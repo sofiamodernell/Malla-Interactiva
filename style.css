@@ -180,3 +180,29 @@ select {
     padding: 2px 8px;
     border-radius: 5px;
 }
+/* BOTÓN APROBAR SEMESTRE ENTERO */
+.btn-semestre {
+    background-color: var(--primary);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 8px;
+    font-size: 0.85rem;
+    font-weight: bold;
+    cursor: pointer;
+    width: 100%;
+    margin-bottom: 15px;
+    transition: all 0.2s;
+    box-shadow: 0 2px 4px rgba(244, 143, 177, 0.3);
+}
+
+.btn-semestre:hover {
+    background-color: #d81b60; /* Rosa un poco más oscuro al pasar el mouse */
+    transform: scale(0.98);
+}
+
+/* Cuando el semestre ya está todo aprobado, cambia el color del botón */
+.btn-semestre.completado {
+    background-color: var(--success);
+    color: #1b5e20;
+}
