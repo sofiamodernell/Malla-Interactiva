@@ -102,8 +102,8 @@ const basesDeDatos = {
             { id: "SICF", n: "Sistemas Inteligentes y Ciberfísicos", c: 7, a: "Mecatrónica", reqExamen: ["TDM2","PYES","MNPI","PRDS","MDSA","SCAP"] },
             { id: "OPT2", n: "Optativa 2", c: 6, a: "Optativa", reqExamen: ["TDM2","PYES","MNPI","PRDS","MDSA","SCAP"]},
             { id: "PFG2", n: "Proyecto Final de Grado 2", c: 8, a: "Competencias", reqExamen: ["TDM2","PYES","MNPI","PRDS","SCAP","MDSA","OPT1","CPIN","MIAC","PFG1"] },
-            { id: "ING9", n: "Inglés 9", c: 4, a: "Idiomas" },
-            { id: "PE9", n: "Programas Especiales 9", c: 2, a: "Otro" }
+            { id: "ING10", n: "Inglés 10", c: 4, a: "Idiomas" },
+            { id: "PE10", n: "Programas Especiales 10", c: 2, a: "Otro" }
         ]}
     ]
 };
