@@ -9,75 +9,77 @@ const basesDeDatos = {
             { id: "ING1", n: "Inglés 1", c: 3, a: "Idiomas" }
         ]},
         { sem: 2, materias: [
-            { id: "MAT2", n: "Matemática 2", c: 6, a: "Básicas", req: ["MAT1"] },
-            { id: "FIS1", n: "Física 1", c: 6, a: "Básicas" },
-            { id: "TC1", n: "Teoría de Circuitos 1", c: 7, a: "Eléctrica", req: ["MAT1"] },
-            { id: "CAD", n: "Dibujo (CAD)", c: 5, a: "Mecánica" },
-            { id: "TDM1", n: "Tecnología de Materiales", c: 6, a: "Mecánica" },
-            { id: "PI1", n: "Proyecto Integrador 1", c: 10, a: "Proyecto", req: ["IME", "PROG1"] }
+            { id: "MAT2", n: "Matemática 2", c: 6, a: "Básicas", reqCurso: ["MAT1"] },
+            { id: "FIS1", n: "Física 1", c: 6, a: "Básicas", reqCurso: ["MAT1"] },
+            { id: "TC1", n: "Teoría de Circuitos 1", c: 7, a: "Eléctrica", reqCurso: ["MAT1", "PROG1"] },
+            { id: "CAD", n: "Dibujo (CAD)", c: 5, a: "Mecánica", reqCurso: ["IME"] },
+            { id: "TDM1", n: "Tecnología de Materiales", c: 6, a: "Mecánica", reqCurso: ["QUI"] },
+            { id: "PI1", n: "Proyecto Integrador 1", c: 10, a: "Proyecto", reqCurso: ["IME", "PROG1"] }
         ]},
         { sem: 3, materias: [
-            { id: "MAT3", n: "Matemática 3", c: 6, a: "Básicas", req: ["MAT2"] },
-            { id: "FIS2", n: "Física 2", c: 6, a: "Básicas", req: ["FIS1", "MAT2"] },
-            { id: "TC2", n: "Teoría de Circuitos 2", c: 7, a: "Eléctrica", req: ["TC1"] },
-            { id: "ME1", n: "Mecánica 1", c: 6, a: "Mecánica", req: ["FIS1"] },
-            { id: "DIG1", n: "Electrónica Digital 1", c: 7, a: "Electrónica", req: ["PROG1", "TC1"] }
+            { id: "MAT3", n: "Matemática 3", c: 6, a: "Básicas", reqCurso: ["MAT2"], reqExamen: ["MAT1"] },
+            { id: "FIS2", n: "Física 2", c: 6, a: "Básicas", reqCurso: ["FIS1", "MAT2"], reqExamen: ["MAT1"] },
+            { id: "TC2", n: "Teoría de Circuitos 2", c: 7, a: "Eléctrica", reqCurso: ["TC1", "MAT2"], reqExamen: ["MAT1"] },
+            { id: "ME1", n: "Mecánica 1", c: 6, a: "Mecánica", reqCurso: ["FIS1", "CAD"] },
+            { id: "DIG1", n: "Electrónica Digital 1", c: 7, a: "Electrónica", reqCurso: ["TC1"] }
         ]},
         { sem: 4, materias: [
-            { id: "EST", n: "Probabilidad y Estadística", c: 6, a: "Básicas", req: ["MAT2"] },
-            { id: "FIS3", n: "Física 3", c: 6, a: "Básicas", req: ["FIS2"] },
-            { id: "ANA1", n: "Electrónica Analógica 1", c: 7, a: "Electrónica", req: ["TC2"] },
-            { id: "ME2", n: "Mecánica 2", c: 6, a: "Mecánica", req: ["ME1"] },
-            { id: "PI2", n: "Proyecto Integrador 2", c: 10, a: "Proyecto", req: ["PI1"] },
-            { id: "EVC1", n: "Eval. Competencias (Tec.)", c: 0, a: "Hito" }
+            { id: "EST", n: "Probabilidad y Estadística", c: 6, a: "Básicas", reqCurso: ["MAT2"] },
+            { id: "FIS3", n: "Física 3", c: 6, a: "Básicas", reqCurso: ["FIS2"], reqExamen: ["FIS1"] },
+            { id: "ANA1", n: "Electrónica Analógica 1", c: 7, a: "Electrónica", reqCurso: ["TC2", "DIG1"] },
+            { id: "ME2", n: "Mecánica 2", c: 6, a: "Mecánica", reqCurso: ["ME1"] },
+            { id: "PI2", n: "Proyecto Integrador 2", c: 10, a: "Proyecto", reqExamen: ["PI1"] }, // Los PI suelen pedir examen salvado
+            { id: "EVC1", n: "Eval. Competencias (Tec.)", c: 0, a: "Hito", reqExamen: ["PI1"] }
         ]},
         { sem: 5, materias: [
-            { id: "SIS1", n: "Sistemas de Control 1", c: 7, a: "Control", req: ["MAT3", "TC2"] },
-            { id: "MICR", n: "Microcontroladores", c: 7, a: "Electrónica", req: ["DIG1"] },
-            { id: "MET", n: "Metrología", c: 4, a: "Mecánica", req: ["FIS1"] },
-            { id: "TER", n: "Termodinámica", c: 6, a: "Mecánica", req: ["FIS2", "QUI"] },
-            { id: "ING2", n: "Inglés 2", c: 3, a: "Idiomas", req: ["ING1"] }
+            { id: "SIS1", n: "Sistemas de Control 1", c: 7, a: "Control", reqCurso: ["MAT3", "TC2"], reqExamen: ["MAT2"] },
+            { id: "MICR", n: "Microcontroladores", c: 7, a: "Electrónica", reqCurso: ["DIG1"], reqExamen: ["PROG1"] },
+            { id: "MET", n: "Metrología", c: 4, a: "Mecánica", reqCurso: ["FIS1"] },
+            { id: "TER", n: "Termodinámica", c: 6, a: "Mecánica", reqCurso: ["FIS2", "QUI"] },
+            { id: "ING2", n: "Inglés 2", c: 3, a: "Idiomas", reqExamen: ["ING1"] }
         ]},
         { sem: 6, materias: [
-            { id: "SIS2", n: "Sistemas de Control 2", c: 7, a: "Control", req: ["SIS1"] },
-            { id: "INST", n: "Instrumentación", c: 7, a: "Control", req: ["ANA1"] },
-            { id: "MAQ", n: "Máquinas Eléctricas", c: 7, a: "Eléctrica", req: ["TC2", "FIS2"] },
-            { id: "PI3", n: "Proyecto Integrador 3", c: 20, a: "Proyecto", req: ["PI2"] },
-            { id: "EVC2", n: "Eval. Comp. (Final Tec.)", c: 0, a: "Hito", req: ["EVC1"] }
+            { id: "SIS2", n: "Sistemas de Control 2", c: 7, a: "Control", reqCurso: ["SIS1"], reqExamen: ["MAT3"] },
+            { id: "INST", n: "Instrumentación", c: 7, a: "Control", reqCurso: ["ANA1", "SIS1"] },
+            { id: "MAQ", n: "Máquinas Eléctricas", c: 7, a: "Eléctrica", reqCurso: ["TC2", "FIS2"] },
+            { id: "PI3", n: "Proyecto Integrador 3", c: 20, a: "Proyecto", reqExamen: ["PI2", "EVC1"] },
+            { id: "EVC2", n: "Eval. Comp. (Final Tec.)", c: 0, a: "Hito", reqExamen: ["PI2", "EVC1"] }
         ]},
         { sem: 7, materias: [
-            { id: "AUT1", n: "Automatización Ind. 1", c: 8, a: "Control", req: ["SIS1", "MICR"] },
-            { id: "POT", n: "Electrónica de Potencia", c: 7, a: "Electrónica", req: ["ANA1"] },
-            { id: "HID", n: "Hidráulica y Neumática", c: 6, a: "Mecánica", req: ["TER"] },
+            { id: "AUT1", n: "Automatización Ind. 1", c: 8, a: "Control", reqCurso: ["SIS1", "MICR"] },
+            { id: "POT", n: "Electrónica de Potencia", c: 7, a: "Electrónica", reqCurso: ["ANA1", "TC2"] },
+            { id: "HID", n: "Hidráulica y Neumática", c: 6, a: "Mecánica", reqCurso: ["TER", "ME1"] },
             { id: "GEST", n: "Gestión de Proyectos", c: 5, a: "Gestión" },
-            { id: "ING3", n: "Inglés 3", c: 3, a: "Idiomas", req: ["ING2"] }
+            { id: "ING3", n: "Inglés 3", c: 3, a: "Idiomas", reqExamen: ["ING2"] }
         ]},
         { sem: 8, materias: [
-            { id: "AUT2", n: "Automatización Ind. 2", c: 8, a: "Control", req: ["AUT1"] },
-            { id: "ROB", n: "Robótica Industrial", c: 8, a: "Control", req: ["SIS2", "ME2"] },
-            { id: "MAN", n: "Mantenimiento Industrial", c: 5, a: "Mecánica", req: ["TDM1"] },
-            { id: "PI4", n: "Proyecto Integrador 4", c: 10, a: "Proyecto", req: ["PI3"] }
+            { id: "AUT2", n: "Automatización Ind. 2", c: 8, a: "Control", reqCurso: ["AUT1"] },
+            { id: "ROB", n: "Robótica Industrial", c: 8, a: "Control", reqCurso: ["SIS2", "ME2"] },
+            { id: "MAN", n: "Mantenimiento Industrial", c: 5, a: "Mecánica", reqCurso: ["TDM1"] },
+            { id: "PI4", n: "Proyecto Integrador 4", c: 10, a: "Proyecto", reqExamen: ["PI3"] }
         ]},
         { sem: 9, materias: [
-            { id: "OPT1", n: "Electiva 1", c: 8, a: "Especialización" },
-            { id: "OPT2", n: "Electiva 2", c: 8, a: "Especialización" },
+            { id: "OPT1", n: "Electiva / Optativa 1", c: 8, a: "Especialización" },
+            { id: "OPT2", n: "Electiva / Optativa 2", c: 8, a: "Especialización" },
             { id: "SEG", n: "Seguridad e Higiene", c: 4, a: "Transversal" },
             { id: "ETI", n: "Ética Profesional", c: 4, a: "Transversal" },
-            { id: "ING4", n: "Inglés 4", c: 3, a: "Idiomas", req: ["ING3"] }
+            { id: "ING4", n: "Inglés 4", c: 3, a: "Idiomas", reqExamen: ["ING3"] }
         ]},
         { sem: 10, materias: [
-            { id: "PFC", n: "Proyecto Final de Carrera", c: 40, a: "Proyecto", req: ["PI4"] },
-            { id: "PAS", n: "Pasantía Profesional", c: 10, a: "Práctica" },
-            { id: "EVC3", n: "Eval. Comp. (Egreso)", c: 0, a: "Hito", req: ["EVC2"] }
+            { id: "PFC", n: "Proyecto Final de Carrera", c: 40, a: "Proyecto", reqExamen: ["PI4", "EVC2"] },
+            { id: "PAS", n: "Pasantía Profesional", c: 10, a: "Práctica", reqExamen: ["PI4", "EVC2"] },
+            { id: "EVC3", n: "Eval. Comp. (Egreso)", c: 0, a: "Hito", reqExamen: ["PFC"] }
         ]}
     ]
 };
 
-let materiasAprobadas = new Set();
+// Map guardará el ID de la materia y su estado: 0 (Blanco), 1 (Cursada), 2 (Examen Aprobado)
+let estadoMaterias = new Map(); 
 let carreraActual = "imec_2023";
 
 function renderMalla(carreraId) {
     carreraActual = carreraId;
+    estadoMaterias.clear();
     dibujarInterfaz();
 }
 
@@ -98,39 +100,72 @@ function dibujarInterfaz() {
             const matDiv = document.createElement('div');
             matDiv.className = 'materia';
             
-            // Lógica de Previaturas
             let estaBloqueada = false;
-            if (mat.req && mat.req.length > 0) {
-                estaBloqueada = !mat.req.every(reqId => materiasAprobadas.has(reqId));
+            let faltanTextos = [];
+
+            // Verifica si tiene las previas de EXAMEN salvadas (estado == 2)
+            if (mat.reqExamen) {
+                mat.reqExamen.forEach(reqId => {
+                    if (estadoMaterias.get(reqId) !== 2) {
+                        faltanTextos.push(`${reqId} (Examen)`);
+                    }
+                });
+            }
+            
+            // Verifica si tiene las previas de CURSO aprobadas (estado >= 1)
+            if (mat.reqCurso) {
+                mat.reqCurso.forEach(reqId => {
+                    if ((estadoMaterias.get(reqId) || 0) < 1) {
+                        faltanTextos.push(`${reqId} (Curso)`);
+                    }
+                });
             }
 
-            if (estaBloqueada) matDiv.classList.add('bloqueada');
-            if (materiasAprobadas.has(mat.id)) {
+            if (faltanTextos.length > 0) estaBloqueada = true;
+
+            const estadoActual = estadoMaterias.get(mat.id) || 0;
+            
+            // Aplicar Clases CSS
+            if (estaBloqueada) {
+                matDiv.classList.add('bloqueada');
+            } else if (estadoActual === 1) {
+                matDiv.classList.add('cursada');
+            } else if (estadoActual === 2) {
                 matDiv.classList.add('aprobada');
-                totalCreditos += mat.c;
+                totalCreditos += mat.c; // Sumar créditos SOLO si el examen está salvado
             }
+
+            // Preparar textos para mostrar requisitos de forma amigable
+            let previasTexto = "";
+            if (mat.reqExamen && mat.reqExamen.length > 0) previasTexto += `Ex: ${mat.reqExamen.join(', ')} `;
+            if (mat.reqCurso && mat.reqCurso.length > 0) previasTexto += `Cur: ${mat.reqCurso.join(', ')}`;
+            if (!previasTexto) previasTexto = "Ninguna";
 
             matDiv.innerHTML = `
                 <span class="area-tag">${mat.a}</span>
                 <span class="materia-name">${mat.n}</span>
                 <div class="materia-info">
                     <span>${mat.c} Créditos</span>
-                    <span>${mat.id}</span>
+                    <span title="Previas necesarias" style="font-size: 0.7rem; color:#888;">Previas: ${previasTexto}</span>
                 </div>
             `;
             
+            // Evento Click: Clickeando pasa de Blanco(0) -> Amarilla(1) -> Verde(2) -> Blanco(0)
             matDiv.addEventListener('click', () => {
                 if (estaBloqueada) {
-                    alert('🔒 Debes aprobar las previas: ' + mat.req.join(', '));
+                    alert('🔒 No puedes acceder a esta materia. Te falta:\n' + faltanTextos.join('\n'));
                     return; 
                 }
 
-                if (materiasAprobadas.has(mat.id)) {
-                    materiasAprobadas.delete(mat.id);
+                if (estadoActual === 0) {
+                    estadoMaterias.set(mat.id, 1); // Cursada aprobada (pero sin examen)
+                } else if (estadoActual === 1) {
+                    estadoMaterias.set(mat.id, 2); // Examen aprobado (créditos sumados)
                 } else {
-                    materiasAprobadas.add(mat.id);
+                    estadoMaterias.set(mat.id, 0); // Desmarcar
                 }
-                dibujarInterfaz(); // Refresca para actualizar candados
+                
+                dibujarInterfaz(); // Redibuja al instante
             });
 
             semDiv.appendChild(matDiv);
@@ -141,4 +176,5 @@ function dibujarInterfaz() {
     document.getElementById('creditos-count').innerText = totalCreditos;
 }
 
-window.onload = () => dibujarInterfaz();
+// Iniciar
+window.onload = () => renderMalla('imec_2023');
