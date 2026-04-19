@@ -108,6 +108,30 @@ const basesDeDatos = {
     ]
 };
 
+
+// --- LÓGICA DEL MODO OSCURO ---
+const themeToggleBtn = document.getElementById('theme-toggle');
+const currentTheme = localStorage.getItem('theme') || 'light';
+
+// Aplicar tema guardado al cargar
+if (currentTheme === 'dark') {
+    document.documentElement.setAttribute('data-theme', 'dark');
+    themeToggleBtn.innerText = '☀️ Modo Claro';
+}
+
+themeToggleBtn.addEventListener('click', () => {
+    let theme = document.documentElement.getAttribute('data-theme');
+    if (theme === 'dark') {
+        document.documentElement.setAttribute('data-theme', 'light');
+        localStorage.setItem('theme', 'light');
+        themeToggleBtn.innerText = '🌙 Modo Oscuro';
+    } else {
+        document.documentElement.setAttribute('data-theme', 'dark');
+        localStorage.setItem('theme', 'dark');
+        themeToggleBtn.innerText = '☀️ Modo Claro';
+    }
+});
+
 let estadoMaterias = new Map(); 
 let carreraActual = "imec_2023";
 
@@ -161,6 +185,13 @@ function dibujarInterfaz() {
 
         semestre.materias.forEach(mat => {
             const matDiv = document.createElement('div');
+            // Justo después de crear matDiv
+            matDiv.id = mat.id; // Asignar el ID para que el resaltado lo encuentre
+            
+            // Eventos para el efecto enfoque
+            matDiv.addEventListener('mouseenter', () => activarResaltado(mat));
+            matDiv.addEventListener('mouseleave', () => desactivarResaltado());
+            
             matDiv.className = 'materia';
             
             let estaBloqueada = false;
@@ -233,9 +264,51 @@ function dibujarInterfaz() {
         container.appendChild(semDiv);
     });
     
-    document.getElementById('creditos-count').innerText = totalCreditos;
-}
+// (Asumiendo que tienes tu variable totalCreditos calculada)
+    // Calcula el total de créditos de la carrera sumando todas las materias de tu base de datos
+    const maxCreditos = materiasDB.reduce((acc, materia) => acc + materia.c, 0); 
+    
+    // Calcular porcentaje
+    const porcentaje = maxCreditos > 0 ? (totalCreditos / maxCreditos) * 100 : 0;
+
+    // Actualizar texto y barra visual
+    document.getElementById('creditos-count').innerText = `Créditos: ${totalCreditos} / ${maxCreditos} (${porcentaje.toFixed(1)}%)`;
+    document.getElementById('progress-bar').style.width = `${porcentaje}%`;}
 
 window.onload = () =>    renderMalla('imec_2023'); // Renderiza la malla
     
+// --- FUNCIONES DE EFECTO ENFOQUE ---
+function activarResaltado(materiaSeleccionada) {
+    const mallaWrapper = document.querySelector('.malla-wrapper');
+    mallaWrapper.classList.add('dimming-active');
+    
+    // Obtener qué materias necesita esta (prerrequisitos)
+    const reqs = [...(materiaSeleccionada.reqCurso || []), ...(materiaSeleccionada.reqExamen || [])];
+    
+    // Obtener a qué materias destraba esta (postrrequisitos)
+    const postReqs = materiasDB.filter(m => 
+        (m.reqCurso && m.reqCurso.includes(materiaSeleccionada.id)) || 
+        (m.reqExamen && m.reqExamen.includes(materiaSeleccionada.id))
+    ).map(m => m.id);
+
+    // Iterar por todas las tarjetas y aplicar estilos
+    document.querySelectorAll('.materia').forEach(div => {
+        const id = div.id;
+        if (id === materiaSeleccionada.id) {
+            div.classList.add('highlight-self');
+        } else if (reqs.includes(id)) {
+            div.classList.add('highlight-req');
+        } else if (postReqs.includes(id)) {
+            div.classList.add('highlight-post');
+        }
+    });
+}
+
+function desactivarResaltado() {
+    const mallaWrapper = document.querySelector('.malla-wrapper');
+    mallaWrapper.classList.remove('dimming-active');
+    document.querySelectorAll('.materia').forEach(div => {
+        div.classList.remove('highlight-self', 'highlight-req', 'highlight-post');
+    });
+}
 
