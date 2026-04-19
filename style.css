@@ -6,7 +6,7 @@
     --card-bg: #ffffff;      /* Fondo de las materias */
     --text: #5a5a5a;         /* Gris oscuro suave para leer bien */
     --success: #a8e6cf;      /* Verde menta pastel para aprobadas */
-    --shadow: 0 4px 10px rgba(244, 143, 177, 0.2); /* Sombra rosada */
+--shadow: 0 4px 10px rgba(244, 143, 177, 0.4); /* Sombra rosada un toque más oscura */
 }
 
 body {
@@ -206,13 +206,15 @@ select {
     background-color: var(--success);
     color: #1b5e20;
 }
-/* === ESTILOS DEL GUIÑO (CHICA SUPERPODEROSA) - AHORA ARRIBA === */
+
+/* === ESTILOS DEL GUIÑO (CHICA SUPERPODEROSA) - ARRIBA A LA DERECHA === */
 .chica-superpoderosa {
     position: fixed;
-    top: 20px;    /* Ahora a 20px del borde superior */
-    right: 20px;   /* Se mantiene a la derecha */
-    width: 80px;   /* La hice apenas más chiquita para que no tape el título */
-    z-index: 1001; /* Un número alto para que flote por encima de todo */
+    top: 20px !important;    /* El !important asegura que gane sobre cualquier otra orden */
+    right: 20px !important;
+    bottom: auto !important; /* Esto anula la orden de "abajo" si quedó grabada */
+    width: 80px;
+    z-index: 2000;           /* Lo subimos bien arriba de todo */
     opacity: 0.8;
     transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     cursor: pointer;
@@ -220,5 +222,5 @@ select {
 
 .chica-superpoderosa:hover {
     opacity: 1;
-    transform: scale(1.1) translateY(10px) rotate(5deg); /* Ahora salta hacia abajo al estar arriba */
+    transform: scale(1.1) translateY(10px) rotate(5deg);
 }
