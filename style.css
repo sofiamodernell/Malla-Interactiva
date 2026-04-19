@@ -1,1 +1,146 @@
+/* Variables de color para fácil personalización */
+:root {
+    --primary-color: #003366;    /* Azul institucional */
+    --secondary-color: #00a8cc;  /* Celeste vibrante */
+    --bg-color: #f0f2f5;
+    --card-bg: #ffffff;
+    --text-color: #333333;
+    --success-color: #28a745;    /* Verde para aprobadas */
+    --border-radius: 8px;
+    --shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
 
+body {
+    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    background-color: var(--bg-color);
+    margin: 0;
+    color: var(--text-color);
+}
+
+/* Encabezado */
+header {
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    color: white;
+    padding: 2rem;
+    text-align: center;
+    box-shadow: var(--shadow);
+}
+
+/* Contenedor de selección de carrera */
+.controls {
+    padding: 20px;
+    background: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    border-bottom: 1px solid #ddd;
+}
+
+select {
+    padding: 10px 15px;
+    border-radius: var(--border-radius);
+    border: 2px solid var(--secondary-color);
+    font-size: 1rem;
+    cursor: pointer;
+    outline: none;
+}
+
+/* Contenedor de la Malla (Scroll horizontal) */
+.malla-wrapper {
+    display: flex;
+    overflow-x: auto;
+    padding: 30px;
+    gap: 25px;
+    min-height: 70vh;
+}
+
+/* Cada columna de semestre */
+.semestre {
+    min-width: 260px;
+    background: rgba(255, 255, 255, 0.5);
+    border-radius: var(--border-radius);
+    padding: 15px;
+    border: 1px dashed #ccc;
+}
+
+.semestre h3 {
+    text-align: center;
+    color: var(--primary-color);
+    margin-top: 0;
+    font-size: 1.2rem;
+    border-bottom: 2px solid var(--secondary-color);
+    padding-bottom: 10px;
+}
+
+/* Tarjeta de Materia */
+.materia {
+    background: var(--card-bg);
+    border-radius: var(--border-radius);
+    padding: 15px;
+    margin-bottom: 15px;
+    box-shadow: var(--shadow);
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s, background-color 0.3s;
+    border-left: 5px solid var(--secondary-color);
+}
+
+.materia:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+}
+
+/* Estado Aprobado */
+.materia.aprobada {
+    background-color: #d4edda;
+    border-left-color: var(--success-color);
+    border-color: var(--success-color);
+}
+
+.materia.aprobada .materia-name {
+    color: #155724;
+}
+
+/* Detalles internos de la materia */
+.materia-name {
+    font-weight: bold;
+    display: block;
+    margin-bottom: 8px;
+    font-size: 1rem;
+}
+
+.materia-info {
+    font-size: 0.85rem;
+    color: #666;
+    display: flex;
+    justify-content: space-between;
+}
+
+.area-tag {
+    font-size: 0.7rem;
+    background: #e1e1e1;
+    padding: 3px 8px;
+    border-radius: 12px;
+    text-transform: uppercase;
+    font-weight: bold;
+    margin-bottom: 5px;
+    display: inline-block;
+}
+
+/* Barra de progreso inferior */
+.stats-bar {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    background: var(--primary-color);
+    color: white;
+    padding: 15px;
+    text-align: center;
+    font-size: 1.1rem;
+    box-shadow: 0 -2px 10px rgba(0,0,0,0.2);
+}
+
+#creditos-count {
+    font-weight: bold;
+    color: #00ffcc;
+}
