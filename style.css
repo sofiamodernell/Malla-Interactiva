@@ -6,7 +6,7 @@
     --card-bg: #ffffff;      /* Fondo de las materias */
     --text: #5a5a5a;         /* Gris oscuro suave para leer bien */
     --success: #a8e6cf;      /* Verde menta pastel para aprobadas */
---shadow: 0 4px 10px rgba(244, 143, 177, 0.4); /* Sombra rosada un toque más oscura */
+    --shadow: 0 4px 10px rgba(244, 143, 177, 0.4); /* Sombra rosada un toque más oscura */
 }
 
 body {
@@ -83,7 +83,6 @@ select {
 
 /* === ESTADOS DE LAS MATERIAS === */
 
-/* 1. APROBADA (Verde menta) */
 .materia.aprobada {
     background-color: #eafff5;
     border-left-color: var(--success);
@@ -102,7 +101,6 @@ select {
     font-size: 1.2rem;
 }
 
-/* 2. CURSADA (Amarillo pastel) */
 .materia.cursada {
     background-color: #fff9c4; 
     border-left-color: #ffd54f;
@@ -119,7 +117,6 @@ select {
     font-size: 1rem;
 }
 
-/* 3. BLOQUEADA (Gris suave) */
 .materia.bloqueada {
     opacity: 0.6;
     background-color: #f5f5f5;
@@ -150,7 +147,7 @@ select {
 
 .area-tag {
     font-size: 0.7rem;
-    background: #fce4ec; /* Rosita muy claro */
+    background: #fce4ec; 
     color: #d81b60;
     padding: 3px 8px;
     border-radius: 10px;
@@ -180,6 +177,7 @@ select {
     padding: 2px 8px;
     border-radius: 5px;
 }
+
 /* BOTÓN APROBAR SEMESTRE ENTERO */
 .btn-semestre {
     background-color: var(--primary);
@@ -197,11 +195,10 @@ select {
 }
 
 .btn-semestre:hover {
-    background-color: #d81b60; /* Rosa un poco más oscuro al pasar el mouse */
+    background-color: #d81b60;
     transform: scale(0.98);
 }
 
-/* Cuando el semestre ya está todo aprobado, cambia el color del botón */
 .btn-semestre.completado {
     background-color: var(--success);
     color: #1b5e20;
@@ -210,11 +207,11 @@ select {
 /* === ESTILOS DEL GUIÑO (CHICA SUPERPODEROSA) - ARRIBA A LA DERECHA === */
 .chica-superpoderosa {
     position: fixed;
-    top: 20px !important;    /* El !important asegura que gane sobre cualquier otra orden */
+    top: 20px !important;    
     right: 20px !important;
-    bottom: auto !important; /* Esto anula la orden de "abajo" si quedó grabada */
+    bottom: auto !important; 
     width: 80px;
-    z-index: 2000;           /* Lo subimos bien arriba de todo */
+    z-index: 2000;           
     opacity: 0.8;
     transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     cursor: pointer;
@@ -223,4 +220,70 @@ select {
 .chica-superpoderosa:hover {
     opacity: 1;
     transform: scale(1.1) translateY(10px) rotate(5deg);
+}
+
+/* =========================================
+   NUEVO: ESTILOS DEL MODAL Y FOOTER 
+========================================= */
+
+/* Estilos del Pie de Página (Footer) */
+.site-footer {
+    text-align: center;
+    padding: 20px;
+    margin-top: 40px;
+    background-color: #fce4ec; /* Rosita claro */
+    border-top: 2px dashed #f8bbd0;
+    font-size: 0.9rem;
+    color: #555;
+    padding-bottom: 80px; /* Para que la barra de créditos no lo tape */
+}
+.site-footer a {
+    color: #d81b60;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+/* Estilos del Modal (Ventana Flotante) */
+.modal-fondo {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background-color: rgba(0, 0, 0, 0.6); /* Fondo oscuro semitransparente */
+    display: flex; /* Se muestra por defecto */
+    justify-content: center;
+    align-items: center;
+    z-index: 3000; /* Asegura que tape todo lo demás */
+}
+
+.modal-contenido {
+    background-color: white;
+    padding: 30px;
+    border-radius: 12px;
+    max-width: 500px;
+    width: 90%;
+    text-align: center;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+    border: 3px solid var(--primary);
+}
+
+.modal-contenido h2 {
+    margin-top: 0;
+    color: #d81b60;
+}
+
+.btn-modal {
+    margin-top: 20px;
+    padding: 10px 20px;
+    font-size: 1rem;
+    color: white;
+    background-color: var(--primary);
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    box-shadow: var(--shadow);
+    transition: all 0.2s;
+}
+.btn-modal:hover {
+    background-color: #d81b60;
+    transform: scale(1.05);
 }
