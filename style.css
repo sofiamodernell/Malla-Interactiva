@@ -149,3 +149,22 @@ select {
     color: #00ffcc;
     font-size: 1.2rem;
 }
+
+/* ESTADO CURSADA (Pendiente Examen) */
+.materia.cursada {
+    background-color: #fff3cd; /* Amarillo suave */
+    border-left-color: #ffc107;
+    border-color: #ffc107;
+}
+
+.materia.cursada .materia-name {
+    color: #856404;
+}
+
+.materia.cursada::after {
+    content: "⏳"; /* Reloj de arena para indicar pendiente de examen */
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 1rem;
+}
