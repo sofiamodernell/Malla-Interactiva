@@ -17,8 +17,8 @@ const basesDeDatos = {
             { id: "TDC2", n: "Teoría de Circuitos 2", c: 6, a: "Electrónica", reqCurso: ["TDC1"]},
             { id: "FIS1", n: "Física 1", c: 7, a: "Básicas", reqCurso: ["MAT1"] },
             { id: "TDM1", n: "Tecnologías de Materiales", c: 6, a: "Mecánica", reqCurso: ["QMCA"] },
-            { id: "DCAD", n: "Dibujo Computarizado (CAD)", c: 5, a: "Mecánica", reqCurso: ["INTM"] },
-            { id: "PIC1", n: "Proyecto Integrador de Competencias 1", c: 3, a: "Competencias", reqCurso: ["INTM",  "FMIN","TDC2","TDM1","DCAD"] },
+            { id: "DCAD", n: "Dibujo Computarizado", c: 5, a: "Mecánica", reqCurso: ["INTM"] },
+            { id: "PIC1", n: "Proyecto Integrador de Competencias 1", c: 3, a: "Competencias", reqCurso: ["INTM", "FMIN","TDC2","TDM1","DCAD"] },
             { id: "ING2", n: "Inglés 2", c: 4, a: "Idiomas" },
             { id: "PE2", n: "Programas Especiales 2", c: 2, a: "Otro" }
         ]},
@@ -56,7 +56,7 @@ const basesDeDatos = {
             { id: "PE5", n: "Programas Especiales 5", c: 2, a: "Otro" }
         ]},
         { sem: 6, materias: [
-            { id: "EDG2", n: "Electrónica Digital 2", c: 7, a: "Electrónica", reqExamen: ["EALG","EDG1"] }
+            { id: "EDG2", n: "Electrónica Digital 2", c: 7, a: "Electrónica", reqExamen: ["EALG","EDG1"] },
             { id: "HYNE", n: "Hidráulica y Neumática", c: 7, a: "Mecánica", reqExamen: ["TMPR","PRG3","MEM1","FIS2","AEIN","PIC2" ] },
             { id: "AUTM", n: "Automatización", c: 7, a: "Telemática", reqCurso: ["TIND", "INSC"], reqExamen: ["TMPR","PRG3","MEM1","FIS2","AEIN","PIC2" ] },
             { id: "TDCR", n: "Tecnologías de Control y Robótica", c: 7, a: "Mecatrónica", reqCurso: ["INSC"] },
@@ -67,24 +67,29 @@ const basesDeDatos = {
             { id: "PE6", n: "Programas Especiales 6", c: 2, a: "Otro" }
         ]},
         { sem: 7, materias: [
-            { id: "AUT1", n: "Automatización Ind. 1", c: 8, a: "Control= },
-            { id: "POT", n: "Electrónica de Potencia", c: 7, a: "Electrónica"  },
-            { id: "GEST", n: "Gestión de Proyectos", c: 5, a: "Gestión" },
+            { id: "MAT3", n: "Matemática 3", c: 8, a: "Básicas" },
+            { id: "EPOT", n: "Electrónica de Potencia", c: 7, a: "Electrónica" },
+            { id: "MEM2", n: "Materiales y Elementos de Maquinas 2", c: 6, a: "Mecánica"},
+            { id: "GPYE", n: "Gestión de Proyectos y Emprendimientos", c: 4, a: "General" },
+            { id: "SEMB", n: "Sistemas Embebidos", c: 6, a: "Telemática" },
+            { id: "TCYF", n: "Transferencia de Calor y Fluidos", c: 6, a: "Mecánica" },
+            { id: "ING7", n: "Inglés 7", c: 4, a: "Idiomas" },
+            { id: "PE7", n: "Programas Especiales 7", c: 2, a: "Otro" }
         ]},
         { sem: 8, materias: [
             { id: "AUT2", n: "Automatización Ind. 2", c: 8, a: "Control" },
             { id: "ROB", n: "Robótica Industrial", c: 8, a: "Control"},
-            { id: "MAN", n: "Mantenimiento Industrial", c: 5, a: "Mecánica"},
+            { id: "MAN", n: "Mantenimiento Industrial", c: 5, a: "Mecánica"}
         ]},
         { sem: 9, materias: [
             { id: "OPT1", n: "Electiva / Optativa 1", c: 8, a: "Especialización" },
             { id: "OPT2", n: "Electiva / Optativa 2", c: 8, a: "Especialización" },
             { id: "SEG", n: "Seguridad e Higiene", c: 4, a: "Transversal" },
-            { id: "ETI", n: "Ética Profesional", c: 4, a: "Transversal" },
+            { id: "ETI", n: "Ética Profesional", c: 4, a: "Transversal" }
         ]},
         { sem: 10, materias: [
             { id: "PFC", n: "Proyecto Final de Carrera", c: 40, a: "Proyecto", },
-            { id: "PAS", n: "Pasantía Profesional", c: 10, a: "Práctica", },
+            { id: "PAS", n: "Pasantía Profesional", c: 10, a: "Práctica", }
         ]}
     ]
 };
