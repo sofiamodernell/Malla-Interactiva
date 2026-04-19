@@ -4,134 +4,30 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Malla Interactiva IMEC - Plan 2023</title>
-    <style>
-        :root {
-            --primary: #003366; --secondary: #00a8cc; --bg: #f4f7f6;
-            --text: #333; --white: #ffffff; --success: #28a745;
-        }
-        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); margin: 0; color: var(--text); }
-        header { background: var(--primary); color: white; padding: 20px; text-align: center; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
-        .controls { padding: 20px; text-align: center; background: white; border-bottom: 1px solid #ddd; }
-        select { padding: 10px; border-radius: 5px; border: 1px solid #ccc; font-size: 1rem; }
-        
-        .malla-wrapper { display: flex; overflow-x: auto; padding: 20px; gap: 20px; align-items: flex-start; }
-        .semestre { min-width: 250px; background: #e9ecef; border-radius: 10px; padding: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
-        .semestre h3 { text-align: center; margin-top: 0; color: var(--primary); border-bottom: 2px solid var(--secondary); padding-bottom: 10px; }
-        
-        .materia { 
-            background: var(--white); border: 1px solid #dee2e6; border-radius: 8px; padding: 12px; margin-bottom: 12px;
-            cursor: pointer; transition: all 0.2s ease; position: relative;
-        }
-        .materia:hover { transform: translateY(-3px); box-shadow: 0 4px 12px rgba(0,0,0,0.1); border-color: var(--secondary); }
-        .materia.aprobada { background: #d4edda; border-color: var(--success); }
-        .materia.aprobada::after { content: "✓"; position: absolute; top: 5px; right: 8px; color: var(--success); font-weight: bold; }
-        
-        .materia-name { font-weight: 600; display: block; margin-bottom: 5px; font-size: 0.95rem; }
-        .materia-info { font-size: 0.8rem; color: #666; display: flex; justify-content: space-between; }
-        .area-tag { font-size: 0.7rem; padding: 2px 6px; border-radius: 10px; background: #eee; text-transform: uppercase; }
-        
-        .stats-bar { position: fixed; bottom: 0; width: 100%; background: var(--primary); color: white; padding: 10px; text-align: center; font-weight: bold; }
-    </style>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<header>
-    <h1>Malla Interactiva Universitaria</h1>
-    <p>Visualiza y gestiona tu progreso académico</p>
-</header>
+    <header>
+        <h1>Malla Interactiva Universitaria</h1>
+        <p>Visualiza y gestiona tu progreso académico</p>
+    </header>
 
-<div class="controls">
-    <label>Carrera seleccionada: </label>
-    <select id="carrera-selector" onchange="renderMalla(this.value)">
-        <option value="imec_2023">Ingeniería en Mecatrónica (Plan 2023)</option>
-        <option value="diseno_dummy">Diseño Industrial (Ejemplo)</option>
-    </select>
-</div>
+    <div class="controls">
+        <label>Carrera seleccionada: </label>
+        <select id="carrera-selector" onchange="renderMalla(this.value)">
+            <option value="imec_2023">Ingeniería en Mecatrónica (Plan 2023)</option>
+            <option value="diseno_dummy">Diseño Industrial (Ejemplo)</option>
+        </select>
+    </div>
 
-<div id="malla-container" class="malla-wrapper"></div>
+    <div id="malla-container" class="malla-wrapper"></div>
 
-<div class="stats-bar">
-    Créditos Acumulados: <span id="creditos-count">0</span>
-</div>
+    <div class="stats-bar">
+        Créditos Acumulados: <span id="creditos-count">0</span>
+    </div>
 
-<script>
-// DATOS DEL PLAN DE ESTUDIOS (IMEC 2023 extraído de tu PDF)
-const basesDeDatos = {
-    "imec_2023": [
-        { sem: 1, materias: [
-            { id: "M1", n: "Matemática 1", c: 6, a: "Básicas" },
-            { id: "P1", n: "Programación 1", c: 8, a: "Informática" },
-            { id: "IM", n: "Introd. a la Mecatrónica", c: 4, a: "Mecánica" },
-            { id: "CO", n: "Comun. Oral y Escrita", c: 4, a: "Transversal" },
-            { id: "I1", n: "Inglés 1", c: 3, a: "Idiomas" }
-        ]},
-        { sem: 2, materias: [
-            { id: "M2", n: "Matemática 2", c: 6, a: "Básicas" },
-            { id: "F1", n: "Física 1", c: 6, a: "Básicas" },
-            { id: "TC1", n: "Teoría de Circuitos 1", c: 7, a: "Eléctrica" },
-            { id: "CAD", n: "Dibujo (CAD)", c: 5, a: "Mecánica" },
-            { id: "PI1", n: "Proyecto Integrador 1", c: 10, a: "Proyecto" }
-        ]},
-        { sem: 3, materias: [
-            { id: "M3", n: "Matemática 3", c: 6, a: "Básicas" },
-            { id: "F2", n: "Física 2", c: 6, a: "Básicas" },
-            { id: "TC2", n: "Teoría de Circuitos 2", c: 7, a: "Eléctrica" },
-            { id: "ME1", n: "Mecánica 1", c: 6, a: "Mecánica" }
-        ]}
-        // Se pueden seguir agregando semestres aquí siguiendo el patrón
-    ],
-    "diseno_dummy": [
-        { sem: 1, materias: [{ id: "D1", n: "Dibujo Artístico", c: 5, a: "Taller" }] }
-    ]
-};
+    <script src="script.js"></script>
 
-let creditosTotales = 0;
-
-function renderMalla(carreraId) {
-    const container = document.getElementById('malla-container');
-    container.innerHTML = '';
-    const plan = basesDeDatos[carreraId];
-
-    plan.forEach(semestre => {
-        const semDiv = document.createElement('div');
-        semDiv.className = 'semestre';
-        semDiv.innerHTML = `<h3>Semestre ${semestre.sem}</h3>`;
-
-        semestre.materias.forEach(mat => {
-            const matDiv = document.createElement('div');
-            matDiv.className = 'materia';
-            matDiv.id = mat.id;
-            matDiv.innerHTML = `
-                <span class="area-tag">${mat.a}</span>
-                <span class="materia-name">${mat.n}</span>
-                <div class="materia-info">
-                    <span>${mat.c} Créditos</span>
-                    <span>ID: ${mat.id}</span>
-                </div>
-            `;
-            
-            matDiv.onclick = () => togglarMateria(matDiv, mat.c);
-            semDiv.appendChild(matDiv);
-        });
-
-        container.appendChild(semDiv);
-    });
-}
-
-function togglarMateria(elemento, creditos) {
-    if (elemento.classList.contains('aprobada')) {
-        elemento.classList.remove('aprobada');
-        creditosTotales -= creditos;
-    } else {
-        elemento.classList.add('aprobada');
-        creditosTotales += creditos;
-    }
-    document.getElementById('creditos-count').innerText = creditosTotales;
-}
-
-// Carga inicial
-renderMalla('imec_2023');
-
-</script>
 </body>
 </html>
