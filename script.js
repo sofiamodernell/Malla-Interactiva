@@ -211,7 +211,7 @@ function dibujarInterfaz() {
             
             matDiv.addEventListener('click', () => {
                 if (estaBloqueada) {
-                    alert('🔒 No puedes acceder a esta materia. Te falta:\n' + faltanTextos.join('\n'));
+                    alert('🔒 No puedes acceder a esta materia. Te falta:\n' + faltanTextos.join('\n') + '\n\n¡Revisa el plan de estudios!');
                     return; 
                 }
 
