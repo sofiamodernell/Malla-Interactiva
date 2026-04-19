@@ -88,8 +88,8 @@ const basesDeDatos = {
             { id: "ETI", n: "Ética Profesional", c: 4, a: "Transversal" }
         ]},
         { sem: 10, materias: [
-            { id: "PFC", n: "Proyecto Final de Carrera", c: 40, a: "Proyecto", },
-            { id: "PAS", n: "Pasantía Profesional", c: 10, a: "Práctica", }
+            { id: "PFC", n: "Proyecto Final de Carrera", c: 40, a: "Proyecto"},
+            { id: "PAS", n: "Pasantía Profesional", c: 10, a: "Práctica" }
         ]}
     ]
 };
