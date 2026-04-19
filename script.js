@@ -18,7 +18,7 @@ const basesDeDatos = {
             { id: "FIS1", n: "Física 1", c: 7, a: "Básicas", reqCurso: ["MAT1"] },
             { id: "TDM1", n: "Tecnologías de Materiales", c: 6, a: "Mecánica", reqCurso: ["QMCA"] },
             { id: "DCAD", n: "Dibujo Computarizado (CAD)", c: 5, a: "Mecánica", reqCurso: ["INTM"] },
-            { id: "PIC1", n: "Proyecto Integrador de Competencias 1", c: 3, a: "Competencias", reqCurso: ["INTM",  "FMIN","TDC2","TDM1","DCAD"] }
+            { id: "PIC1", n: "Proyecto Integrador de Competencias 1", c: 3, a: "Competencias", reqCurso: ["INTM",  "FMIN","TDC2","TDM1","DCAD"] },
             { id: "ING2", n: "Inglés 2", c: 4, a: "Idiomas" },
             { id: "PE2", n: "Programas Especiales 2", c: 2, a: "Otro" }
         ]},
@@ -26,10 +26,10 @@ const basesDeDatos = {
         { sem: 3, materias: [
             { id: "MAT3", n: "Matemática 3", c: 8, a: "Básicas", reqCurso: ["MAT2"], reqExamen: ["MAT1"] },
             { id: "PRG2", n: "Programación 2", c: 6, a: "Informática", reqCurso: ["FMIN"], reqExamen: ["PRG1"]  },
-            { id: "EALG", n: "Electrónica Analógica Aplicada 1", c: 6, a: "Electrónica", reqCurso: ["TDC2", "FIS1","MAT2"], reqExamen: ["MAT1", "TDC1"]  }
+            { id: "EALG", n: "Electrónica Analógica Aplicada 1", c: 6, a: "Electrónica", reqCurso: ["TDC2", "FIS1","MAT2"], reqExamen: ["MAT1", "TDC1"] },
             { id: "SLSO", n: "Seguridad Laboral y Salud Ocupacional", c: 5, a: "General", reqExamen: ["MAT1","QMCA","INTM","COES","PRG1", "TDC1"] },
-            { id: "DIES", n: "Dinámica y Estática", c: 7, a: "Mecánica" ,reqCurso: ["FIS1"], reqExamen: ["INTM"]}
-            { id: "EDG1", n: "Electrónica Digital 1", c: 7, a: "Electrónica", reqCurso: ["FMIN"], reqExamen: ["TDC1"] }
+            { id: "DIES", n: "Dinámica y Estática", c: 7, a: "Mecánica" ,reqCurso: ["FIS1"], reqExamen: ["INTM"]},
+            { id: "EDG1", n: "Electrónica Digital 1", c: 7, a: "Electrónica", reqCurso: ["FMIN"], reqExamen: ["TDC1"] },
             { id: "ING3", n: "Inglés 3", c: 4, a: "Idiomas" },
             { id: "PE3", n: "Programas Especiales 3", c: 2, a: "Otro" }
         ]},
