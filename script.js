@@ -1,74 +1,90 @@
 const basesDeDatos = {
     "imec_2023": [
         { sem: 1, materias: [
-            { id: "MAT1", n: "Matemática 1", c: 6, a: "Básicas" },
-            { id: "QUI", n: "Química", c: 6, a: "Básicas" },
-            { id: "PROG1", n: "Programación 1", c: 8, a: "Informática" },
-            { id: "IME", n: "Introd. a la Mecatrónica", c: 4, a: "Mecánica" },
-            { id: "COE", n: "Comun. Oral y Escrita", c: 4, a: "Transversal" },
-            { id: "ING1", n: "Inglés 1", c: 3, a: "Idiomas" }
+            { id: "COES", n: "Comun. Oral y Escrita", c: 5, a: "General" },
+            { id: "PRG1", n: "Programación 1", c: 6, a: "Informática" },
+            { id: "TDC1", n: "Teoría de Circuitos 1", c: 6, a: "Electrónica"},
+            { id: "MAT1", n: "Matemática 1", c: 8, a: "Básicas" },
+            { id: "QMCA", n: "Química", c: 6, a: "Básicas" },
+            { id: "INTM", n: "Introd. a la Mecatrónica", c: 4, a: "Mecánica" },
+            { id: "ING1", n: "Inglés 1", c: 4, a: "Idiomas" }
+            { id: "PE1", n: "Programas Especiales 1", c: 2, a: "Otro" }
         ]},
+        
         { sem: 2, materias: [
-            { id: "MAT2", n: "Matemática 2", c: 6, a: "Básicas", reqCurso: ["MAT1"] },
-            { id: "FIS1", n: "Física 1", c: 6, a: "Básicas", reqCurso: ["MAT1"] },
-            { id: "TC1", n: "Teoría de Circuitos 1", c: 7, a: "Eléctrica", reqCurso: ["MAT1", "PROG1"] },
-            { id: "CAD", n: "Dibujo (CAD)", c: 5, a: "Mecánica", reqCurso: ["IME"] },
-            { id: "TDM1", n: "Tecnología de Materiales", c: 6, a: "Mecánica", reqCurso: ["QUI"] },
-            { id: "PI1", n: "Proyecto Integrador 1", c: 10, a: "Proyecto", reqCurso: ["IME", "PROG1"] }
+            { id: "MAT2", n: "Matemática 2", c: 8, a: "Básicas", reqCurso: ["MAT1"] },
+            { id: "FMIN", n: "Fundamentos Matemáticos con Informatica", c: 6, a: "Informática", reqCurso: ["MAT1", "PRG1"] },
+            { id: "TDC2", n: "Teoría de Circuitos 2", c: 6, a: "Electrónica", reqCurso: ["TDC1"]},
+            { id: "FIS1", n: "Física 1", c: 7, a: "Básicas", reqCurso: ["MAT1"] },
+            { id: "TDM1", n: "Tecnologías de Materiales", c: 6, a: "Mecánica", reqCurso: ["QMCA"] },
+            { id: "DCAD", n: "Dibujo Computarizado (CAD)", c: 5, a: "Mecánica", reqCurso: ["INTM"] },
+            { id: "PIC1", n: "Proyecto Integrador de Competencias 1", c: 3, a: "Competencias", reqCurso: ["INTM",  "FMIN","TDC2","TDM1","DCAD"] }
+            { id: "ING2", n: "Inglés 2", c: 4, a: "Idiomas" }
+            { id: "PE2", n: "Programas Especiales 2", c: 2, a: "Otro" }
         ]},
+        
         { sem: 3, materias: [
-            { id: "MAT3", n: "Matemática 3", c: 6, a: "Básicas", reqCurso: ["MAT2"], reqExamen: ["MAT1"] },
-            { id: "FIS2", n: "Física 2", c: 6, a: "Básicas", reqCurso: ["FIS1", "MAT2"], reqExamen: ["MAT1"] },
-            { id: "TC2", n: "Teoría de Circuitos 2", c: 7, a: "Eléctrica", reqCurso: ["TC1", "MAT2"], reqExamen: ["MAT1"] },
-            { id: "ME1", n: "Mecánica 1", c: 6, a: "Mecánica", reqCurso: ["FIS1", "CAD"] },
-            { id: "DIG1", n: "Electrónica Digital 1", c: 7, a: "Electrónica", reqCurso: ["TC1"] }
+            { id: "MAT3", n: "Matemática 3", c: 8, a: "Básicas", reqCurso: ["MAT2"], reqExamen: ["MAT1"] },
+            { id: "PRG2", n: "Programación 2", c: 6, a: "Informática", reqCurso: ["FMIN"], reqExamen: ["PRG1"]  },
+            { id: "EALG", n: "Electrónica Analógica Aplicada 1", c: 6, a: "Electrónica", reqCurso: ["TDC2", "FIS1","MAT2"], reqExamen: ["MAT1", "TDC1"]  }
+            { id: "SLSO", n: "Seguridad Laboral y Salud Ocupacional", c: 5, a: "General", reqExamen: ["MAT1","QMCA","INTM","COES","PRG1", "TDC1"] },
+            { id: "DIES", n: "Dinámica y Estática", c: 7, a: "Mecánica" ,reqCurso: ["FIS1"], reqExamen: ["INTM"]}
+            { id: "EDG1", n: "Electrónica Digital 1", c: 7, a: "Electrónica", reqCurso: ["FMIN"], reqExamen: ["TDC1"] }
+            { id: "ING3", n: "Inglés 3", c: 4, a: "Idiomas" }
+            { id: "PE3", n: "Programas Especiales 3", c: 2, a: "Otro" }
         ]},
         { sem: 4, materias: [
-            { id: "EST", n: "Probabilidad y Estadística", c: 6, a: "Básicas", reqCurso: ["MAT2"] },
-            { id: "FIS3", n: "Física 3", c: 6, a: "Básicas", reqCurso: ["FIS2"], reqExamen: ["FIS1"] },
-            { id: "ANA1", n: "Electrónica Analógica 1", c: 7, a: "Electrónica", reqCurso: ["TC2", "DIG1"] },
-            { id: "ME2", n: "Mecánica 2", c: 6, a: "Mecánica", reqCurso: ["ME1"] },
-            { id: "PI2", n: "Proyecto Integrador 2", c: 10, a: "Proyecto", reqExamen: ["PI1"] },
-            { id: "EVC1", n: "Eval. Competencias (Tec.)", c: 0, a: "Hito", reqExamen: ["PI1"] }
+            { id: "TMPR", n: "Tecnologías de Microprocesadores", c: 7, a: "Electrónica", reqCurso: ["EDG1"], reqExamen: ["FMIN"] },
+            { id: "PRG3", n: "Programación 3", c: 7, a: "Informática", reqCurso: ["PRG1","MAT1"] },
+            { id: "MEM1", n: "Materiales y Elementos de Maquinas 1", c: 6, a: "Mecánica", reqCurso: ["DIES"], reqExamen: ["FMIN"] },
+            { id: "FIS2", n: "Física 2", c: 7, a: "Básicas", reqExamen: ["MAT1", "FMIN","FIS1"] },
+            { id: "AEIN", n: "Aplicaciones Electro Industriales", c: 6, a: "Electrónica", reqCurso: ["EALG"], reqExamen: ["TDC2", "FMIN"] },
+            { id: "PIC2", n: "Proyecto Integrador de Competencias 2", c: 3, a: "Competencias", reqCurso: ["TMPR","PRG3","MEM1","AEIN"], reqExamen:["PIC1"] },
+            { id: "ING4", n: "Inglés 4", c: 4, a: "Idiomas" }
+            { id: "PE4", n: "Programas Especiales 4", c: 2, a: "Otro" }
         ]},
         { sem: 5, materias: [
-            { id: "SIS1", n: "Sistemas de Control 1", c: 7, a: "Control", reqCurso: ["MAT3", "TC2"], reqExamen: ["MAT2"] },
-            { id: "MICR", n: "Microcontroladores", c: 7, a: "Electrónica", reqCurso: ["DIG1"], reqExamen: ["PROG1"] },
-            { id: "MET", n: "Metrología", c: 4, a: "Mecánica", reqCurso: ["FIS1"] },
-            { id: "TER", n: "Termodinámica", c: 6, a: "Mecánica", reqCurso: ["FIS2", "QUI"] },
-            { id: "ING2", n: "Inglés 2", c: 3, a: "Idiomas", reqExamen: ["ING1"] }
+            { id: "MAEL", n: "Máquinas Eléctricas", c: 7, a: "Electrónica", reqCurso: ["AEIN"], reqExamen: ["EALG"]  },
+            { id: "TIND", n: "Telemática Industrial", c: 7, a: "Telemática", reqCurso: ["EALG", "PRG2"], reqExamen: ["TMPR", "PRG3"]  },
+            { id: "FIS3", n: "Física 3", c: 7, a: "Básicas", reqExamen: ["PRG2","EALG","SLSO","EDG1","MAT3","DIES"] },
+            { id: "INSC", n: "Introducción a los Sistemas de Control", c: 7, a: "Electrónica", reqCurso: ["AEIN"], reqExamen: ["PRG2","EALG","SLSO","EDG1","MAT3","DIES"] },
+            { id: "LEGL", n: "Legislación Laboral", c: 5, a: "General", reqExamen: ["PRG2","EALG","SLSO","EDG1","MAT3","DIES"] },
+            { id: "PFAB", n: "Procesos de Fabricación", c: 5, a: "Mecánica", reqExamen: ["PRG2","EALG","SLSO","EDG1","MAT3","DIES"] },
+            { id: "APTM", n: "Anteproyecto de Tecnólogo", c: 5, a: "Competencias", reqExamen: ["PI2"] },
+            { id: "PPCU", n: "Practica Profesional Curricular", c: 8, a: "Competencias", reqExamen: ["PRG2","EALG","SLSO","EDG1","MAT3","DIES"] },
+            { id: "ING5", n: "Inglés 5", c: 4, a: "Idiomas" }
+            { id: "PE5", n: "Programas Especiales 5", c: 2, a: "Otro" }
         ]},
         { sem: 6, materias: [
-            { id: "SIS2", n: "Sistemas de Control 2", c: 7, a: "Control", reqCurso: ["SIS1"], reqExamen: ["MAT3"] },
-            { id: "INST", n: "Instrumentación", c: 7, a: "Control", reqCurso: ["ANA1", "SIS1"] },
-            { id: "MAQ", n: "Máquinas Eléctricas", c: 7, a: "Eléctrica", reqCurso: ["TC2", "FIS2"] },
-            { id: "PI3", n: "Proyecto Integrador 3", c: 20, a: "Proyecto", reqExamen: ["PI2", "EVC1"] },
-            { id: "EVC2", n: "Eval. Comp. (Final Tec.)", c: 0, a: "Hito", reqExamen: ["PI2", "EVC1"] }
+            { id: "EDG2", n: "Electrónica Digital 2", c: 7, a: "Electrónica", reqExamen: ["EALG","EDG1"] }
+            { id: "HYNE", n: "Hidráulica y Neumática", c: 7, a: "Mecánica", reqExamen: ["TMPR","PRG3","MEM1","FIS2","AEIN","PIC2" ] },
+            { id: "AUTM", n: "Automatización", c: 7, a: "Telemática", reqCurso: ["TIND", "INSC"], reqExamen: ["TMPR","PRG3","MEM1","FIS2","AEIN","PIC2" ] },
+            { id: "TDCR", n: "Tecnologías de Control y Robótica", c: 7, a: "Mecatrónica", reqCurso: ["INSC"] },
+            { id: "IMEL", n: "Instrumentación y Medidas Eléctricas", c: 7, a: "Electrónica", reqCurso: ["MAEL", "INSC"], reqExamen: ["TMPR","PRG3","MEM1","FIS2","AEIN","PIC2" ]  },
+            { id: "PIND", n: "Procesos Industriales", c: 5, a: "Soporte", reqExamen: ["TMPR","PRG3","MEM1","FIS2","AEIN","PIC2" ] },
+            { id: "PFTM", n: "Proyecto Final de Tecnólogo", c: 5, a: "Competencias", reqExamen: ["APTM"] },
+            { id: "ING6", n: "Inglés 6", c: 4, a: "Idiomas" }
+            { id: "PE6", n: "Programas Especiales 6", c: 2, a: "Otro" }
         ]},
         { sem: 7, materias: [
             { id: "AUT1", n: "Automatización Ind. 1", c: 8, a: "Control", reqCurso: ["SIS1", "MICR"] },
             { id: "POT", n: "Electrónica de Potencia", c: 7, a: "Electrónica", reqCurso: ["ANA1", "TC2"] },
-            { id: "HID", n: "Hidráulica y Neumática", c: 6, a: "Mecánica", reqCurso: ["TER", "ME1"] },
             { id: "GEST", n: "Gestión de Proyectos", c: 5, a: "Gestión" },
-            { id: "ING3", n: "Inglés 3", c: 3, a: "Idiomas", reqExamen: ["ING2"] }
         ]},
         { sem: 8, materias: [
             { id: "AUT2", n: "Automatización Ind. 2", c: 8, a: "Control", reqCurso: ["AUT1"] },
             { id: "ROB", n: "Robótica Industrial", c: 8, a: "Control", reqCurso: ["SIS2", "ME2"] },
             { id: "MAN", n: "Mantenimiento Industrial", c: 5, a: "Mecánica", reqCurso: ["TDM1"] },
-            { id: "PI4", n: "Proyecto Integrador 4", c: 10, a: "Proyecto", reqExamen: ["PI3"] }
         ]},
         { sem: 9, materias: [
             { id: "OPT1", n: "Electiva / Optativa 1", c: 8, a: "Especialización" },
             { id: "OPT2", n: "Electiva / Optativa 2", c: 8, a: "Especialización" },
             { id: "SEG", n: "Seguridad e Higiene", c: 4, a: "Transversal" },
             { id: "ETI", n: "Ética Profesional", c: 4, a: "Transversal" },
-            { id: "ING4", n: "Inglés 4", c: 3, a: "Idiomas", reqExamen: ["ING3"] }
         ]},
         { sem: 10, materias: [
             { id: "PFC", n: "Proyecto Final de Carrera", c: 40, a: "Proyecto", reqExamen: ["PI4", "EVC2"] },
             { id: "PAS", n: "Pasantía Profesional", c: 10, a: "Práctica", reqExamen: ["PI4", "EVC2"] },
-            { id: "EVC3", n: "Eval. Comp. (Egreso)", c: 0, a: "Hito", reqExamen: ["PFC"] }
         ]}
     ]
 };
