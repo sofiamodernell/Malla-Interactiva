@@ -26,22 +26,30 @@ header {
     position: relative;
     background: linear-gradient(135deg, var(--dark), var(--primary));
     color: white;
-    padding: 3rem 1rem 3rem 1rem; /* Más espacio para la ola */
+    /* Le damos 7rem de espacio abajo para empujar el título hacia arriba */
+    padding: 3rem 1rem 7rem 1rem; 
     text-align: center;
+}
+
+/* Protegemos el texto para que siempre esté al frente */
+.header-content {
+    position: relative;
+    z-index: 10; 
 }
 .wave {
     position: absolute;
-    bottom: -1px; /* Para que no quede una línea blanca fina */
+    bottom: -1px; 
     left: 0;
     width: 100%;
     line-height: 0;
+    z-index: 1; /* La ola va por detrás del texto */
 }
-/* Agregamos esta regla específica para el dibujo de la ola */
+
 .wave svg {
     display: block;
     width: 100%;
-    height: auto;
-    max-height: 80px; /* <--- Esto aplana la ola para que no sea tan alta */
+    /* Forzamos la altura a 60px para que no tape los logos ni el texto */
+    height: 60px; 
 }
 .controls {
     padding: 15px;
