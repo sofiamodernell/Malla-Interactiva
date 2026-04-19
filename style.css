@@ -208,12 +208,14 @@ select {
     color: #1b5e20;
 }
 
-/* === ESTILOS DEL GUIÑO (CHICA SUPERPODEROSA) - ARRIBA A LA DERECHA === */
+/* === ESTILOS DEL GUIÑO (CHICA SUPERPODEROSA) === */
 .chica-superpoderosa {
     position: fixed;
-    top: 20px !important;    
+    /* La bajamos: flotará a 70px del fondo, justo arriba de tu barra de créditos */
+    bottom: 70px !important; 
     right: 20px !important;
-    bottom: auto !important; 
+    top: auto !important; /* Desactivamos su anclaje superior */
+    
     width: 80px;
     z-index: 2000;           
     opacity: 0.8;
@@ -223,7 +225,7 @@ select {
 
 .chica-superpoderosa:hover {
     opacity: 1;
-    transform: scale(1.1) translateY(10px) rotate(5deg);
+    transform: scale(1.1) translateY(-10px) rotate(-5deg); /* Ahora salta un poquito hacia arriba */
 }
 
 /* =========================================
@@ -307,5 +309,23 @@ select {
         height: 75px !important;  /* <--- Tamaño para el celular */
         top: 10px;
         left: 10px;
+    }
+}
+/* === ESTILOS DEL LOGO IMEC (DERECHA) === */
+.logo-imec {
+    position: absolute; 
+    top: 15px;          
+    right: 20px;        /* Lo empujamos bien a la derecha */
+    height: 80px;       /* Tamaño inicial (ajústalo a tu gusto) */
+    width: auto;
+    z-index: 10;
+}
+
+/* Ajuste para celulares */
+@media (max-width: 600px) {
+    .logo-imec {
+        height: 50px;
+        top: 10px;
+        right: 10px;
     }
 }
