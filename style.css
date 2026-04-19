@@ -206,3 +206,20 @@ select {
     background-color: var(--success);
     color: #1b5e20;
 }
+/* === ESTILOS DEL GUIÑO (CHICA SUPERPODEROSA) === */
+.chica-superpoderosa {
+    position: fixed;
+    bottom: 60px; /* Se apoya justo encima de tu barra de créditos */
+    right: 20px;  /* Esquina inferior derecha */
+    width: 90px;  /* Tamaño pequeñito y tierno */
+    z-index: 999; /* Asegura que no quede tapada por otras cosas */
+    opacity: 0.85; /* Un poquito transparente para que se vea delicado */
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); /* Animación suave y rebotona */
+    cursor: pointer;
+}
+
+/* Efecto divertido al pasarle el mouse */
+.chica-superpoderosa:hover {
+    opacity: 1;
+    transform: scale(1.15) translateY(-15px) rotate(-10deg);
+}
