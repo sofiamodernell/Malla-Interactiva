@@ -1,116 +1,122 @@
-/* Variables de color para fácil personalización */
 :root {
-    --primary-color: #003366;    /* Azul institucional */
-    --secondary-color: #00a8cc;  /* Celeste vibrante */
-    --bg-color: #f0f2f5;
+    --primary: #003366;
+    --secondary: #00a8cc;
+    --bg: #f0f2f5;
     --card-bg: #ffffff;
-    --text-color: #333333;
-    --success-color: #28a745;    /* Verde para aprobadas */
-    --border-radius: 8px;
+    --text: #333333;
+    --success: #28a745;
     --shadow: 0 4px 6px rgba(0,0,0,0.1);
 }
 
 body {
-    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-    background-color: var(--bg-color);
+    font-family: 'Segoe UI', sans-serif;
+    background: var(--bg);
     margin: 0;
-    color: var(--text-color);
+    color: var(--text);
+    padding-bottom: 60px;
 }
 
-/* Encabezado */
 header {
-    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
     color: white;
-    padding: 2rem;
+    padding: 1.5rem;
     text-align: center;
     box-shadow: var(--shadow);
 }
 
-/* Contenedor de selección de carrera */
 .controls {
-    padding: 20px;
+    padding: 15px;
     background: white;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 15px;
+    text-align: center;
     border-bottom: 1px solid #ddd;
 }
 
 select {
-    padding: 10px 15px;
-    border-radius: var(--border-radius);
-    border: 2px solid var(--secondary-color);
-    font-size: 1rem;
-    cursor: pointer;
-    outline: none;
+    padding: 8px;
+    border-radius: 5px;
+    border: 2px solid var(--secondary);
 }
 
-/* Contenedor de la Malla (Scroll horizontal) */
 .malla-wrapper {
     display: flex;
     overflow-x: auto;
-    padding: 30px;
-    gap: 25px;
-    min-height: 70vh;
+    padding: 20px;
+    gap: 20px;
 }
 
-/* Cada columna de semestre */
 .semestre {
-    min-width: 260px;
-    background: rgba(255, 255, 255, 0.5);
-    border-radius: var(--border-radius);
+    min-width: 250px;
+    background: rgba(255, 255, 255, 0.6);
+    border-radius: 8px;
     padding: 15px;
     border: 1px dashed #ccc;
 }
 
 .semestre h3 {
     text-align: center;
-    color: var(--primary-color);
+    color: var(--primary);
     margin-top: 0;
-    font-size: 1.2rem;
-    border-bottom: 2px solid var(--secondary-color);
-    padding-bottom: 10px;
+    border-bottom: 2px solid var(--secondary);
+    padding-bottom: 8px;
 }
 
-/* Tarjeta de Materia */
-.materia {
+.materia { 
     background: var(--card-bg);
-    border-radius: var(--border-radius);
-    padding: 15px;
-    margin-bottom: 15px;
+    border-radius: 8px;
+    padding: 12px;
+    margin-bottom: 12px;
     box-shadow: var(--shadow);
     cursor: pointer;
-    transition: transform 0.2s, box-shadow 0.2s, background-color 0.3s;
-    border-left: 5px solid var(--secondary-color);
+    border-left: 5px solid var(--secondary);
+    transition: all 0.2s ease;
+    position: relative;
 }
 
-.materia:hover {
-    transform: translateY(-5px);
+.materia:hover:not(.bloqueada) {
+    transform: translateY(-3px);
     box-shadow: 0 6px 12px rgba(0,0,0,0.15);
 }
 
-/* Estado Aprobado */
+/* APROBADA */
 .materia.aprobada {
     background-color: #d4edda;
-    border-left-color: var(--success-color);
-    border-color: var(--success-color);
+    border-left-color: var(--success);
+    border-color: var(--success);
 }
 
-.materia.aprobada .materia-name {
-    color: #155724;
+.materia.aprobada::after {
+    content: "✓";
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    color: var(--success);
+    font-weight: bold;
 }
 
-/* Detalles internos de la materia */
+/* BLOQUEADA */
+.materia.bloqueada {
+    opacity: 0.5;
+    background-color: #e9ecef;
+    border-left-color: #999;
+    cursor: not-allowed;
+}
+
+.materia.bloqueada::after {
+    content: "🔒";
+    position: absolute;
+    top: 10px;
+    right: 10px;
+}
+
 .materia-name {
     font-weight: bold;
     display: block;
-    margin-bottom: 8px;
-    font-size: 1rem;
+    margin-bottom: 5px;
+    font-size: 0.95rem;
 }
 
 .materia-info {
-    font-size: 0.85rem;
+    font-size: 0.8rem;
     color: #666;
     display: flex;
     justify-content: space-between;
@@ -118,47 +124,28 @@ select {
 
 .area-tag {
     font-size: 0.7rem;
-    background: #e1e1e1;
-    padding: 3px 8px;
-    border-radius: 12px;
+    background: #eee;
+    padding: 2px 6px;
+    border-radius: 8px;
     text-transform: uppercase;
     font-weight: bold;
     margin-bottom: 5px;
     display: inline-block;
 }
 
-/* Barra de progreso inferior */
 .stats-bar {
     position: fixed;
     bottom: 0;
     width: 100%;
-    background: var(--primary-color);
+    background: var(--primary);
     color: white;
     padding: 15px;
     text-align: center;
-    font-size: 1.1rem;
-    box-shadow: 0 -2px 10px rgba(0,0,0,0.2);
+    font-weight: bold;
+    z-index: 1000;
 }
 
 #creditos-count {
-    font-weight: bold;
     color: #00ffcc;
-}
-
-/* Estado Bloqueado (Faltan previas) */
-.materia.bloqueada {
-    opacity: 0.4;
-    filter: grayscale(80%);
-    cursor: not-allowed;
-    border-color: #ccc;
-    transform: none !important;
-    box-shadow: none !important;
-}
-
-.materia.bloqueada::before {
-    content: "🔒";
-    position: absolute;
-    top: 5px;
-    right: 8px;
-    font-size: 0.9rem;
+    font-size: 1.2rem;
 }
