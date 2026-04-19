@@ -144,3 +144,21 @@ select {
     font-weight: bold;
     color: #00ffcc;
 }
+
+/* Estado Bloqueado (Faltan previas) */
+.materia.bloqueada {
+    opacity: 0.4;
+    filter: grayscale(80%);
+    cursor: not-allowed;
+    border-color: #ccc;
+    transform: none !important;
+    box-shadow: none !important;
+}
+
+.materia.bloqueada::before {
+    content: "🔒";
+    position: absolute;
+    top: 5px;
+    right: 8px;
+    font-size: 0.9rem;
+}
