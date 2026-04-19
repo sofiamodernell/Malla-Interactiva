@@ -1,11 +1,12 @@
 :root {
-    --primary: #003366;
-    --secondary: #00a8cc;
-    --bg: #f0f2f5;
-    --card-bg: #ffffff;
-    --text: #333333;
-    --success: #28a745;
-    --shadow: 0 4px 6px rgba(0,0,0,0.1);
+    /* Paleta Pastel y Rosada */
+    --primary: #f48fb1;      /* Rosa principal */
+    --secondary: #ce93d8;    /* Lila pastel */
+    --bg: #fff0f5;           /* Fondo general (Lavender Blush) */
+    --card-bg: #ffffff;      /* Fondo de las materias */
+    --text: #5a5a5a;         /* Gris oscuro suave para leer bien */
+    --success: #a8e6cf;      /* Verde menta pastel para aprobadas */
+    --shadow: 0 4px 10px rgba(244, 143, 177, 0.2); /* Sombra rosada */
 }
 
 body {
@@ -22,19 +23,22 @@ header {
     padding: 1.5rem;
     text-align: center;
     box-shadow: var(--shadow);
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
 }
 
 .controls {
     padding: 15px;
     background: white;
     text-align: center;
-    border-bottom: 1px solid #ddd;
+    border-bottom: 1px solid #f8bbd0;
 }
 
 select {
     padding: 8px;
     border-radius: 5px;
-    border: 2px solid var(--secondary);
+    border: 2px solid var(--primary);
+    color: var(--text);
+    outline: none;
 }
 
 .malla-wrapper {
@@ -46,44 +50,48 @@ select {
 
 .semestre {
     min-width: 250px;
-    background: rgba(255, 255, 255, 0.6);
-    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.7);
+    border-radius: 12px;
     padding: 15px;
-    border: 1px dashed #ccc;
+    border: 2px dashed #f8bbd0;
 }
 
 .semestre h3 {
     text-align: center;
-    color: var(--primary);
+    color: #d81b60; /* Rosa más oscuro para los títulos */
     margin-top: 0;
-    border-bottom: 2px solid var(--secondary);
+    border-bottom: 2px solid var(--primary);
     padding-bottom: 8px;
 }
 
 .materia { 
     background: var(--card-bg);
-    border-radius: 8px;
+    border-radius: 10px;
     padding: 12px;
     margin-bottom: 12px;
     box-shadow: var(--shadow);
     cursor: pointer;
-    border-left: 5px solid var(--secondary);
+    border-left: 5px solid var(--primary);
     transition: all 0.2s ease;
     position: relative;
 }
 
 .materia:hover:not(.bloqueada) {
     transform: translateY(-3px);
-    box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+    box-shadow: 0 6px 15px rgba(244, 143, 177, 0.4);
 }
 
-/* APROBADA */
+/* === ESTADOS DE LAS MATERIAS === */
+
+/* 1. APROBADA (Verde menta) */
 .materia.aprobada {
-    background-color: #d4edda;
+    background-color: #eafff5;
     border-left-color: var(--success);
     border-color: var(--success);
 }
-
+.materia.aprobada .materia-name {
+    color: #2e7d32;
+}
 .materia.aprobada::after {
     content: "✓";
     position: absolute;
@@ -91,21 +99,39 @@ select {
     right: 10px;
     color: var(--success);
     font-weight: bold;
+    font-size: 1.2rem;
 }
 
-/* BLOQUEADA */
+/* 2. CURSADA (Amarillo pastel) */
+.materia.cursada {
+    background-color: #fff9c4; 
+    border-left-color: #ffd54f;
+    border-color: #ffd54f;
+}
+.materia.cursada .materia-name {
+    color: #f57f17;
+}
+.materia.cursada::after {
+    content: "⏳";
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 1rem;
+}
+
+/* 3. BLOQUEADA (Gris suave) */
 .materia.bloqueada {
-    opacity: 0.5;
-    background-color: #e9ecef;
-    border-left-color: #999;
+    opacity: 0.6;
+    background-color: #f5f5f5;
+    border-left-color: #d7ccc8;
     cursor: not-allowed;
 }
-
 .materia.bloqueada::after {
     content: "🔒";
     position: absolute;
     top: 10px;
     right: 10px;
+    filter: grayscale(100%) opacity(60%);
 }
 
 .materia-name {
@@ -117,16 +143,17 @@ select {
 
 .materia-info {
     font-size: 0.8rem;
-    color: #666;
+    color: #888;
     display: flex;
     justify-content: space-between;
 }
 
 .area-tag {
     font-size: 0.7rem;
-    background: #eee;
-    padding: 2px 6px;
-    border-radius: 8px;
+    background: #fce4ec; /* Rosita muy claro */
+    color: #d81b60;
+    padding: 3px 8px;
+    border-radius: 10px;
     text-transform: uppercase;
     font-weight: bold;
     margin-bottom: 5px;
@@ -143,28 +170,13 @@ select {
     text-align: center;
     font-weight: bold;
     z-index: 1000;
+    box-shadow: 0 -4px 10px rgba(0,0,0,0.05);
 }
 
 #creditos-count {
-    color: #00ffcc;
-    font-size: 1.2rem;
-}
-
-/* ESTADO CURSADA (Pendiente Examen) */
-.materia.cursada {
-    background-color: #fff3cd; /* Amarillo suave */
-    border-left-color: #ffc107;
-    border-color: #ffc107;
-}
-
-.materia.cursada .materia-name {
-    color: #856404;
-}
-
-.materia.cursada::after {
-    content: "⏳"; /* Reloj de arena para indicar pendiente de examen */
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    font-size: 1rem;
+    color: #ffffff;
+    font-size: 1.3rem;
+    background: rgba(255,255,255,0.3);
+    padding: 2px 8px;
+    border-radius: 5px;
 }
