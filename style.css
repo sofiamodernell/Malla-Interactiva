@@ -1,7 +1,7 @@
 :root {
     /* Paleta Pastel y Rosada */
     --primary: #dda0dd;      /* Rosa principal */
-    --secondary: #ffe6ff;    /* Lila pastel */
+    --secondary: #dda0dd;    /* Lila pastel */
     --bg: #fff0f5;           /* Fondo general (Lavender Blush) */
     --card-bg: #ffffff;      /* Fondo de las materias */
     --text: #5a5a5a;         /* Gris oscuro suave para leer bien */
