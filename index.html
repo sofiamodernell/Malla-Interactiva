@@ -40,6 +40,7 @@
 </header>
 
 <div class="controls">
+    <button id="theme-toggle" class="btn-theme">🌙 Modo Oscuro</button>
     <label>Carrera: </label>
     <select id="carrera-selector" onchange="renderMalla(this.value)">
         <option value="imec_2023">Ingeniería en Mecatrónica (Plan 2023)</option>
@@ -49,8 +50,12 @@
 <div id="malla-container" class="malla-wrapper"></div>
 
 <div class="stats-bar">
-    Créditos Acumulados: <span id="creditos-count">0</span> / 451
+    <div class="progress-container">
+        <div class="progress-bar" id="progress-bar"></div>
+    </div>
+    <span id="creditos-count">Créditos: 0</span>
 </div>
+    
 <img src="bombon.png" alt="Bombón" class="chica-superpoderosa">
     
 <script src="script.js"></script>
