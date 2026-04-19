@@ -1,12 +1,17 @@
 :root {
-    /* Paleta Pastel y Rosada */
-    --primary: #dda0dd;      /* Rosa principal */
-    --secondary: #dda0dd;    /* Lila pastel */
-    --bg: #fff0f5;           /* Fondo general (Lavender Blush) */
-    --card-bg: #ffffff;      /* Fondo de las materias */
-    --text: #5a5a5a;         /* Gris oscuro suave para leer bien */
-    --success: #a8e6cf;      /* Verde menta pastel para aprobadas */
-    --shadow: 0 4px 10px rgba(244, 143, 177, 0.4); /* Sombra rosada un toque más oscura */
+    /* Nueva Paleta Azul - Profesional */
+    --bg: #ffffff;             /* Blanco puro */
+    --darker: #00171f;         /* Azul casi negro (Ideal para textos) */
+    --dark: #003459;           /* Azul oscuro */
+    --primary: #007ea7;        /* Azul medio (Botones y bordes) */
+    --secondary: #00a8e8;      /* Celeste brillante (Acentos) */
+    
+    /* Colores extra para la interfaz */
+    --card-bg: #ffffff;        
+    --text: var(--darker);         
+    --success: #a8e6cf;        /* Mantenemos el verde para aprobadas */
+    --cursada: #fff9c4;        /* Mantenemos el amarillo para cursadas */
+    --shadow: 0 4px 10px rgba(0, 52, 89, 0.15); /* Sombra azulada elegante */
 }
 
 body {
@@ -19,7 +24,7 @@ body {
 
 header {
     position: relative;
-    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    background: linear-gradient(135deg, var(--dark), var(--primary));
     color: white;
     padding: 3rem 1rem; /* <--- Aumentamos el relleno (arriba/abajo) a 3rem */
     text-align: center;
@@ -329,3 +334,54 @@ select {
         right: 10px;
     }
 }
+/* =========================================
+   COLORES POR ÁREA DE LA MATERIA
+========================================= */
+
+/* 1. BÁSICAS (Matemáticas, Física, etc. - Celeste Pastel) */
+.materia[data-area="Básicas"] { border-left-color: #81d4fa; }
+.materia[data-area="Básicas"] .area-tag { background: #e1f5fe; color: #007ea7; }
+
+/* 2. INFORMÁTICA (Programación - Verde Agua Pastel) */
+.materia[data-area="Informática"] { border-left-color: #80cbc4; }
+.materia[data-area="Informática"] .area-tag { background: #e0f2f1; color: #00695c; }
+
+/* 3. ELECTRÓNICA (Circuitos - Naranja/Amarillo Pastel) */
+.materia[data-area="Electrónica"] { border-left-color: #ffcc80; }
+.materia[data-area="Electrónica"] .area-tag { background: #fff3e0; color: #e65100; }
+
+/* 4. MECÁNICA (Rosado/Rojo Pastel) */
+.materia[data-area="Mecánica"] { border-left-color: #ef9a9a; }
+.materia[data-area="Mecánica"] .area-tag { background: #ffebee; color: #c62828; }
+
+/* 5. IDIOMAS (Inglés - Verde Claro Pastel) */
+.materia[data-area="Idiomas"] { border-left-color: #c5e1a5; }
+.materia[data-area="Idiomas"] .area-tag { background: #f1f8e9; color: #33691e; }
+
+/* 6. GENERAL (Comunicaciones - Lila Pastel) */
+.materia[data-area="General"] { border-left-color: #ce93d8; }
+.materia[data-area="General"] .area-tag { background: #f3e5f5; color: #6a1b9a; }
+
+/* 7. OTRO (Gris Pastel) */
+.materia[data-area="Otro"] { border-left-color: #b0bec5; }
+.materia[data-area="Otro"] .area-tag { background: #eceff1; color: #455a64; }
+
+/* 8. COMPETENCIAS (Amarillo/Crema Pastel) */
+.materia[data-area="Competencias"] { border-left-color: #fff59d; }
+.materia[data-area="Competencias"] .area-tag { background: #fffde7; color: #f57f17; }
+
+/* 9. MECATRÓNICA (Azul Grisáceo/Industrial Pastel) */
+.materia[data-area="Mecatrónica"] { border-left-color: #90a4ae; }
+.materia[data-area="Mecatrónica"] .area-tag { background: #eceff1; color: #37474f; }
+
+/* 10. TELEMÁTICA (Violeta/Indigo Pastel) */
+.materia[data-area="Telemática"] { border-left-color: #9fa8da; }
+.materia[data-area="Telemática"] .area-tag { background: #e8eaf6; color: #283593; }
+
+/* 11. SOPORTE (Salmón/Durazno Pastel) */
+.materia[data-area="Soporte"] { border-left-color: #ffab91; }
+.materia[data-area="Soporte"] .area-tag { background: #fbe9e7; color: #d84315; }
+
+/* IMPORTANTE: Forzamos a que si está aprobada/cursada, gane el color de estado */
+.materia.aprobada { border-left-color: var(--success) !important; }
+.materia.cursada { border-left-color: #ffd54f !important; }
