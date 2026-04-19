@@ -24,7 +24,7 @@ body {
 header {
     position: relative;
     background: linear-gradient(135deg, var(--dark), var(--primary));
-    color: white;
+    color: var(--card-bg);
     /* Dejamos un colchón exacto de 130px abajo para que la ola no toque el texto */
     padding: 3rem 1rem 130px 1rem; 
     text-align: center;
@@ -51,7 +51,7 @@ header {
 }
 .controls {
     padding: 15px;
-    background: white;
+    background: var(--card-bg);
     text-align: center;
     border-bottom: 1px solid #f8bbd0;
 }
@@ -212,7 +212,7 @@ select {
     bottom: 0;
     width: 100%;
     background: var(--primary);
-    color: white;
+    color: var(--card-bg);
     padding: 15px;
     text-align: center;
     font-weight: bold;
@@ -231,7 +231,7 @@ select {
 /* BOTÓN APROBAR SEMESTRE ENTERO */
 .btn-semestre {
     background-color: var(--primary);
-    color: white;
+    color: var(--card-bg);
     border: none;
     border-radius: 8px;
     padding: 8px;
@@ -326,7 +326,7 @@ select {
     margin-top: 20px;
     padding: 10px 20px;
     font-size: 1rem;
-    color: white;
+    color: var(--card-bg);
     background-color: var(--primary);
     border: none;
     border-radius: 8px;
@@ -472,7 +472,7 @@ body, .controls, .materia, .semestre, .modal-contenido {
 }
 .btn-theme:hover {
     background: var(--primary);
-    color: white;
+    color: var(--card-bg);
 }
 
 /* Barra de Progreso */
@@ -526,4 +526,36 @@ body, .controls, .materia, .semestre, .modal-contenido {
     opacity: 1;
     filter: none;
     border: 3px dashed var(--secondary) !important;
+}
+/* =========================================
+   🌙 MODO OSCURO (DARK MODE)
+========================================= */
+[data-theme="dark"] {
+    --bg: #0b132b;             /* Fondo general de la página oscuro */
+    --card-bg: #1c2541;        /* Fondo de las materias y el modal */
+    --text: #e0e1dd;           /* Texto claro para que se lea bien */
+    --darker: #ffffff;         /* Títulos en blanco puro */
+    --shadow: 0 4px 15px rgba(0, 0, 0, 0.6); /* Sombra más profunda */
+    
+    /* Colores de estado ajustados para que no encandilen en la oscuridad */
+    --success: #2a9d8f;        /* Verde más apagado para aprobadas */
+    --cursada: #e9c46a;        /* Amarillo/mostaza para cursadas */
+}
+
+/* 🌊 EL SECRETO DE LA OLA: 
+   Forzamos al SVG del HTML a que tome el color de fondo oscuro */
+[data-theme="dark"] header svg path {
+    fill: var(--bg) !important;
+}
+
+/* 📝 Ajuste para textos secundarios que quedan invisibles */
+[data-theme="dark"] .materia-info span[title] {
+    color: #a3b1c6 !important; /* Gris clarito para las "Previas" */
+}
+
+/* Ajuste para el botón de Aprobar Semestre (desmarcar) */
+[data-theme="dark"] .btn-semestre.completado {
+    background: #1c2541;
+    color: var(--success);
+    border-color: var(--success);
 }
