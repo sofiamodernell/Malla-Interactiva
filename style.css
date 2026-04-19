@@ -21,35 +21,33 @@ body {
     color: var(--text);
     padding-bottom: 60px;
 }
-
 header {
     position: relative;
     background: linear-gradient(135deg, var(--dark), var(--primary));
     color: white;
-    /* Le damos 7rem de espacio abajo para empujar el título hacia arriba */
-    padding: 3rem 1rem 7rem 1rem; 
+    /* Usamos 'vw' (viewport width) para que el espacio inferior sea dinámico */
+    padding: 3rem 1rem 8vw 1rem; 
     text-align: center;
 }
 
-/* Protegemos el texto para que siempre esté al frente */
 .header-content {
     position: relative;
-    z-index: 10; 
+    z-index: 10; /* ¡Súper importante! Mantiene el texto por encima de la ola */
 }
+
 .wave {
     position: absolute;
-    bottom: -1px; 
+    bottom: -1px;
     left: 0;
     width: 100%;
     line-height: 0;
-    z-index: 1; /* La ola va por detrás del texto */
+    z-index: 1;
 }
 
 .wave svg {
     display: block;
     width: 100%;
-    /* Forzamos la altura a 60px para que no tape los logos ni el texto */
-    height: 60px; 
+    height: auto; /* <--- Esto le devuelve la curva suave y natural */
 }
 .controls {
     padding: 15px;
