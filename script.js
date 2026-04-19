@@ -7,7 +7,7 @@ const basesDeDatos = {
             { id: "MAT1", n: "Matemática 1", c: 8, a: "Básicas" },
             { id: "QMCA", n: "Química", c: 6, a: "Básicas" },
             { id: "INTM", n: "Introd. a la Mecatrónica", c: 4, a: "Mecánica" },
-            { id: "ING1", n: "Inglés 1", c: 4, a: "Idiomas" }
+            { id: "ING1", n: "Inglés 1", c: 4, a: "Idiomas" },
             { id: "PE1", n: "Programas Especiales 1", c: 2, a: "Otro" }
         ]},
         
@@ -19,7 +19,7 @@ const basesDeDatos = {
             { id: "TDM1", n: "Tecnologías de Materiales", c: 6, a: "Mecánica", reqCurso: ["QMCA"] },
             { id: "DCAD", n: "Dibujo Computarizado (CAD)", c: 5, a: "Mecánica", reqCurso: ["INTM"] },
             { id: "PIC1", n: "Proyecto Integrador de Competencias 1", c: 3, a: "Competencias", reqCurso: ["INTM",  "FMIN","TDC2","TDM1","DCAD"] }
-            { id: "ING2", n: "Inglés 2", c: 4, a: "Idiomas" }
+            { id: "ING2", n: "Inglés 2", c: 4, a: "Idiomas" },
             { id: "PE2", n: "Programas Especiales 2", c: 2, a: "Otro" }
         ]},
         
@@ -30,7 +30,7 @@ const basesDeDatos = {
             { id: "SLSO", n: "Seguridad Laboral y Salud Ocupacional", c: 5, a: "General", reqExamen: ["MAT1","QMCA","INTM","COES","PRG1", "TDC1"] },
             { id: "DIES", n: "Dinámica y Estática", c: 7, a: "Mecánica" ,reqCurso: ["FIS1"], reqExamen: ["INTM"]}
             { id: "EDG1", n: "Electrónica Digital 1", c: 7, a: "Electrónica", reqCurso: ["FMIN"], reqExamen: ["TDC1"] }
-            { id: "ING3", n: "Inglés 3", c: 4, a: "Idiomas" }
+            { id: "ING3", n: "Inglés 3", c: 4, a: "Idiomas" },
             { id: "PE3", n: "Programas Especiales 3", c: 2, a: "Otro" }
         ]},
         { sem: 4, materias: [
@@ -40,7 +40,7 @@ const basesDeDatos = {
             { id: "FIS2", n: "Física 2", c: 7, a: "Básicas", reqExamen: ["MAT1", "FMIN","FIS1"] },
             { id: "AEIN", n: "Aplicaciones Electro Industriales", c: 6, a: "Electrónica", reqCurso: ["EALG"], reqExamen: ["TDC2", "FMIN"] },
             { id: "PIC2", n: "Proyecto Integrador de Competencias 2", c: 3, a: "Competencias", reqCurso: ["TMPR","PRG3","MEM1","AEIN"], reqExamen:["PIC1"] },
-            { id: "ING4", n: "Inglés 4", c: 4, a: "Idiomas" }
+            { id: "ING4", n: "Inglés 4", c: 4, a: "Idiomas" },
             { id: "PE4", n: "Programas Especiales 4", c: 2, a: "Otro" }
         ]},
         { sem: 5, materias: [
@@ -52,7 +52,7 @@ const basesDeDatos = {
             { id: "PFAB", n: "Procesos de Fabricación", c: 5, a: "Mecánica", reqExamen: ["PRG2","EALG","SLSO","EDG1","MAT3","DIES"] },
             { id: "APTM", n: "Anteproyecto de Tecnólogo", c: 5, a: "Competencias", reqExamen: ["PI2"] },
             { id: "PPCU", n: "Practica Profesional Curricular", c: 8, a: "Competencias", reqExamen: ["PRG2","EALG","SLSO","EDG1","MAT3","DIES"] },
-            { id: "ING5", n: "Inglés 5", c: 4, a: "Idiomas" }
+            { id: "ING5", n: "Inglés 5", c: 4, a: "Idiomas" },
             { id: "PE5", n: "Programas Especiales 5", c: 2, a: "Otro" }
         ]},
         { sem: 6, materias: [
@@ -63,7 +63,7 @@ const basesDeDatos = {
             { id: "IMEL", n: "Instrumentación y Medidas Eléctricas", c: 7, a: "Electrónica", reqCurso: ["MAEL", "INSC"], reqExamen: ["TMPR","PRG3","MEM1","FIS2","AEIN","PIC2" ]  },
             { id: "PIND", n: "Procesos Industriales", c: 5, a: "Soporte", reqExamen: ["TMPR","PRG3","MEM1","FIS2","AEIN","PIC2" ] },
             { id: "PFTM", n: "Proyecto Final de Tecnólogo", c: 5, a: "Competencias", reqExamen: ["APTM"] },
-            { id: "ING6", n: "Inglés 6", c: 4, a: "Idiomas" }
+            { id: "ING6", n: "Inglés 6", c: 4, a: "Idiomas" },
             { id: "PE6", n: "Programas Especiales 6", c: 2, a: "Otro" }
         ]},
         { sem: 7, materias: [
