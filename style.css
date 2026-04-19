@@ -26,15 +26,16 @@ header {
     position: relative;
     background: linear-gradient(135deg, var(--dark), var(--primary));
     color: white;
-    padding: 3rem 1rem; /* <--- Aumentamos el relleno (arriba/abajo) a 3rem */
+    padding: 4rem 1rem 6rem 1rem; /* Más espacio para la ola */
     text-align: center;
-    box-shadow: var(--shadow);
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    min-height: 120px; /* <--- Asegura que el header tenga al menos 120px de alto */
 }
-
+.wave {
+    position: absolute;
+    bottom: -1px; /* Para que no quede una línea blanca fina */
+    left: 0;
+    width: 100%;
+    line-height: 0;
+}
 .controls {
     padding: 15px;
     background: white;
@@ -58,11 +59,13 @@ select {
 }
 
 .semestre {
-    min-width: 250px;
-    background: rgba(255, 255, 255, 0.7);
-    border-radius: 12px;
+    min-width: 200px; /* Un poco más angosto para las tarjetas cuadradas */
+    background: rgba(255, 255, 255, 0.6);
+    backdrop-filter: blur(10px); /* Desenfoque de fondo */
+    border-radius: 24px; /* Súper redondeado */
     padding: 15px;
-    border: 2px dashed #f8bbd0;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 0 8px 32px rgba(0, 52, 89, 0.05);
 }
 .semestre h3 {
     text-align: center;
@@ -71,21 +74,31 @@ select {
     border-bottom: 2px solid var(--secondary); /* El celeste brillante */
     padding-bottom: 8px;
 }
-.materia { 
+/* Materias: Cuadradas y Orgánicas */
+.materia {
     background: var(--card-bg);
-    border-radius: 10px;
+    border-radius: 18px; /* Bordes suaves */
     padding: 12px;
-    margin-bottom: 12px;
-    box-shadow: var(--shadow);
-    cursor: pointer;
-    border-left: 5px solid var(--primary);
-    transition: all 0.2s ease;
-    position: relative;
+    margin-bottom: 15px;
+    
+    /* Configuración para que sean cuadradas */
+    width: 160px; 
+    height: 160px;
+    margin-left: auto;
+    margin-right: auto;
+    
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; /* Distribuye el contenido arriba y abajo */
+    
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.04);
+    border: 1px solid #f0f0f0;
+    border-left: 6px solid var(--primary);
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
-
 .materia:hover:not(.bloqueada) {
-    transform: translateY(-3px);
-    box-shadow: 0 6px 15px rgba(244, 143, 177, 0.4);
+    transform: translateY(-5px) scale(1.02);
+    box-shadow: 0 15px 30px rgba(0, 126, 167, 0.15);
 }
 
 /* === ESTADOS DE LAS MATERIAS === */
@@ -142,16 +155,33 @@ select {
     font-weight: bold;
     display: block;
     margin-bottom: 5px;
-    font-size: 0.95rem;
+    font-size: 0.85rem;
 }
-
 .materia-info {
     font-size: 0.8rem;
     color: #888;
     display: flex;
     justify-content: space-between;
 }
+/* === IDEA 5: SCROLLBAR PERSONALIZADO === */
+.malla-wrapper::-webkit-scrollbar {
+    height: 10px; /* Barra horizontal */
+}
 
+.malla-wrapper::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+}
+
+.malla-wrapper::-webkit-scrollbar-thumb {
+    background: var(--primary);
+    border-radius: 10px;
+    border: 2px solid #f1f1f1; /* Crea un pequeño margen */
+}
+
+.malla-wrapper::-webkit-scrollbar-thumb:hover {
+    background: var(--dark);
+}
 .area-tag {
     font-size: 0.7rem;
     background: #fce4ec; 
