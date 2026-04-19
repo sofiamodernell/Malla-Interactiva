@@ -8,26 +8,24 @@
 </head>
 <body>
 
-    <header>
-        <h1>Malla Interactiva Universitaria</h1>
-        <p>Visualiza y gestiona tu progreso académico</p>
-    </header>
+<header>
+    <h1>Malla Interactiva IMEC</h1>
+    <p>Visualiza tu progreso y desbloquea materias según sus previaturas.</p>
+</header>
 
-    <div class="controls">
-        <label>Carrera seleccionada: </label>
-        <select id="carrera-selector" onchange="renderMalla(this.value)">
-            <option value="imec_2023">Ingeniería en Mecatrónica (Plan 2023)</option>
-            <option value="diseno_dummy">Diseño Industrial (Ejemplo)</option>
-        </select>
-    </div>
+<div class="controls">
+    <label>Carrera: </label>
+    <select id="carrera-selector" onchange="renderMalla(this.value)">
+        <option value="imec_2023">Ingeniería en Mecatrónica (Plan 2023)</option>
+    </select>
+</div>
 
-    <div id="malla-container" class="malla-wrapper"></div>
+<div id="malla-container" class="malla-wrapper"></div>
 
-    <div class="stats-bar">
-        Créditos Acumulados: <span id="creditos-count">0</span>
-    </div>
+<div class="stats-bar">
+    Créditos Acumulados: <span id="creditos-count">0</span> / 451
+</div>
 
-    <script src="script.js"></script>
-
+<script src="script.js"></script>
 </body>
 </html>
