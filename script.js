@@ -264,29 +264,44 @@ function dibujarInterfaz() {
         container.appendChild(semDiv);
     });
     
-// (Asumiendo que tienes tu variable totalCreditos calculada)
-    // Calcula el total de créditos de la carrera sumando todas las materias de tu base de datos
-    const maxCreditos = materiasDB.reduce((acc, materia) => acc + materia.c, 0); 
+// === CÁLCULO DE CRÉDITOS Y BARRA DE PROGRESO ===
+    // Extraemos TODAS las materias del plan actual en una sola lista
+    const todasLasMaterias = plan.flatMap(sem => sem.materias);
     
-    // Calcular porcentaje
+    // Calculamos el máximo de créditos posibles
+    const maxCreditos = todasLasMaterias.reduce((acc, materia) => acc + materia.c, 0); 
+    
+    // Calculamos el porcentaje
     const porcentaje = maxCreditos > 0 ? (totalCreditos / maxCreditos) * 100 : 0;
 
-    // Actualizar texto y barra visual
-    document.getElementById('creditos-count').innerText = `Créditos: ${totalCreditos} / ${maxCreditos} (${porcentaje.toFixed(1)}%)`;
-    document.getElementById('progress-bar').style.width = `${porcentaje}%`;}
+    // Actualizamos los textos y el ancho de la barra
+    const creditosCount = document.getElementById('creditos-count');
+    const progressBar = document.getElementById('progress-bar');
+    
+    if (creditosCount && progressBar) {
+        creditosCount.innerText = `Créditos: ${totalCreditos} / ${maxCreditos} (${porcentaje.toFixed(1)}%)`;
+        progressBar.style.width = `${porcentaje}%`;
+    }
+} // <-- Aquí cierra correctamente dibujarInterfaz()
 
 window.onload = () =>    renderMalla('imec_2023'); // Renderiza la malla
     
 // --- FUNCIONES DE EFECTO ENFOQUE ---
+// --- FUNCIONES DE EFECTO ENFOQUE ---
 function activarResaltado(materiaSeleccionada) {
     const mallaWrapper = document.querySelector('.malla-wrapper');
-    mallaWrapper.classList.add('dimming-active');
+    if(mallaWrapper) mallaWrapper.classList.add('dimming-active');
     
     // Obtener qué materias necesita esta (prerrequisitos)
     const reqs = [...(materiaSeleccionada.reqCurso || []), ...(materiaSeleccionada.reqExamen || [])];
     
-    // Obtener a qué materias destraba esta (postrrequisitos)
-    const postReqs = materiasDB.filter(m => 
+    // === ESTO ERA LO QUE FALTABA ===
+    // Extraemos TODAS las materias del plan actual para buscar quiénes la necesitan
+    const plan = basesDeDatos[carreraActual];
+    const todasLasMaterias = plan.flatMap(sem => sem.materias);
+
+    // Obtener a qué materias destraba esta (postrrequisitos) usando todasLasMaterias
+    const postReqs = todasLasMaterias.filter(m => 
         (m.reqCurso && m.reqCurso.includes(materiaSeleccionada.id)) || 
         (m.reqExamen && m.reqExamen.includes(materiaSeleccionada.id))
     ).map(m => m.id);
