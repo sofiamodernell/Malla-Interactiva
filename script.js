@@ -67,29 +67,43 @@ const basesDeDatos = {
             { id: "PE6", n: "Programas Especiales 6", c: 2, a: "Otro" }
         ]},
         { sem: 7, materias: [
-            { id: "MAT3", n: "Matemática 3", c: 8, a: "Básicas" },
-            { id: "EPOT", n: "Electrónica de Potencia", c: 7, a: "Electrónica" },
-            { id: "MEM2", n: "Materiales y Elementos de Maquinas 2", c: 6, a: "Mecánica"},
-            { id: "GPYE", n: "Gestión de Proyectos y Emprendimientos", c: 4, a: "General" },
-            { id: "SEMB", n: "Sistemas Embebidos", c: 6, a: "Telemática" },
-            { id: "TCYF", n: "Transferencia de Calor y Fluidos", c: 6, a: "Mecánica" },
+            { id: "MAT4", n: "Matemática 4", c: 8, a: "Básicas", reqExamen: ["MAEL","TIND","INSC","FIS3","LEGL","APTM","PFAB","PPCU"]},
+            { id: "EPOT", n: "Electrónica de Potencia", c: 7, a: "Electrónica", reqCurso: ["TDCR", "IMEL"], reqExamen: ["MAEL","TIND","INSC","FIS3","LEGL","APTM","PFAB","PPCU"] },
+            { id: "MEM2", n: "Materiales y Elementos de Maquinas 2", c: 6, a: "Mecánica", reqExamen:["MAEL","TIND","INSC","FIS3","LEGL","APTM","PFAB","PPCU"]},
+            { id: "GPYE", n: "Gestión de Proyectos y Emprendimientos", c: 4, a: "General", reqExamen:["MAEL","TIND","INSC","FIS3","LEGL","APTM","PFAB","PPCU"] },
+            { id: "SEMB", n: "Sistemas Embebidos", c: 6, a: "Telemática" , reqCurso: ["TDCR"], reqExamen:["MAEL","TIND","INSC","FIS3","LEGL","APTM","PFAB","PPCU"]},
+            { id: "TCYF", n: "Transferencia de Calor y Fluidos", c: 6, a: "Mecánica", reqExamen: ["MAEL","TIND","INSC","FIS3","LEGL","APTM","PFAB","PPCU"]},
             { id: "ING7", n: "Inglés 7", c: 4, a: "Idiomas" },
             { id: "PE7", n: "Programas Especiales 7", c: 2, a: "Otro" }
         ]},
         { sem: 8, materias: [
-            { id: "AUT2", n: "Automatización Ind. 2", c: 8, a: "Control" },
-            { id: "ROB", n: "Robótica Industrial", c: 8, a: "Control"},
-            { id: "MAN", n: "Mantenimiento Industrial", c: 5, a: "Mecánica"}
+            { id: "PYES", n: "Probabilidad y Estadística", c: 5, a: "Básicas", reqExamen:["EDG2","HYNE","AUTM","TDCR","IMEL","PIND","PFTM"] },
+            { id: "MNPI", n: "Métodos Númericos para Ingeniería", c: 7, a: "Soporte", reqCurso: ["MAT4"], reqExamen:["EDG2","HYNE","AUTM","TDCR","IMEL","PIND","PFTM"]},
+            { id: "PRDS", n: "Procesamiento de Señales", c: 7, a: "Telemática", reqExamen:["EDG2","HYNE","AUTM","TDCR","IMEL","PIND","PFTM"]},
+            { id: "MDSA", n: "Mantenimiento de Sistemas Automaizados", c: 6, a: "Mecánica", reqCurso: ["SEMB"], reqExamen:["EDG2","HYNE","AUTM","TDCR","IMEL","PIND","PFTM"]},
+            { id: "SCAP", n: "Sistemas de Control Aplicados ", c: 7, a: "Mecatrónica", reqCurso: ["EPOT"], reqExamen:["EDG2","HYNE","AUTM","TDCR","IMEL","PIND","PFTM"]},
+            { id: "TDM2", n: "Tecnologías de Materiales 2", c: 6, a: "Mecánica", reqExamen: ["EDG2","HYNE","AUTM","TDCR","IMEL","PIND","PFTM"] },
+            { id: "ING8", n: "Inglés 8", c: 4, a: "Idiomas" },
+            { id: "PE8", n: "Programas Especiales 8", c: 2, a: "Otro" }
         ]},
         { sem: 9, materias: [
-            { id: "OPT1", n: "Electiva / Optativa 1", c: 8, a: "Especialización" },
-            { id: "OPT2", n: "Electiva / Optativa 2", c: 8, a: "Especialización" },
-            { id: "SEG", n: "Seguridad e Higiene", c: 4, a: "Transversal" },
-            { id: "ETI", n: "Ética Profesional", c: 4, a: "Transversal" }
+            { id: "DMEC", n: "Diseño Mecatónico", c: 7, a: "Mecatrónica", reqCurso: ["SCAP","MDSA"], reqExamen: ["TCYF","MAT4","EPOT","MEM2","GPYE","SEMB"] },
+            { id: "RBIN", n: "Robótica Industrial ", c: 7, a: "Mecatrónica", reqCurso: ["SCAP"] , reqExamen:["TCYF","MAT4","EPOT","MEM2","GPYE","SEMB"]},
+            { id: "MIAC", n: "Manufactura Asistida por Computador ", c: 5, a: "Soporte", reqExamen:["TCYF","MAT4","EPOT","MEM2","GPYE","SEMB"] },
+            { id: "CPIN", n: "Costos para Ingeniería ", c: 5, a: "Soporte" , reqExamen:["TCYF","MAT4","EPOT","MEM2","GPYE","SEMB"]},
+            { id: "OPT1", n: "Optativa 1", c: 6, a: "Optativa", reqExamen:["TCYF","MAT4","EPOT","MEM2","GPYE","SEMB"] },
+            { id: "PFG1", n: "Proyecto Final de Grado 1", c: 8, a: "Competencias" , reqExamen:["PYES","MNPI","PRDS","MDSA","SCAP","TDM2"]},
+            { id: "ING9", n: "Inglés 9", c: 4, a: "Idiomas" },
+            { id: "PE9", n: "Programas Especiales 9", c: 2, a: "Otro" }
         ]},
         { sem: 10, materias: [
-            { id: "PFC", n: "Proyecto Final de Carrera", c: 40, a: "Proyecto"},
-            { id: "PAS", n: "Pasantía Profesional", c: 10, a: "Práctica" }
+            { id: "GCAL", n: "Gestion de Calidad", c: 5, a: "Soporte" , reqExamen:["TDM2","PYES","MNPI","PRDS","MDSA","SCAP"]},
+            { id: "GIAM", n: "Gestion de Impacto Ambiental ", c: 5, a: "Soporte" , reqExamen:["TDM2","PYES","MNPI","PRDS","MDSA","SCAP"]},
+            { id: "SICF", n: "Sistemas Inteligentes y Ciberfísicos", c: 7, a: "Mecatrónica", reqExamen: ["TDM2","PYES","MNPI","PRDS","MDSA","SCAP"] },
+            { id: "OPT2", n: "Optativa 2", c: 6, a: "Optativa", reqExamen: ["TDM2","PYES","MNPI","PRDS","MDSA","SCAP"]},
+            { id: "PFG2", n: "Proyecto Final de Grado 2", c: 8, a: "Competencias", reqExamen: ["TDM2","PYES","MNPI","PRDS","SCAP","MDSA","OPT1","CPIN","MIAC","PFG1"] },
+            { id: "ING9", n: "Inglés 9", c: 4, a: "Idiomas" },
+            { id: "PE9", n: "Programas Especiales 9", c: 2, a: "Otro" }
         ]}
     ]
 };
