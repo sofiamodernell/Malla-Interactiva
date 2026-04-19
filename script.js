@@ -195,6 +195,8 @@ function dibujarInterfaz() {
                 totalCreditos += mat.c;
             }
 
+            matDiv.setAttribute('data-area', mat.a);
+            
             let previasTexto = "";
             if (mat.reqExamen && mat.reqExamen.length > 0) previasTexto += `Ex: ${mat.reqExamen.join(', ')} `;
             if (mat.reqCurso && mat.reqCurso.length > 0) previasTexto += `Cur: ${mat.reqCurso.join(', ')}`;
