@@ -26,7 +26,7 @@ header {
     position: relative;
     background: linear-gradient(135deg, var(--dark), var(--primary));
     color: white;
-    padding: 4rem 1rem 6rem 1rem; /* Más espacio para la ola */
+    padding: 3rem 1rem 3rem 1rem; /* Más espacio para la ola */
     text-align: center;
 }
 .wave {
@@ -35,6 +35,13 @@ header {
     left: 0;
     width: 100%;
     line-height: 0;
+}
+/* Agregamos esta regla específica para el dibujo de la ola */
+.wave svg {
+    display: block;
+    width: 100%;
+    height: auto;
+    max-height: 80px; /* <--- Esto aplana la ola para que no sea tan alta */
 }
 .controls {
     padding: 15px;
