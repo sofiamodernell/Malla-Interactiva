@@ -2,7 +2,7 @@ const basesDeDatos = {
     "imec_2023": [
         { sem: 1, materias: [
             { id: "MAT1", n: "Matemática 1", c: 6, a: "Básicas" },
-            { id: "QUI", n: "Química", c: 6, a: "Básicas" }, // ¡Aquí está!
+            { id: "QUI", n: "Química", c: 6, a: "Básicas" },
             { id: "PROG1", n: "Programación 1", c: 8, a: "Informática" },
             { id: "IME", n: "Introd. a la Mecatrónica", c: 4, a: "Mecánica" },
             { id: "COE", n: "Comun. Oral y Escrita", c: 4, a: "Transversal" },
@@ -13,6 +13,7 @@ const basesDeDatos = {
             { id: "FIS1", n: "Física 1", c: 6, a: "Básicas" },
             { id: "TC1", n: "Teoría de Circuitos 1", c: 7, a: "Eléctrica" },
             { id: "CAD", n: "Dibujo (CAD)", c: 5, a: "Mecánica" },
+            { id: "TDM1", n: "Tecnología de Materiales", c: 6, a: "Mecánica" }, // ¡Materia añadida!
             { id: "PI1", n: "Proyecto Integrador 1", c: 10, a: "Proyecto" }
         ]},
         { sem: 3, materias: [
