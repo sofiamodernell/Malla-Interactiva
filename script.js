@@ -234,4 +234,16 @@ function dibujarInterfaz() {
     document.getElementById('creditos-count').innerText = totalCreditos;
 }
 
-window.onload = () => renderMalla('imec_2023');
+window.onload = () => {
+    renderMalla('imec_2023'); // Renderiza la malla
+    
+    // Lógica para cerrar el modal de bienvenida
+    const modal = document.getElementById('modal-bienvenida');
+    const btnEntendido = document.getElementById('btn-entendido');
+    
+    if (modal && btnEntendido) {
+        btnEntendido.addEventListener('click', () => {
+            modal.style.display = 'none'; // Oculta el modal al hacer clic
+        });
+    }
+};
