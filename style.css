@@ -18,6 +18,7 @@ body {
 }
 
 header {
+    position: relative; /* <--- Agrega solo esta línea nueva */
     background: linear-gradient(135deg, var(--primary), var(--secondary));
     color: white;
     padding: 1.5rem;
@@ -286,4 +287,21 @@ select {
 .btn-modal:hover {
     background-color: #d81b60;
     transform: scale(1.05);
+}
+/* === ESTILOS DEL LOGO DE LA UNIVERSIDAD === */
+.logo-uni {
+    position: absolute; /* Lo independiza del texto */
+    top: 20px;          /* Lo separa del borde de arriba */
+    left: 20px;         /* Lo empuja bien a la izquierda */
+    height: 60px;       /* Tamaño del logo (puedes ajustarlo si lo ves muy chico/grande) */
+    width: auto;
+}
+
+/* Ajuste para que en celulares no choque con el texto */
+@media (max-width: 600px) {
+    .logo-uni {
+        height: 40px;
+        top: 10px;
+        left: 10px;
+    }
 }
