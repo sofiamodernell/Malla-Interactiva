@@ -43,7 +43,7 @@ const basesDeDatos = {
             { id: "INST", n: "Instrumentación", c: 7, a: "Control", req: ["ANA1"] },
             { id: "MAQ", n: "Máquinas Eléctricas", c: 7, a: "Eléctrica", req: ["TC2", "FIS2"] },
             { id: "PI3", n: "Proyecto Integrador 3", c: 20, a: "Proyecto", req: ["PI2"] },
-            { id: "EVC2", n: "Eval. Competencias (Final Tec.)", c: 0, a: "Hito", req: ["EVC1"] }
+            { id: "EVC2", n: "Eval. Comp. (Final Tec.)", c: 0, a: "Hito", req: ["EVC1"] }
         ]},
         { sem: 7, materias: [
             { id: "AUT1", n: "Automatización Ind. 1", c: 8, a: "Control", req: ["SIS1", "MICR"] },
@@ -59,8 +59,8 @@ const basesDeDatos = {
             { id: "PI4", n: "Proyecto Integrador 4", c: 10, a: "Proyecto", req: ["PI3"] }
         ]},
         { sem: 9, materias: [
-            { id: "OPT1", n: "Electiva / Optativa 1", c: 8, a: "Especialización" },
-            { id: "OPT2", n: "Electiva / Optativa 2", c: 8, a: "Especialización" },
+            { id: "OPT1", n: "Electiva 1", c: 8, a: "Especialización" },
+            { id: "OPT2", n: "Electiva 2", c: 8, a: "Especialización" },
             { id: "SEG", n: "Seguridad e Higiene", c: 4, a: "Transversal" },
             { id: "ETI", n: "Ética Profesional", c: 4, a: "Transversal" },
             { id: "ING4", n: "Inglés 4", c: 3, a: "Idiomas", req: ["ING3"] }
@@ -68,17 +68,16 @@ const basesDeDatos = {
         { sem: 10, materias: [
             { id: "PFC", n: "Proyecto Final de Carrera", c: 40, a: "Proyecto", req: ["PI4"] },
             { id: "PAS", n: "Pasantía Profesional", c: 10, a: "Práctica" },
-            { id: "EVC3", n: "Eval. Competencias (Egreso)", c: 0, a: "Hito", req: ["EVC2"] }
+            { id: "EVC3", n: "Eval. Comp. (Egreso)", c: 0, a: "Hito", req: ["EVC2"] }
         ]}
     ]
 };
 
 let materiasAprobadas = new Set();
-let carreraActual = "";
+let carreraActual = "imec_2023";
 
 function renderMalla(carreraId) {
     carreraActual = carreraId;
-    materiasAprobadas.clear(); // Reinicia progreso al cambiar de carrera
     dibujarInterfaz();
 }
 
@@ -88,6 +87,7 @@ function dibujarInterfaz() {
     container.innerHTML = '';
     
     const plan = basesDeDatos[carreraActual];
+    let totalCreditos = 0;
 
     plan.forEach(semestre => {
         const semDiv = document.createElement('div');
@@ -97,16 +97,18 @@ function dibujarInterfaz() {
         semestre.materias.forEach(mat => {
             const matDiv = document.createElement('div');
             matDiv.className = 'materia';
-            matDiv.id = `mat-${mat.id}`;
             
-            // Lógica de Previaturas (Bloqueo)
+            // Lógica de Previaturas
             let estaBloqueada = false;
             if (mat.req && mat.req.length > 0) {
                 estaBloqueada = !mat.req.every(reqId => materiasAprobadas.has(reqId));
             }
 
             if (estaBloqueada) matDiv.classList.add('bloqueada');
-            if (materiasAprobadas.has(mat.id)) matDiv.classList.add('aprobada');
+            if (materiasAprobadas.has(mat.id)) {
+                matDiv.classList.add('aprobada');
+                totalCreditos += mat.c;
+            }
 
             matDiv.innerHTML = `
                 <span class="area-tag">${mat.a}</span>
@@ -118,18 +120,17 @@ function dibujarInterfaz() {
             `;
             
             matDiv.addEventListener('click', () => {
-                if (matDiv.classList.contains('bloqueada')) {
-                    // Opcional: Podrías poner una alerta aquí tipo alert("Debes aprobar las previas primero");
+                if (estaBloqueada) {
+                    alert('🔒 Debes aprobar las previas: ' + mat.req.join(', '));
                     return; 
                 }
 
                 if (materiasAprobadas.has(mat.id)) {
                     materiasAprobadas.delete(mat.id);
-                    // Si desapruebas una, deberíamos reevaluar para bloquear las siguientes
                 } else {
                     materiasAprobadas.add(mat.id);
                 }
-                actualizarEstadoGeneral();
+                dibujarInterfaz(); // Refresca para actualizar candados
             });
 
             semDiv.appendChild(matDiv);
@@ -137,28 +138,7 @@ function dibujarInterfaz() {
         container.appendChild(semDiv);
     });
     
-    actualizarContador();
+    document.getElementById('creditos-count').innerText = totalCreditos;
 }
 
-function actualizarEstadoGeneral() {
-    // Redibuja toda la malla para que los candados se actualicen dinámicamente
-    dibujarInterfaz();
-}
-
-function actualizarContador() {
-    let totalCreditos = 0;
-    const plan = basesDeDatos[carreraActual];
-    
-    plan.forEach(sem => {
-        sem.materias.forEach(mat => {
-            if (materiasAprobadas.has(mat.id)) {
-                totalCreditos += mat.c;
-            }
-        });
-    });
-    
-    const el = document.getElementById('creditos-count');
-    if (el) el.innerText = totalCreditos;
-}
-
-window.onload = () => renderMalla('imec_2023');
+window.onload = () => dibujarInterfaz();
