@@ -28,7 +28,7 @@ const basesDeDatos = {
             { id: "FIS3", n: "Física 3", c: 6, a: "Básicas", reqCurso: ["FIS2"], reqExamen: ["FIS1"] },
             { id: "ANA1", n: "Electrónica Analógica 1", c: 7, a: "Electrónica", reqCurso: ["TC2", "DIG1"] },
             { id: "ME2", n: "Mecánica 2", c: 6, a: "Mecánica", reqCurso: ["ME1"] },
-            { id: "PI2", n: "Proyecto Integrador 2", c: 10, a: "Proyecto", reqExamen: ["PI1"] }, // Los PI suelen pedir examen salvado
+            { id: "PI2", n: "Proyecto Integrador 2", c: 10, a: "Proyecto", reqExamen: ["PI1"] },
             { id: "EVC1", n: "Eval. Competencias (Tec.)", c: 0, a: "Hito", reqExamen: ["PI1"] }
         ]},
         { sem: 5, materias: [
@@ -73,7 +73,6 @@ const basesDeDatos = {
     ]
 };
 
-// Map guardará el ID de la materia y su estado: 0 (Blanco), 1 (Cursada), 2 (Examen Aprobado)
 let estadoMaterias = new Map(); 
 let carreraActual = "imec_2023";
 
@@ -96,6 +95,35 @@ function dibujarInterfaz() {
         semDiv.className = 'semestre';
         semDiv.innerHTML = `<h3>Semestre ${semestre.sem}</h3>`;
 
+        // === NUEVO: BOTÓN DE APROBAR SEMESTRE ENTERO ===
+        const btnSemestre = document.createElement('button');
+        btnSemestre.className = 'btn-semestre';
+        
+        // Verificamos si TODAS las materias de este semestre ya están en estado 2 (Aprobadas)
+        const semestreCompleto = semestre.materias.every(mat => estadoMaterias.get(mat.id) === 2);
+        
+        if (semestreCompleto) {
+            btnSemestre.innerText = "Desmarcar Semestre";
+            btnSemestre.classList.add('completado');
+        } else {
+            btnSemestre.innerText = "✓ Aprobar Semestre";
+        }
+
+        // Qué pasa al hacer clic en el botón del semestre
+        btnSemestre.addEventListener('click', () => {
+            if (semestreCompleto) {
+                // Si estaba completo, desmarcamos todo (volvemos a 0)
+                semestre.materias.forEach(mat => estadoMaterias.set(mat.id, 0));
+            } else {
+                // Si faltaban materias, las forzamos todas a estado 2 (Examen salvado)
+                semestre.materias.forEach(mat => estadoMaterias.set(mat.id, 2));
+            }
+            dibujarInterfaz(); // Redibujamos la pantalla
+        });
+
+        semDiv.appendChild(btnSemestre);
+        // ===============================================
+
         semestre.materias.forEach(mat => {
             const matDiv = document.createElement('div');
             matDiv.className = 'materia';
@@ -103,7 +131,6 @@ function dibujarInterfaz() {
             let estaBloqueada = false;
             let faltanTextos = [];
 
-            // Verifica si tiene las previas de EXAMEN salvadas (estado == 2)
             if (mat.reqExamen) {
                 mat.reqExamen.forEach(reqId => {
                     if (estadoMaterias.get(reqId) !== 2) {
@@ -112,7 +139,6 @@ function dibujarInterfaz() {
                 });
             }
             
-            // Verifica si tiene las previas de CURSO aprobadas (estado >= 1)
             if (mat.reqCurso) {
                 mat.reqCurso.forEach(reqId => {
                     if ((estadoMaterias.get(reqId) || 0) < 1) {
@@ -125,17 +151,15 @@ function dibujarInterfaz() {
 
             const estadoActual = estadoMaterias.get(mat.id) || 0;
             
-            // Aplicar Clases CSS
             if (estaBloqueada) {
                 matDiv.classList.add('bloqueada');
             } else if (estadoActual === 1) {
                 matDiv.classList.add('cursada');
             } else if (estadoActual === 2) {
                 matDiv.classList.add('aprobada');
-                totalCreditos += mat.c; // Sumar créditos SOLO si el examen está salvado
+                totalCreditos += mat.c;
             }
 
-            // Preparar textos para mostrar requisitos de forma amigable
             let previasTexto = "";
             if (mat.reqExamen && mat.reqExamen.length > 0) previasTexto += `Ex: ${mat.reqExamen.join(', ')} `;
             if (mat.reqCurso && mat.reqCurso.length > 0) previasTexto += `Cur: ${mat.reqCurso.join(', ')}`;
@@ -150,7 +174,6 @@ function dibujarInterfaz() {
                 </div>
             `;
             
-            // Evento Click: Clickeando pasa de Blanco(0) -> Amarilla(1) -> Verde(2) -> Blanco(0)
             matDiv.addEventListener('click', () => {
                 if (estaBloqueada) {
                     alert('🔒 No puedes acceder a esta materia. Te falta:\n' + faltanTextos.join('\n'));
@@ -158,14 +181,14 @@ function dibujarInterfaz() {
                 }
 
                 if (estadoActual === 0) {
-                    estadoMaterias.set(mat.id, 1); // Cursada aprobada (pero sin examen)
+                    estadoMaterias.set(mat.id, 1);
                 } else if (estadoActual === 1) {
-                    estadoMaterias.set(mat.id, 2); // Examen aprobado (créditos sumados)
+                    estadoMaterias.set(mat.id, 2);
                 } else {
-                    estadoMaterias.set(mat.id, 0); // Desmarcar
+                    estadoMaterias.set(mat.id, 0);
                 }
                 
-                dibujarInterfaz(); // Redibuja al instante
+                dibujarInterfaz();
             });
 
             semDiv.appendChild(matDiv);
@@ -176,5 +199,4 @@ function dibujarInterfaz() {
     document.getElementById('creditos-count').innerText = totalCreditos;
 }
 
-// Iniciar
 window.onload = () => renderMalla('imec_2023');
