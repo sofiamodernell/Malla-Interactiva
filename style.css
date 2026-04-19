@@ -25,14 +25,14 @@ header {
     position: relative;
     background: linear-gradient(135deg, var(--dark), var(--primary));
     color: white;
-    /* Usamos 'vw' (viewport width) para que el espacio inferior sea dinámico */
-    padding: 3rem 1rem 8vw 1rem; 
+    /* Dejamos un colchón exacto de 130px abajo para que la ola no toque el texto */
+    padding: 3rem 1rem 130px 1rem; 
     text-align: center;
 }
 
 .header-content {
     position: relative;
-    z-index: 10; /* ¡Súper importante! Mantiene el texto por encima de la ola */
+    z-index: 10; /* Esto obliga al texto a estar POR ENCIMA de la ola */
 }
 
 .wave {
@@ -41,13 +41,13 @@ header {
     left: 0;
     width: 100%;
     line-height: 0;
-    z-index: 1;
+    z-index: 1; /* La ola se queda en el fondo */
 }
 
 .wave svg {
     display: block;
     width: 100%;
-    height: auto; /* <--- Esto le devuelve la curva suave y natural */
+    height: 120px; /* Altura controlada, mucho menos invasiva */
 }
 .controls {
     padding: 15px;
