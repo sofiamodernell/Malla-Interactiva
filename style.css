@@ -293,7 +293,7 @@ select {
     position: absolute; /* Lo independiza del texto */
     top: 20px;          /* Lo separa del borde de arriba */
     left: 20px;         /* Lo empuja bien a la izquierda */
-    height: 60px;       /* Tamaño del logo (puedes ajustarlo si lo ves muy chico/grande) */
+    height: 10px;       /* Tamaño del logo (puedes ajustarlo si lo ves muy chico/grande) */
     width: auto;
 }
 
