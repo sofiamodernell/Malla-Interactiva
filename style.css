@@ -290,18 +290,18 @@ select {
 }
 /* === ESTILOS DEL LOGO DE LA UNIVERSIDAD === */
 .logo-uni {
-    position: absolute; /* Lo independiza del texto */
-    top: 20px;          /* Lo separa del borde de arriba */
-    left: 20px;         /* Lo empuja bien a la izquierda */
-    height: 30px;       /* Tamaño del logo (puedes ajustarlo si lo ves muy chico/grande) */
+    position: absolute; 
+    top: 15px;          
+    left: 20px;         
+    height: 70px;       /* <--- ¡Subimos el tamaño a 70px! */
     width: auto;
 }
 
-/* Ajuste para que en celulares no choque con el texto */
+/* Ajuste para que en celulares se vea bien y proporcionado */
 @media (max-width: 600px) {
     .logo-uni {
-        height: 40px;
-        top: 10px;
-        left: 10px;
+        height: 50px;   /* <--- En el celu lo dejamos en 50px */
+        top: 15px;
+        left: 15px;
     }
 }
