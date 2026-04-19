@@ -426,3 +426,104 @@ select {
 /* IMPORTANTE: Forzamos a que si está aprobada/cursada, gane el color de estado */
 .materia.aprobada { border-left-color: var(--success) !important; }
 .materia.cursada { border-left-color: #ffd54f !important; }
+
+/* =========================================
+   NUEVAS FUNCIONES: MODO OSCURO Y PROGRESO
+========================================= */
+
+/* Transiciones suaves para cambiar de tema */
+body, .controls, .materia, .semestre, .modal-contenido {
+    transition: background-color 0.4s, color 0.4s, border-color 0.4s;
+}
+
+/* Variables de Modo Oscuro */
+[data-theme="dark"] {
+    --bg: #121212;
+    --card-bg: #1e1e1e;
+    --text: #e0e0e0;
+    --dark: #00171f;
+    --primary: #003459;
+    --shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+}
+
+[data-theme="dark"] .controls,
+[data-theme="dark"] .modal-contenido {
+    background-color: var(--card-bg);
+    color: var(--text);
+    border-color: var(--primary);
+}
+
+[data-theme="dark"] .semestre {
+    background: rgba(30, 30, 30, 0.7);
+    border-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Botón Modo Oscuro */
+.btn-theme {
+    background: transparent;
+    border: 2px solid var(--primary);
+    color: var(--text);
+    padding: 8px 15px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: all 0.3s;
+    margin-left: 15px;
+}
+.btn-theme:hover {
+    background: var(--primary);
+    color: white;
+}
+
+/* Barra de Progreso */
+.progress-container {
+    width: 80%;
+    max-width: 600px;
+    height: 12px;
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 10px;
+    margin: 0 auto 10px auto;
+    overflow: hidden;
+}
+
+.progress-bar {
+    height: 100%;
+    width: 0%; /* Inicia en 0 */
+    background: var(--success); 
+    border-radius: 10px;
+    transition: width 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    box-shadow: 0 0 10px rgba(168, 230, 207, 0.8);
+}
+
+/* =========================================
+   EFECTO ENFOQUE (RESALTADO DE CORRELATIVAS)
+========================================= */
+
+/* Cuando la malla está "activa", oscurecemos todo */
+.malla-wrapper.dimming-active .materia {
+    opacity: 0.25;
+    filter: grayscale(100%);
+}
+
+/* La materia que tenemos bajo el mouse */
+.malla-wrapper.dimming-active .materia.highlight-self {
+    opacity: 1;
+    filter: none;
+    transform: scale(1.05) translateY(-5px);
+    z-index: 10;
+    box-shadow: 0 15px 30px rgba(0, 126, 167, 0.4);
+}
+
+/* Materias requeridas (Prerrequisitos - Borde Naranja) */
+.malla-wrapper.dimming-active .materia.highlight-req {
+    opacity: 1;
+    filter: none;
+    border: 3px dashed #ff9800 !important;
+}
+
+/* Materias que destraba (Postrrequisitos - Borde Celeste) */
+.malla-wrapper.dimming-active .materia.highlight-post {
+    opacity: 1;
+    filter: none;
+    border: 3px dashed var(--secondary) !important;
+}
