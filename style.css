@@ -559,3 +559,14 @@ body, .controls, .materia, .semestre, .modal-contenido {
     color: var(--success);
     border-color: var(--success);
 }
+/* Quitar viñetas y achicar letra en las sub-listas del modal */
+.lista-instrucciones .sub-lista {
+    list-style-type: none; /* Esto borra el puntito negro */
+    padding-left: 5px;     /* Alinea el texto a la izquierda */
+    font-size: 0.85rem;    /* Achica el tamaño de la letra */
+    margin-top: 10px;
+}
+
+.lista-instrucciones .sub-lista li {
+    margin-bottom: 8px; /* Da un poquito de espacio entre cada línea */
+}
