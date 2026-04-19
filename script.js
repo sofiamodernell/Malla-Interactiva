@@ -67,14 +67,14 @@ const basesDeDatos = {
             { id: "PE6", n: "Programas Especiales 6", c: 2, a: "Otro" }
         ]},
         { sem: 7, materias: [
-            { id: "AUT1", n: "Automatización Ind. 1", c: 8, a: "Control", reqCurso: ["SIS1", "MICR"] },
-            { id: "POT", n: "Electrónica de Potencia", c: 7, a: "Electrónica", reqCurso: ["ANA1", "TC2"] },
+            { id: "AUT1", n: "Automatización Ind. 1", c: 8, a: "Control= },
+            { id: "POT", n: "Electrónica de Potencia", c: 7, a: "Electrónica"  },
             { id: "GEST", n: "Gestión de Proyectos", c: 5, a: "Gestión" },
         ]},
         { sem: 8, materias: [
-            { id: "AUT2", n: "Automatización Ind. 2", c: 8, a: "Control", reqCurso: ["AUT1"] },
-            { id: "ROB", n: "Robótica Industrial", c: 8, a: "Control", reqCurso: ["SIS2", "ME2"] },
-            { id: "MAN", n: "Mantenimiento Industrial", c: 5, a: "Mecánica", reqCurso: ["TDM1"] },
+            { id: "AUT2", n: "Automatización Ind. 2", c: 8, a: "Control" },
+            { id: "ROB", n: "Robótica Industrial", c: 8, a: "Control"},
+            { id: "MAN", n: "Mantenimiento Industrial", c: 5, a: "Mecánica"},
         ]},
         { sem: 9, materias: [
             { id: "OPT1", n: "Electiva / Optativa 1", c: 8, a: "Especialización" },
@@ -83,8 +83,8 @@ const basesDeDatos = {
             { id: "ETI", n: "Ética Profesional", c: 4, a: "Transversal" },
         ]},
         { sem: 10, materias: [
-            { id: "PFC", n: "Proyecto Final de Carrera", c: 40, a: "Proyecto", reqExamen: ["PI4", "EVC2"] },
-            { id: "PAS", n: "Pasantía Profesional", c: 10, a: "Práctica", reqExamen: ["PI4", "EVC2"] },
+            { id: "PFC", n: "Proyecto Final de Carrera", c: 40, a: "Proyecto", },
+            { id: "PAS", n: "Pasantía Profesional", c: 10, a: "Práctica", },
         ]}
     ]
 };
