@@ -64,15 +64,13 @@ select {
     padding: 15px;
     border: 2px dashed #f8bbd0;
 }
-
 .semestre h3 {
     text-align: center;
-    color: #d81b60; /* Rosa más oscuro para los títulos */
+    color: var(--dark); /* Usamos tu nuevo azul oscuro */
     margin-top: 0;
-    border-bottom: 2px solid var(--primary);
+    border-bottom: 2px solid var(--secondary); /* El celeste brillante */
     padding-bottom: 8px;
 }
-
 .materia { 
     background: var(--card-bg);
     border-radius: 10px;
