@@ -315,8 +315,8 @@ select {
 .logo-imec {
     position: absolute; 
     top: 15px;          
-    right: 20px;        /* Lo empujamos bien a la derecha */
-    height: 80px;       /* Tamaño inicial (ajústalo a tu gusto) */
+    right: 20px;        
+    height: 96px;       /* <--- Aumentado un 20% (antes 80px) */
     width: auto;
     z-index: 10;
 }
@@ -324,7 +324,7 @@ select {
 /* Ajuste para celulares */
 @media (max-width: 600px) {
     .logo-imec {
-        height: 50px;
+        height: 60px;   /* <--- Aumentado un 20% (antes 50px) */
         top: 10px;
         right: 10px;
     }
