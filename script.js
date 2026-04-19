@@ -141,7 +141,7 @@ function dibujarInterfaz() {
             btnSemestre.innerText = "Desmarcar Semestre";
             btnSemestre.classList.add('completado');
         } else {
-            btnSemestre.innerText = "✓ Aprobar Semestre";
+            btnSemestre.innerText = "Aprobar Semestre ✓";
         }
 
         // Qué pasa al hacer clic en el botón del semestre
@@ -234,16 +234,6 @@ function dibujarInterfaz() {
     document.getElementById('creditos-count').innerText = totalCreditos;
 }
 
-window.onload = () => {
-    renderMalla('imec_2023'); // Renderiza la malla
+window.onload = () =>    renderMalla('imec_2023'); // Renderiza la malla
     
-    // Lógica para cerrar el modal de bienvenida
-    const modal = document.getElementById('modal-bienvenida');
-    const btnEntendido = document.getElementById('btn-entendido');
-    
-    if (modal && btnEntendido) {
-        btnEntendido.addEventListener('click', () => {
-            modal.style.display = 'none'; // Oculta el modal al hacer clic
-        });
-    }
-};
+
