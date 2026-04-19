@@ -288,20 +288,21 @@ select {
     background-color: #d81b60;
     transform: scale(1.05);
 }
-/* === ESTILOS DEL LOGO DE LA UNIVERSIDAD === */
+/* === ESTILOS DEL LOGO DE LA UNIVERSIDAD (VERSIÓN GRANDE) === */
 .logo-uni {
     position: absolute; 
-    top: 15px;          
+    top: 10px;          /* Lo acercamos más al borde superior */
     left: 20px;         
-    height: 70px;       /* <--- ¡Subimos el tamaño a 70px! */
+    height: 110px !important; /* <--- Tamaño grande para computadora */
     width: auto;
+    z-index: 10;        /* Para que siempre esté al frente */
 }
 
-/* Ajuste para que en celulares se vea bien y proporcionado */
+/* Ajuste para que en celulares se vea imponente pero no tape todo */
 @media (max-width: 600px) {
     .logo-uni {
-        height: 50px;   /* <--- En el celu lo dejamos en 50px */
-        top: 15px;
-        left: 15px;
+        height: 75px !important;  /* <--- Tamaño para el celular */
+        top: 10px;
+        left: 10px;
     }
 }
