@@ -369,7 +369,6 @@ const currentTheme = localStorage.getItem('theme') || 'light';
 // Aplicar tema guardado al cargar
 if (currentTheme === 'dark') {
     document.documentElement.setAttribute('data-theme', 'dark');
-    themeToggleBtn.innerText = '☀️ Light Mode';
 }
 
 themeToggleBtn.addEventListener('click', () => {
@@ -377,11 +376,9 @@ themeToggleBtn.addEventListener('click', () => {
     if (theme === 'dark') {
         document.documentElement.setAttribute('data-theme', 'light');
         localStorage.setItem('theme', 'light');
-        themeToggleBtn.innerText = '🌙 Dark Mode';
     } else {
         document.documentElement.setAttribute('data-theme', 'dark');
         localStorage.setItem('theme', 'dark');
-        themeToggleBtn.innerText = '☀️ Light Mode';
     }
 });
 
@@ -431,7 +428,7 @@ function desactivarResaltado() {
 }
 
 document.getElementById('btn-reset').addEventListener('click', () => {
-    if (confirm("¿Estás seguro de que quieres borrar todo tu progreso? Esta acción no se puede deshacer.")) {
+    if (confirm("¿Estás seguro de que queres borrar todo tu progreso? Esta acción no se puede deshacer.")) {
         estadoMaterias.clear(); // Limpia el mapa de estados
         dibujarInterfaz(); // Refresca la pantalla
     }
@@ -464,9 +461,8 @@ function mostrarDisponibles() {
     document.getElementById('lista-disponibles').style.display = 'block';
 }
 
-// Función para el botón de Reiniciar (Debes añadir el ID 'btn-reset' a un botón en el HTML si quieres usarlo)
 function reiniciarTodo() {
-    if (confirm("¿Seguro que quieres borrar todo tu progreso?")) {
+    if (confirm("¿Seguro que queres borrar todo tu progreso?")) {
         estadoMaterias.clear();
         localStorage.removeItem('progreso_imec');
         dibujarInterfaz();
@@ -487,7 +483,7 @@ document.getElementById('btn-disponibles').addEventListener('click', () => {
     });
 
     if (disponibles.length === 0) {
-        listaUl.innerHTML = '<li>¡No tienes materias nuevas disponibles por ahora!</li>';
+        listaUl.innerHTML = '<li>¡No tenes materias nuevas disponibles por ahora!</li>';
     } else {
         disponibles.forEach(mat => {
             const li = document.createElement('li');
@@ -496,4 +492,4 @@ document.getElementById('btn-disponibles').addEventListener('click', () => {
         });
     }
     document.getElementById('lista-disponibles').style.display = 'block';
-}); // <-- Esta llave cierra el eventListener correctamente
+}); 
