@@ -274,57 +274,59 @@ select {
     text-decoration: none;
     font-weight: bold;
 }
-
-/* Estilos del Modal (Ventana Flotante) */
-.modal-fondo {
-    position: fixed;
-    top: 0; left: 0; width: 100%; height: 100%;
-    background-color: rgba(0, 0, 0, 0.7); /* Fondo un poco más oscuro para mejor contraste */
-    display: flex; 
-    justify-content: center;
-    align-items: center;
-    z-index: 3000;
-}
-
 .modal-contenido {
     background-color: white;
-    padding: 30px;
+    padding: 20px; /* Reducido de 30px a 20px */
     border-radius: 12px;
-    max-width: 500px;
-    width: 90%; /* Un poco más de margen en móviles */
-    text-align: center; /* Centra títulos y botones */
+    max-width: 480px;
+    width: 85%;
     display: flex;
     flex-direction: column;
-    align-items: center; /* Centra la lista y otros bloques */
+    align-items: center;
     box-shadow: 0 10px 25px rgba(0,0,0,0.3);
     border: 3px solid var(--primary);
+    
+    /* Previene que se desborde en pantallas muy pequeñas */
+    max-height: 85vh;
+    overflow-y: auto;
 }
 
 .modal-contenido h2 {
     margin-top: 0;
+    margin-bottom: 10px; /* Espacio controlado debajo del título */
     color: #d81b60;
-    font-size: 1.8rem;
-    display: block; /* El título debe ocupar su propia línea */
+    font-size: 1.5rem; /* Reducido de 1.8rem para ganar espacio */
 }
 
-/* ESTO ES LO QUE CENTRA LA LISTA MANTENIENDO EL TEXTO A LA IZQUIERDA */
+.modal-contenido h3 {
+    margin: 5px 0; /* Margen mínimo para subtítulos como 'Instructivo' */
+    font-size: 1.1rem;
+}
+
 .modal-contenido ul {
-    text-align: left; /* Alinea el texto de los items a la izquierda */
-    display: inline-block; /* Hace que el contenedor de la lista se ajuste al contenido */
-    margin: 20px 0;
-    padding-left: 20px; /* Espacio para las viñetas */
+    text-align: left;
+    display: inline-block;
+    margin: 10px 0; /* Reducido de 20px a 10px */
+    padding-left: 20px;
     max-width: 95%;
 }
 
 .modal-contenido li {
-    margin-bottom: 10px;
-    line-height: 1.4;
+    margin-bottom: 5px; /* Reducido de 10px a 5px */
+    line-height: 1.3;    /* Interlineado un poco más apretado */
+    font-size: 0.9rem;   /* Texto levemente más pequeño */
+}
+
+/* Ajuste para párrafos intermedios */
+.modal-contenido p {
+    margin: 8px 0;
+    font-size: 0.9rem;
 }
 
 .btn-modal {
-    margin-top: 20px; /* Corregido el '25x' */
-    padding: 12px 25px;
-    font-size: 1rem;
+    margin-top: 15px; /* Reducido de 20px a 15px */
+    padding: 10px 20px;
+    font-size: 0.95rem;
     color: white;
     background-color: var(--primary);
     border: none;
@@ -332,11 +334,6 @@ select {
     cursor: pointer;
     font-weight: bold;
     transition: all 0.2s;
-}
-
-.btn-modal:hover {
-    background-color: #ad1457;
-    transform: scale(1.05);
 }
 /* === ESTILOS DEL LOGO DE LA UNIVERSIDAD (VERSIÓN GRANDE) === */
 .logo-uni {
