@@ -616,3 +616,97 @@ body, .controls, .materia, .semestre, .modal-contenido {
         justify-content: center;
     }
 }
+
+/* =========================================
+   ESTILOS DE LA CALCULADORA DE NOTAS (UTEC)
+   ========================================= */
+
+/* Contenedor de los campos de entrada */
+.campos-calculadora {
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* Dos columnas en computadoras */
+    gap: 15px;
+    margin-top: 15px;
+}
+
+/* Grupos de etiqueta + input */
+.input-group {
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+}
+
+.input-group label {
+    font-size: 0.85rem;
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: var(--text);
+}
+
+.nota-input {
+    width: 100%;
+    padding: 10px;
+    border: 2px solid var(--primary);
+    border-radius: 8px;
+    background: var(--bg);
+    color: var(--text);
+    font-size: 1rem;
+    transition: border-color 0.3s ease;
+    box-sizing: border-box;
+}
+
+.nota-input:focus {
+    outline: none;
+    border-color: var(--secondary);
+    box-shadow: 0 0 5px rgba(0, 168, 232, 0.4);
+}
+
+/* Recuadro de Resultado y Predicción */
+#resultado-calc {
+    margin-top: 20px;
+    padding: 15px;
+    border-radius: 12px;
+    font-size: 0.95rem;
+    line-height: 1.4;
+    border: 1px solid rgba(0,0,0,0.1);
+    animation: fadeIn 0.4s ease; /* Animación suave al aparecer */
+}
+
+/* Estilo para las predicciones */
+#resultado-calc strong {
+    font-size: 1.1rem;
+}
+
+#resultado-calc span {
+    display: block;
+    margin-top: 5px;
+}
+
+/* --- AJUSTES PARA CELULARES --- */
+@media (max-width: 600px) {
+    #modal-calculadora .modal-contenido {
+        width: 95% !important;
+        padding: 15px !important;
+        transform: scale(1); /* No achicamos tanto para que el teclado no tape todo */
+    }
+
+    .campos-calculadora {
+        grid-template-columns: 1fr; /* Una sola columna en el celular */
+        gap: 10px;
+    }
+
+    .nota-input {
+        padding: 12px; /* Más grande para que sea fácil tocar con el dedo */
+        font-size: 16px !important; /* Evita que el iPhone haga zoom automático al escribir */
+    }
+    
+    #modal-calculadora h2 {
+        font-size: 1.2rem;
+    }
+}
+
+/* Animación de aparición */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
