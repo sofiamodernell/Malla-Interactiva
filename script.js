@@ -162,27 +162,19 @@ function dibujarInterfaz() {
         semDiv.innerHTML = `<h3>Semestre ${semestre.sem}</h3>`;
 
         // === BOTÓN DE APROBAR SEMESTRE ENTERO ===
+        // 1. Primero calculamos si está completo
+        const semestreCompleto = semestre.materias.every(mat => estadoMaterias.get(mat.id) === 2);
+        
+        // 2. Luego creamos el botón usando ese dato
         const btnSemestre = document.createElement('button');
-
         btnSemestre.className = 'btn-semestre' + (semestreCompleto ? ' completado' : '');
         btnSemestre.innerText = semestreCompleto ? "Desmarcar Semestre" : "Aprobar Semestre ✓";
-        
-        // Verificamos si TODAS las materias de este semestre ya están en estado 2 (Aprobadas)
-        const semestreCompleto = semestre.materias.every(mat => estadoMaterias.get(mat.id) === 2);
 
         btnSemestre.addEventListener('click', () => {
-        // Limpiamos cualquier resaltado previo para que no se vea gris
-        desactivarResaltado();
-        materiaEnfocadaId = null;
-        
-        if (semestreCompleto) {
-            btnSemestre.innerText = "Desmarcar Semestre";
-            btnSemestre.classList.add('completado');
-        } else {
-            btnSemestre.innerText = "Aprobar Semestre ✓";
-        }
-
-        // Qué pasa al hacer clic en el botón del semestre
+            // Limpiamos cualquier resaltado previo para que no se vea gris en móviles
+            desactivarResaltado();
+            materiaEnfocadaId = null;
+            
             if (semestreCompleto) {
                 semestre.materias.forEach(m => estadoMaterias.set(m.id, 0));
             } else {
@@ -200,53 +192,14 @@ function dibujarInterfaz() {
             dibujarInterfaz();
         });
 
-        
         semDiv.appendChild(btnSemestre);
 
         semestre.materias.forEach(mat => {
             const matDiv = document.createElement('div');
-            matDiv.id = mat.id; // Asignar el ID para que el resaltado lo encuentre
+            matDiv.id = mat.id; 
             matDiv.className = 'materia';
 
-        // --- LÓGICA DE INTERACCIÓN (PC y MÓVIL) ---
-            
-// En PC: Hover normal
-            matDiv.addEventListener('mouseenter', () => {
-                if (window.innerWidth > 768) activarResaltado(mat);
-            });
-            matDiv.addEventListener('mouseleave', () => {
-                if (window.innerWidth > 768) desactivarResaltado();
-            });
-
-            // En Móvil y PC: Click
-            matDiv.addEventListener('click', (e) => {
-                const esMovil = window.innerWidth <= 768;
-
-                // Si es móvil y no está enfocada, primero la enfocamos (mostramos previas)
-                if (esMovil && materiaEnfocadaId !== mat.id) {
-                    desactivarResaltado(); // Limpiar el gris de otras
-                    activarResaltado(mat);
-                    materiaEnfocadaId = mat.id;
-                    return; // Detenemos aquí para que no cambie el estado en el primer toque
-                }
-
-                // Si es PC, o si es móvil y ya estaba enfocada, procedemos a marcar/desmarcar
-                if (estaBloqueada) {
-                    alert('🔒 No podés acceder a esta materia!. Te falta:\n' + faltanTextos.join('\n'));
-                    return; 
-                }
-
-                const estadoActual = estadoMaterias.get(mat.id) || 0;
-                if (estadoActual === 0) estadoMaterias.set(mat.id, 1);
-                else if (estadoActual === 1) estadoMaterias.set(mat.id, 2);
-                else estadoMaterias.set(mat.id, 0);
-                
-                materiaEnfocadaId = null; // Resetear enfoque tras marcar
-                desactivarResaltado();
-                dibujarInterfaz();
-            });
-
-            // --- LÓGICA DE ESTADOS Y RENDERIZADO ---
+            // --- LÓGICA DE ESTADOS (necesaria para el bloqueo en el click) ---
             let estaBloqueada = false;
             let faltanTextos = [];
 
@@ -260,9 +213,48 @@ function dibujarInterfaz() {
                     if ((estadoMaterias.get(reqId) || 0) < 1) faltanTextos.push(`${reqId} (Cursada)`);
                 });
             }
-
             if (faltanTextos.length > 0) estaBloqueada = true;
 
+            // --- LÓGICA DE INTERACCIÓN (PC y MÓVIL) ---
+            
+            // En PC: Hover normal
+            matDiv.addEventListener('mouseenter', () => {
+                if (window.innerWidth > 768) activarResaltado(mat);
+            });
+            matDiv.addEventListener('mouseleave', () => {
+                if (window.innerWidth > 768) desactivarResaltado();
+            });
+
+            // En Móvil y PC: Click
+            matDiv.addEventListener('click', (e) => {
+                const esMovil = window.innerWidth <= 768;
+
+                // Si es móvil y no está enfocada, primero la enfocamos
+                if (esMovil && materiaEnfocadaId !== mat.id) {
+                    desactivarResaltado(); 
+                    activarResaltado(mat);
+                    materiaEnfocadaId = mat.id;
+                    return; 
+                }
+
+                // Acción de marcar/desmarcar
+                if (estaBloqueada) {
+                    alert('🔒 No podés acceder a esta materia!. Te falta:\n' + faltanTextos.join('\n'));
+                    return; 
+                }
+
+                const estadoActual = estadoMaterias.get(mat.id) || 0;
+                if (estadoActual === 0) estadoMaterias.set(mat.id, 1);
+                else if (estadoActual === 1) estadoMaterias.set(mat.id, 2);
+                else estadoMaterias.set(mat.id, 0);
+                
+                materiaEnfocadaId = null; 
+                desactivarResaltado();
+                localStorage.setItem('progreso_imec', JSON.stringify(Array.from(estadoMaterias.entries())));
+                dibujarInterfaz();
+            });
+
+            // --- RENDERIZADO VISUAL ---
             const estadoActual = estadoMaterias.get(mat.id) || 0;
             if (estaBloqueada) matDiv.classList.add('bloqueada');
             else if (estadoActual === 1) matDiv.classList.add('cursada');
@@ -285,7 +277,6 @@ function dibujarInterfaz() {
         container.appendChild(semDiv);
     });
 
-    // Actualizar contador de créditos si tienes el elemento
     const totalElement = document.getElementById('total-creditos');
     if (totalElement) totalElement.innerText = totalCreditos;
 }
