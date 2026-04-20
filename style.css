@@ -274,6 +274,20 @@ select {
     text-decoration: none;
     font-weight: bold;
 }
+
+.modal-fondo {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw; /* Asegura el ancho total */
+    height: 100vh; /* Asegura el alto total */
+    background-color: rgba(0, 0, 0, 0.7);
+    display: flex;         /* Activamos Flexbox */
+    justify-content: center; /* Centrado horizontal */
+    align-items: center;     /* Centrado vertical */
+    z-index: 3000;
+    backdrop-filter: blur(4px); /* El toque profesional de desenfoque */
+}
 .modal-contenido {
     background-color: white;
     padding: 20px; /* Reducido de 30px a 20px */
