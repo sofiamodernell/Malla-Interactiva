@@ -468,11 +468,11 @@ function reiniciarTodo() {
 }
     
 document.addEventListener('DOMContentLoaded', () => {
-    const btn-disponibles = document.getElementById('btn-disponibles');
-    if(btn-disponibles) btn-disponibles.onclick = mostrarDisponibles;
+    const btndisponibles = document.getElementById('btn-disponibles');
+    if(btndisponibles) btn-disponibles.onclick = mostrarDisponibles;
     
-    const btnRes = document.getElementById('btn-reset');
-    if(btn-reset) btn-reset.onclick = reiniciarTodo;
+    const btnReset = document.getElementById('btn-reset');
+    if(btnReset) btn-reset.onclick = reiniciarTodo;
 });
 
 document.getElementById('btn-disponibles').addEventListener('click', () => {
