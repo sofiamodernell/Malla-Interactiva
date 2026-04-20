@@ -64,13 +64,13 @@
         <option value="imec_2023">Ingeniería en Mecatrónica (Plan 2023)</option>
     </select>
 </div>
+<div id="lista-disponibles" style="display:none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 90%; max-width: 400px; background: var(--card-bg); border: 2px solid var(--secondary); border-radius: 15px; padding: 20px; z-index: 10000; box-shadow: var(--shadow);">
+        <h3 style="margin-top:0">📚 Podes cursar:</h3>
+        <ul id="items-disponibles" style="max-height: 300px; overflow-y: auto; padding-left: 20px;"></ul>
+        <button class="btn-theme" onclick="document.getElementById('lista-disponibles').style.display='none'" style="width:100%; margin-top:10px">Cerrar</button>
+    </div>
 
-<div id="lista-disponibles" style="display:none; padding: 20px; background: var(--card-bg); border: 2px solid var(--secondary); margin: 20px; border-radius: 15px;">
-    <h3>📚 Materias que podés cursar ahora:</h3>
-    <ul id="items-disponibles"></ul>
-    <button onclick="document.getElementById('lista-disponibles').style.display='none'">Cerrar</button>
-</div>
-    
+
 <div id="malla-container" class="malla-wrapper"></div>
         
 <div class="stats-bar">
@@ -87,6 +87,9 @@
     <p>¿Tenés alguna consulta, encontraste un error o querés que tu carrera aparezca en la página?</p>
     <p>📩 Contáctame :) : <a href="mailto:sofia.modernell@estudiantes.utec.edu.uy">sofia.modernell@estudiantes.utec.edu.uy</a></p>
 </footer>
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <script src="script.js"></script>
+
 </body>
 </html>
