@@ -142,7 +142,6 @@ function renderMalla(carreraId) {
 }
 
 function dibujarInterfaz() {
-    localStorage.setItem('progreso_imec', JSON.stringify(Array.from(estadoMaterias.entries())));
     const container = document.getElementById('malla-container');
     if (!container) return;
     container.innerHTML = '';
@@ -331,7 +330,6 @@ function desactivarResaltado() {
 document.getElementById('btn-reset').addEventListener('click', () => {
     if (confirm("¿Estás seguro de que quieres borrar todo tu progreso? Esta acción no se puede deshacer.")) {
         estadoMaterias.clear(); // Limpia el mapa de estados
-        localStorage.removeItem('progreso_imec');
         dibujarInterfaz(); // Refresca la pantalla
     }
 });
