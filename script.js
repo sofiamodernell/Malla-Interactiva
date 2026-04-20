@@ -108,6 +108,14 @@ const basesDeDatos = {
     ]
 };
 
+function cerrarBienvenida() {
+    const modal = document.getElementById('modal-bienvenida');
+    if (modal) {
+        modal.style.display = 'none';
+        // Opcional: Guardar en localStorage para que no aparezca siempre
+        localStorage.setItem('bienvenida_vista', 'true');
+    }
+}
 
 // --- LÓGICA DEL MODO OSCURO ---
 const themeToggleBtn = document.getElementById('theme-toggle');
@@ -379,6 +387,7 @@ document.getElementById('btn-disponibles').addEventListener('click', () => {
     }
     document.getElementById('lista-disponibles').style.display = 'block';
 });
+
 // Función para el botón de Reiniciar (Debes añadir el ID 'btn-reset' a un botón en el HTML si quieres usarlo)
 function reiniciarTodo() {
     if (confirm("¿Seguro que quieres borrar todo tu progreso?")) {
@@ -473,7 +482,6 @@ function cerrarCalculadora() {
     document.getElementById('modal-calculadora').style.display = 'none';
 }
 
-
 function procesarCalculo() {
     const scpId = document.getElementById('scp-tipo').value;
     const config = configuracionSCP[scpId];
@@ -484,7 +492,6 @@ function procesarCalculo() {
     let pesoFaltante = 0;
     let camposVacios = [];
 
-    // 1. Cálculo directo: Sumatoria de (Nota * Peso)
     inputs.forEach((input, index) => {
         const notaEntrada = parseFloat(input.value);
         const peso = parseFloat(input.dataset.peso);
@@ -501,70 +508,19 @@ function procesarCalculo() {
     resDiv.style.display = 'block';
     let msg = "";
 
-    // 2. CASO: RESULTADO FINAL (Todos los campos llenos)
     if (camposVacios.length === 0) {
-        let concepto = "";
-        let situacion = "";
-        let color = "";
         const nf = parseFloat(notaFinalEscala.toFixed(2));
-
-        if (nf >= 4.00) {
-            concepto = nf === 5.00 ? "Excelente" : "Muy Bueno";
-            situacion = "🟢 EXONERA";
-            color = "#a8e6cf";
-        } else if (nf >= 3.00) {
-            concepto = "Suficiente";
-            situacion = "🟡 EXAMEN REGLAMENTADO";
-            color = "#fff9c4";
-        } else if (nf >= 2.00) {
-            concepto = "Insuficiente";
-            situacion = "🟠 TUTORÍA";
-            color = "#ffd1a1";
-        } else {
-            concepto = "Deficiente";
-            situacion = "🔴 RECURSA / EXAMEN ÚNICO";
-            color = "#ff8b94";
-        }
-
-        msg = `<strong>${situacion}</strong><br>
-               Nota Final: <span style="font-size:1.8rem">${nf}</span><br>
-               Concepto: <em>${concepto}</em>`;
-        resDiv.style.backgroundColor = color;
-    } 
-    
-    // 3. CASO: PREDICCIÓN (Falta una nota)
-    else if (camposVacios.length === 1) {
-        const campoFaltante = camposVacios[0];
-        
-        // Despejamos: NotaNecesaria = (Umbral - NotaAcumulada) / PesoDelCampo
+        let situacion = nf >= 4.00 ? "🟢 EXONERA" : (nf >= 3.00 ? "🟡 EXAMEN" : "🟠 TUTORÍA");
+        msg = `<strong>${situacion}</strong><br>Nota Final: <span style="font-size:1.8rem">${nf}</span>`;
+    } else if (camposVacios.length === 1) {
         const notaNecExon = (4.00 - notaFinalEscala) / pesoFaltante;
-        const notaNecExamen = (3.00 - notaFinalEscala) / pesoFaltante;
-        const notaNecTutoria = (2.00 - notaFinalEscala) / pesoFaltante;
-
-        msg = `<strong>Para ${campoFaltante} necesitas:</strong><br><br>`;
-        
-        if (notaNecExon <= 5) {
-            msg += `Para <strong>Exonerar</strong>: <strong>${Math.max(1, notaNecExon).toFixed(2)}</strong><br>`;
-        } else {
-            msg += `Ya no llegas a exonerar :( Estudia para el examen.<br>`;
-        }
-
-        if (notaNecExamen <= 5) {
-            msg += `Para <strong>Examen Reg.</strong>: <strong>${Math.max(1, notaNecExamen).toFixed(2)}</strong><br>`;
-        }
-        
-        if (notaNecTutoria <= 5 && notaNecExamen > 5) {
-            msg += `Para <strong>Tutoría</strong>: <strong>${Math.max(1, notaNecTutoria).toFixed(2)}</strong>`;
-        }
-
-        resDiv.style.backgroundColor = "var(--card-bg)";
-        resDiv.style.border = "2px solid var(--secondary)";
+        msg = `Para exonerar necesitás un: <strong>${Math.max(1, notaNecExon).toFixed(2)}</strong> en ${camposVacios[0]}`;
     } else {
-        msg = "Ingresa más notas para predecir qué necesitas.";
+        msg = "Ingresá más notas para predecir.";
     }
 
     resDiv.innerHTML = msg;
     resDiv.style.color = "#333";
-}
 
+} 
 
