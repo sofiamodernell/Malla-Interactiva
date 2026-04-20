@@ -172,15 +172,20 @@ function dibujarInterfaz() {
         // Qué pasa al hacer clic en el botón del semestre
         btnSemestre.addEventListener('click', () => {
             if (semestreCompleto) {
-                // Si estaba completo, desmarcamos todo (volvemos a 0)
                 semestre.materias.forEach(mat => estadoMaterias.set(mat.id, 0));
             } else {
-                // Si faltaban materias, las forzamos todas a estado 2 (Examen salvado)
                 semestre.materias.forEach(mat => estadoMaterias.set(mat.id, 2));
+                // Disparar confetti al completar semestre
+                confetti({
+                    particleCount: 100,
+                    spread: 70,
+                    origin: { y: 0.6 }
+                });
             }
-            dibujarInterfaz(); // Redibujamos la pantalla
+            dibujarInterfaz();
         });
 
+        
         semDiv.appendChild(btnSemestre);
 
         semestre.materias.forEach(mat => {
@@ -323,4 +328,41 @@ function desactivarResaltado() {
         div.classList.remove('highlight-self', 'highlight-req', 'highlight-post');
     });
 }
+document.getElementById('btn-reset').addEventListener('click', () => {
+    if (confirm("¿Estás seguro de que quieres borrar todo tu progreso? Esta acción no se puede deshacer.")) {
+        estadoMaterias.clear(); // Limpia el mapa de estados
+        localStorage.removeItem('progreso_imec');
+        dibujarInterfaz(); // Refresca la pantalla
+    }
+});
 
+document.getElementById('btn-disponibles').addEventListener('click', () => {
+    const plan = basesDeDatos[carreraActual]; // Obtiene el plan actual
+    const todas = plan.flatMap(sem => sem.materias); // Aplana la lista de materias
+    const listaUl = document.getElementById('items-disponibles');
+    listaUl.innerHTML = '';
+
+    const disponibles = todas.filter(mat => {
+        // Solo considerar materias que no están cursadas ni aprobadas (estado 0)
+        if ((estadoMaterias.get(mat.id) || 0) > 0) return false;
+
+        // Verificar requisitos de Examen
+        const cumpleExamen = !mat.reqExamen || mat.reqExamen.every(reqId => estadoMaterias.get(reqId) === 2);
+        
+        // Verificar requisitos de Curso
+        const cumpleCurso = !mat.reqCurso || mat.reqCurso.every(reqId => (estadoMaterias.get(reqId) || 0) >= 1);
+
+        return cumpleExamen && cumpleCurso;
+    });
+
+    if (disponibles.length === 0) {
+        listaUl.innerHTML = '<li>¡No tienes materias nuevas disponibles por ahora!</li>';
+    } else {
+        disponibles.forEach(mat => {
+            const li = document.createElement('li');
+            li.textContent = `${mat.n} (${mat.id})`;
+            listaUl.appendChild(li);
+        });
+    }
+    document.getElementById('lista-disponibles').style.display = 'block';
+});
