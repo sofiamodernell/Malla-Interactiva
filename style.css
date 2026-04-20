@@ -554,13 +554,39 @@ body, .controls, .materia, .semestre, .modal-contenido {
 @media (max-width: 600px) {
     /* Achicamos el modal de bienvenida */
     .modal-contenido {
-        width: 92% !important;
-        padding: 15px !important;
+        width: 85% !important;
+        padding: 12px !important;
+        transform: scale(0.9); /* Escala general del 90% para achicar todo */
+        max-height: 80vh; /* Que no ocupe todo el alto del cel */
         margin: 10px auto;
+        overflow-y: auto; /* Si el contenido es largo, permite scroll interno */
     }
     
-    .modal-contenido h2 { font-size: 1.3rem; }
-    .lista-instrucciones { font-size: 0.85rem; }
+    .modal-contenido h2 {
+        font-size: 1.1rem !important; /* Título más pequeño */
+        margin-bottom: 10px;
+    }
+    
+    .modal-seccion h3 {
+        font-size: 0.9rem !important;
+        margin: 5px 0;
+    }
+    
+    .lista-instrucciones { 
+        font-size: 0.85rem; 
+        font-size: 0.75rem !important; /* Texto de instrucciones más pequeño */
+        line-height: 1.2;
+    }
+    
+    .sub-lista {
+        padding-left: 15px !important;
+    }
+    
+    /* Achicamos también los badges dentro del modal */
+    .badge {
+        padding: 1px 4px !important;
+        font-size: 0.7rem !important;
+    }
 
     /* Reducimos el tamaño de las materias para que entren más en pantalla */
     .materia {
@@ -586,7 +612,7 @@ body, .controls, .materia, .semestre, .modal-contenido {
     }
 
     .btn-theme {
-        width: 100%; /* Botones a lo ancho del cel */
+        width: 95%; /* Botones a lo ancho del cel */
         justify-content: center;
     }
 }
