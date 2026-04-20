@@ -312,46 +312,139 @@ function generarCamposDinamicos() {
     });
 }
 
+function getSituacion(nf) {
+    if (nf >= 4.00) return { emoji: "🟢", texto: "EXONERA", color: "#e8f5e9", border: "#2e7d32" };
+    if (nf >= 3.00) return { emoji: "🟡", texto: "DEBE RENDIR EXAMEN REGLAMENTADO", color: "#fffde7", border: "#f57f17" };
+    if (nf >= 2.00) return { emoji: "🟠", texto: "TUTORÍA + EXAMEN REGLAMENTADO", color: "#fff3e0", border: "#e65100" };
+    if (nf >  1.00) return { emoji: "🔴", texto: "RECURSAR O EXAMEN ÚNICO", color: "#fce4ec", border: "#c62828" };
+    return { emoji: "🔴", texto: "DEBE RECURSAR", color: "#fce4ec", border: "#c62828" };
+}
+
 function procesarCalculo() {
     const scpId = document.getElementById('scp-tipo').value;
+    const esSinExamen = ["11", "12"].includes(scpId);
     const config = configuracionSCP[scpId];
     const inputs = document.querySelectorAll('.nota-input');
     const resDiv = document.getElementById('resultado-calc');
-    
-    let notaFinalEscala = 0;
+
+    let notaAcum = 0;
+    let pesoAcum = 0;
     let pesoFaltante = 0;
     let camposVacios = [];
 
     inputs.forEach((input, index) => {
-        const notaEntrada = parseFloat(input.value);
+        const val = parseFloat(input.value);
         const peso = parseFloat(input.dataset.peso);
-        const nombreCampo = config.campos[index];
-
-        if (!isNaN(notaEntrada)) {
-            notaFinalEscala += notaEntrada * peso;
+        const nombre = config.campos[index];
+        if (!isNaN(val) && val >= 1 && val <= 5) {
+            notaAcum += val * peso;
+            pesoAcum += peso;
         } else {
             pesoFaltante += peso;
-            camposVacios.push(nombreCampo);
+            camposVacios.push({ nombre, peso });
         }
     });
 
     resDiv.style.display = 'block';
     let msg = "";
 
+    // === TODOS LOS CAMPOS COMPLETOS ===
     if (camposVacios.length === 0) {
-        const nf = parseFloat(notaFinalEscala.toFixed(2));
-        let situacion = nf >= 4.00 ? "🟢 EXONERA" : (nf >= 3.00 ? "🟡 EXAMEN" : "🟠 TUTORÍA");
-        msg = `<strong>${situacion}</strong><br>Nota Final: <span style="font-size:1.8rem">${nf}</span>`;
+        const nf = parseFloat(notaAcum.toFixed(2));
+        const sit = getSituacion(nf);
+        let detalle = "";
+        if (!esSinExamen) {
+            if (nf >= 4.00) {
+                detalle = `<p style="margin:6px 0 0;font-size:0.9rem">✅ La nota del curso (${nf}) es tu calificación final.</p>`;
+            } else if (nf >= 3.00) {
+                const minExamen = parseFloat(((3.00 - nf * 0.7) / 0.3).toFixed(2));
+                const exonExamen = parseFloat(((4.00 - nf * 0.7) / 0.3).toFixed(2));
+                detalle = `<p style="margin:6px 0 0;font-size:0.9rem">📋 En el examen necesitás <strong>${Math.max(1, minExamen).toFixed(2)}</strong> para aprobar la materia.</p>`;
+                if (exonExamen <= 5) {
+                    detalle += `<p style="margin:4px 0 0;font-size:0.85rem;opacity:0.8">Si sacás <strong>${exonExamen.toFixed(2)}</strong> en el examen, tu nota final sube a 4.00.</p>`;
+                }
+            } else if (nf >= 2.00) {
+                detalle = `<p style="margin:6px 0 0;font-size:0.9rem">⚠️ Debés aprobar la tutoría (mínimo 3) antes del examen reglamentado.</p>`;
+            } else if (nf > 1.00) {
+                detalle = `<p style="margin:6px 0 0;font-size:0.9rem">⚠️ Podés optar entre <strong>recursar</strong> o rendir el <strong>Examen Único</strong> (mínimo 4.00).</p>`;
+            } else {
+                detalle = `<p style="margin:6px 0 0;font-size:0.9rem">❌ Con nota 1.00 en el curso, debés <strong>recursar</strong> la materia.</p>`;
+            }
+        } else {
+            if (nf >= 3.00) detalle = `<p style="margin:6px 0 0;font-size:0.9rem">✅ Esta materia no tiene examen (SCP ${scpId}). ¡Aprobada!</p>`;
+            else detalle = `<p style="margin:6px 0 0;font-size:0.9rem">❌ Esta materia no tiene examen (SCP ${scpId}). Debés recursar.</p>`;
+        }
+        msg = `
+            <div style="background:${sit.color};border:2px solid ${sit.border};border-radius:10px;padding:14px;text-align:center">
+                <div style="font-size:1rem;font-weight:bold;color:${sit.border}">${sit.emoji} ${sit.texto}</div>
+                <div style="font-size:2rem;font-weight:bold;margin:6px 0;color:${sit.border}">${nf}</div>
+                <div style="font-size:0.8rem;color:#555">nota del curso (escala 1–5)</div>
+                ${detalle}
+            </div>`;
+
+    // === UN SOLO CAMPO VACÍO: predicción detallada ===
     } else if (camposVacios.length === 1) {
-        const notaNecExon = (4.00 - notaFinalEscala) / pesoFaltante;
-        msg = `Para exonerar necesitás un: <strong>${Math.max(1, notaNecExon).toFixed(2)}</strong> en ${camposVacios[0]}`;
+        const faltante = camposVacios[0];
+        const calcNota = (objetivo) => parseFloat(((objetivo - notaAcum) / faltante.peso).toFixed(2));
+
+        const necExon   = calcNota(4.00);
+        const necExamen = calcNota(3.00);
+        const necTutoria = calcNota(2.00);
+
+        let filas = "";
+
+        // Exonerar
+        if (necExon <= 5) {
+            filas += `<tr><td>🟢 Exonerar</td><td><strong>${Math.max(1, necExon).toFixed(2)}</strong></td><td>Nota final = nota del curso</td></tr>`;
+        } else {
+            filas += `<tr style="opacity:0.5"><td>🟢 Exonerar</td><td>No alcanza</td><td>Ni con 5.00 llegás a 4.00</td></tr>`;
+        }
+
+        // Ir a examen
+        if (!esSinExamen) {
+            if (necExamen <= 5) {
+                filas += `<tr><td>🟡 Ir a examen</td><td><strong>${Math.max(1, necExamen).toFixed(2)}</strong></td><td>Aprobás el curso, rendís examen</td></tr>`;
+            } else {
+                filas += `<tr style="opacity:0.5"><td>🟡 Ir a examen</td><td>No alcanza</td><td>Ni con 5.00 aprobás el curso</td></tr>`;
+            }
+            // Tutoría
+            if (necTutoria <= 5) {
+                filas += `<tr><td>🟠 Tutoría</td><td><strong>${Math.max(1, necTutoria).toFixed(2)}</strong></td><td>CC entre 2.00–2.99, tutoría obligatoria, debes anotarte a la tutoría.</td></tr>`;
+            }
+        }
+
+        msg = `
+            <div style="text-align:left">
+                <p style="margin:0 0 10px;font-size:0.9rem">📊 Te falta ingresar <strong>${faltante.nombre}</strong>. Según lo que saques:</p>
+                <table style="width:100%;border-collapse:collapse;font-size:0.85rem">
+                    <thead>
+                        <tr style="background:#f0f0f0">
+                            <th style="padding:6px 8px;text-align:left">Situación</th>
+                            <th style="padding:6px 8px;text-align:left">Nota mínima</th>
+                            <th style="padding:6px 8px;text-align:left">Qué significa</th>
+                        </tr>
+                    </thead>
+                    <tbody>${filas}</tbody>
+                </table>
+                <p style="margin:10px 0 0;font-size:0.78rem;color:#888">* Notas en escala UTEC (1–5). Las notas calculadas por debajo de 1 se muestran como 1.00.</p>
+            </div>`;
+
+    // === VARIOS CAMPOS VACÍOS ===
     } else {
-        msg = "Ingresá más notas para predecir.";
+        const notaMaxPosible = parseFloat((notaAcum + 5 * pesoFaltante).toFixed(2));
+        const sit = getSituacion(notaMaxPosible);
+        msg = `
+            <div style="background:#f5f5f5;border:1px solid #ccc;border-radius:10px;padding:14px;text-align:center">
+                <p style="margin:0 0 6px;font-size:0.9rem">Faltan <strong>${camposVacios.length}</strong> campos. Ingresá más notas para una predicción precisa.</p>
+                <p style="margin:0;font-size:0.85rem;color:#555">Con <strong>5.00</strong> en todo lo que falta, tu nota de curso sería <strong>${notaMaxPosible}</strong> → ${sit.emoji} ${sit.texto}</p>
+            </div>`;
     }
 
     resDiv.innerHTML = msg;
-    resDiv.style.color = "#333";
-
+    resDiv.style.color = "inherit";
+    resDiv.style.background = "none";
+    resDiv.style.border = "none";
+    resDiv.style.padding = "0";
 } 
 
 function cerrarBienvenida() {
@@ -428,7 +521,7 @@ function desactivarResaltado() {
 }
 
 document.getElementById('btn-reset').addEventListener('click', () => {
-    if (confirm("¿Estás seguro de que queres borrar todo tu progreso? Esta acción no se puede deshacer.")) {
+    if (confirm("¿Estás seguro de que quieres borrar todo tu progreso? Esta acción no se puede deshacer.")) {
         estadoMaterias.clear(); // Limpia el mapa de estados
         dibujarInterfaz(); // Refresca la pantalla
     }
@@ -461,8 +554,9 @@ function mostrarDisponibles() {
     document.getElementById('lista-disponibles').style.display = 'block';
 }
 
+// Función para el botón de Reiniciar (Debes añadir el ID 'btn-reset' a un botón en el HTML si quieres usarlo)
 function reiniciarTodo() {
-    if (confirm("¿Seguro que queres borrar todo tu progreso?")) {
+    if (confirm("¿Seguro que quieres borrar todo tu progreso?")) {
         estadoMaterias.clear();
         localStorage.removeItem('progreso_imec');
         dibujarInterfaz();
@@ -483,7 +577,7 @@ document.getElementById('btn-disponibles').addEventListener('click', () => {
     });
 
     if (disponibles.length === 0) {
-        listaUl.innerHTML = '<li>¡No tenes materias nuevas disponibles por ahora!</li>';
+        listaUl.innerHTML = '<li>¡No tienes materias nuevas disponibles por ahora!</li>';
     } else {
         disponibles.forEach(mat => {
             const li = document.createElement('li');
@@ -492,4 +586,4 @@ document.getElementById('btn-disponibles').addEventListener('click', () => {
         });
     }
     document.getElementById('lista-disponibles').style.display = 'block';
-}); 
+});
