@@ -452,44 +452,87 @@ function generarCamposDinamicos() {
 }
 
 function procesarCalculo() {
+    const scpId = document.getElementById('scp-tipo').value;
+    const config = configuracionSCP[scpId];
     const inputs = document.querySelectorAll('.nota-input');
-    let notaFinal = 0;
-    let faltanNotas = false;
+    const resDiv = document.getElementById('resultado-calc');
+    
+    let notaAcumulada = 0;
+    let pesoFaltante = 0;
+    let camposVacios = [];
 
-    inputs.forEach(input => {
+    // 1. Analizar qué notas tenemos y qué falta
+    inputs.forEach((input, index) => {
         const valor = parseFloat(input.value);
-        if (isNaN(valor)) faltanNotas = true;
-        notaFinal += (valor || 0) * parseFloat(input.dataset.peso);
+        const peso = parseFloat(input.dataset.peso);
+        const nombreCampo = config.campos[index];
+
+        if (!isNaN(valor)) {
+            notaAcumulada += valor * peso;
+        } else {
+            pesoFaltante += peso;
+            camposVacios.push(nombreCampo);
+        }
     });
 
-    const resDiv = document.getElementById('resultado-calc');
     resDiv.style.display = 'block';
-    
-    // Lógica de colores y estados según Circular 37_DE_2023
     let msg = "";
     let color = "";
 
-    if (notaFinal >= 70) {
-        msg = `🟢 <strong>EXONERADO</strong><br>Puntaje Final: ${notaFinal.toFixed(1)}%`;
-        color = "#a8e6cf";
-    } else if (notaFinal >= 40) {
-        msg = `🟡 <strong>EXAMEN REGLAMENTADO</strong><br>Puntaje Final: ${notaFinal.toFixed(1)}%`;
-        color = "#fff9c4";
-    } else if (notaFinal >= 25) {
-        msg = `🟠 <strong>TUTORÍA / EXAMEN ÚNICO</strong><br>Puntaje Final: ${notaFinal.toFixed(1)}%`;
-        color = "#ffd1a1";
-    } else {
-        msg = `🔴 <strong>RECURSA</strong><br>Puntaje Final: ${notaFinal.toFixed(1)}%`;
-        color = "#ff8b94";
+    // 2. CASO A: El estudiante ya ingresó todas las notas
+    if (camposVacios.length === 0) {
+        if (notaAcumulada >= 70) {
+            msg = `🟢 <strong>¡EXONERADO!</strong><br>Nota Final: ${notaAcumulada.toFixed(1)}%`;
+            color = "#a8e6cf";
+        } else if (notaAcumulada >= 40) {
+            msg = `🟡 <strong>EXAMEN REGLAMENTADO</strong><br>Nota Final: ${notaAcumulada.toFixed(1)}%`;
+            color = "#fff9c4";
+        } else if (notaAcumulada >= 25) {
+            msg = `🟠 <strong>TUTORÍA / EXAMEN ÚNICO</strong><br>Nota Final: ${notaAcumulada.toFixed(1)}%`;
+            color = "#ffd1a1";
+        } else {
+            msg = `🔴 <strong>RECURSA</strong><br>Nota Final: ${notaAcumulada.toFixed(1)}%`;
+            color = "#ff8b94";
+        }
+    } 
+    // 3. CASO B: Falta UNA nota (Predicción)
+    else if (camposVacios.length === 1) {
+        const objetivoExonerar = 70;
+        const objetivoExamen = 40;
+        const campoFaltante = camposVacios[0];
+        const pesoDelFaltante = pesoFaltante;
+
+        const notaNecesariaExonerar = (objetivoExonerar - notaAcumulada) / pesoDelFaltante;
+        const notaNecesariaExamen = (objetivoExamen - notaAcumulada) / pesoDelFaltante;
+
+        color = "var(--card-bg)"; // Fondo neutro para predicción
+        resDiv.style.border = "2px solid var(--secondary)";
+        
+        msg = `<strong>Calculando para ${campoFaltante}:</strong><br>`;
+        msg += `Llevas acumulado: <strong>${notaAcumulada.toFixed(1)}%</strong><br><br>`;
+
+        if (notaNecesariaExonerar <= 100) {
+            msg += `Para <strong>Exonerar</strong> necesitas: <br><span style="font-size:1.2rem; color: #2a9d8f;"><strong>${Math.max(0, notaNecesariaExonerar).toFixed(1)}%</strong></span><br>`;
+        } else {
+            msg += `Ya no es posible llegar a la Exoneración.<br>`;
+        }
+
+        if (notaNecesariaExamen <= 100) {
+            msg += `Para <strong>Examen</strong> necesitas: <br><strong>${Math.max(0, notaNecesariaExamen).toFixed(1)}%</strong>`;
+        } else {
+            msg += `Situación crítica.`;
+        }
+    } 
+    // 4. CASO C: Faltan muchas notas
+    else {
+        msg = `Llevas acumulado <strong>${notaAcumulada.toFixed(1)}%</strong>.<br>Ingresa más notas para predecir qué necesitas.`;
+        color = "#e0e1dd";
     }
 
-    if (faltanNotas) msg += `<br><small>⚠️ (Cálculo basado solo en notas ingresadas)</small>`;
-    
     resDiv.style.backgroundColor = color;
     resDiv.innerHTML = msg;
     resDiv.style.color = "#333";
 }
-
 // Inicializar campos la primera vez
 document.addEventListener('DOMContentLoaded', () => {
     generarCamposDinamicos();
