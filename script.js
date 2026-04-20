@@ -116,7 +116,7 @@ const currentTheme = localStorage.getItem('theme') || 'light';
 // Aplicar tema guardado al cargar
 if (currentTheme === 'dark') {
     document.documentElement.setAttribute('data-theme', 'dark');
-    themeToggleBtn.innerText = '☀️ Modo Claro';
+    themeToggleBtn.innerText = '☀️ Light Mode';
 }
 
 themeToggleBtn.addEventListener('click', () => {
@@ -124,11 +124,11 @@ themeToggleBtn.addEventListener('click', () => {
     if (theme === 'dark') {
         document.documentElement.setAttribute('data-theme', 'light');
         localStorage.setItem('theme', 'light');
-        themeToggleBtn.innerText = '🌙 Modo Oscuro';
+        themeToggleBtn.innerText = '🌙 Dark Mode';
     } else {
         document.documentElement.setAttribute('data-theme', 'dark');
         localStorage.setItem('theme', 'dark');
-        themeToggleBtn.innerText = '☀️ Modo Claro';
+        themeToggleBtn.innerText = '☀️ Light Mode';
     }
 });
 
@@ -154,7 +154,7 @@ function dibujarInterfaz() {
         semDiv.className = 'semestre';
         semDiv.innerHTML = `<h3>Semestre ${semestre.sem}</h3>`;
 
-        // === NUEVO: BOTÓN DE APROBAR SEMESTRE ENTERO ===
+        // === BOTÓN DE APROBAR SEMESTRE ENTERO ===
         const btnSemestre = document.createElement('button');
         btnSemestre.className = 'btn-semestre';
         
@@ -181,11 +181,9 @@ function dibujarInterfaz() {
         });
 
         semDiv.appendChild(btnSemestre);
-        // ===============================================
 
         semestre.materias.forEach(mat => {
             const matDiv = document.createElement('div');
-            // Justo después de crear matDiv
             matDiv.id = mat.id; // Asignar el ID para que el resaltado lo encuentre
             
             // Eventos para el efecto enfoque
@@ -244,7 +242,7 @@ function dibujarInterfaz() {
             
             matDiv.addEventListener('click', () => {
                 if (estaBloqueada) {
-                    alert('🔒 No puedes acceder a esta materia. Te falta:\n' + faltanTextos.join('\n') + '\n\n¡Revisa el plan de estudios!');
+                    alert('🔒 No podés acceder a esta materia!. Te falta:\n' + faltanTextos.join('\n') + '\n\n¡Revisa el plan de estudios!');
                     return; 
                 }
 
@@ -282,11 +280,10 @@ function dibujarInterfaz() {
         creditosCount.innerText = `Créditos: ${totalCreditos} / ${maxCreditos} (${porcentaje.toFixed(1)}%)`;
         progressBar.style.width = `${porcentaje}%`;
     }
-} // <-- Aquí cierra correctamente dibujarInterfaz()
+}
 
 window.onload = () =>    renderMalla('imec_2023'); // Renderiza la malla
     
-// --- FUNCIONES DE EFECTO ENFOQUE ---
 // --- FUNCIONES DE EFECTO ENFOQUE ---
 function activarResaltado(materiaSeleccionada) {
     const mallaWrapper = document.querySelector('.malla-wrapper');
@@ -295,7 +292,6 @@ function activarResaltado(materiaSeleccionada) {
     // Obtener qué materias necesita esta (prerrequisitos)
     const reqs = [...(materiaSeleccionada.reqCurso || []), ...(materiaSeleccionada.reqExamen || [])];
     
-    // === ESTO ERA LO QUE FALTABA ===
     // Extraemos TODAS las materias del plan actual para buscar quiénes la necesitan
     const plan = basesDeDatos[carreraActual];
     const todasLasMaterias = plan.flatMap(sem => sem.materias);
