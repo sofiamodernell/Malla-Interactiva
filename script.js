@@ -164,7 +164,7 @@ function dibujarInterfaz() {
         btnSemestre.className = 'btn-semestre' + (semestreCompleto ? ' completado' : '');
         btnSemestre.innerText = semestreCompleto ? "Desmarcar Semestre" : "Aprobar Semestre ✓";
 
-        btnSemestre.addEventListener('click', () => {
+        btnSemestre.addEventListener('click', (e) => {
             e.stopPropagation();
             // Limpiamos cualquier resaltado previo para que no se vea gris en móviles
             desactivarResaltado();
@@ -272,7 +272,7 @@ function dibujarInterfaz() {
     
 // Actualización de progreso (Lógica restaurada)
     const todasLasMaterias = plan.flatMap(sem => sem.materias);
-    const maxCreditos = todasLasMatrias.reduce((acc, materia) => acc + materia.c, 0);
+    const maxCreditos = todasLasMaterias.reduce((acc, materia) => acc + materia.c, 0);
     const porcentaje = maxCreditos > 0 ? (totalCreditos / maxCreditos) * 100 : 0;
     const creditosCount = document.getElementById('creditos-count');
     const progressBar = document.getElementById('progress-bar');
@@ -280,6 +280,7 @@ function dibujarInterfaz() {
         creditosCount.innerText = `Créditos: ${totalCreditos} / ${maxCreditos} (${porcentaje.toFixed(1)}%)`;
         progressBar.style.width = `${porcentaje}%`;
     }
+} // fin dibujarInterfaz
 
 // FUNCIONES DE LA CALCULADORA 
 function abrirCalculadora() {
@@ -384,7 +385,12 @@ themeToggleBtn.addEventListener('click', () => {
     }
 });
 
-window.onload = () =>    renderMalla('imec_2023'); // Renderiza la malla
+function renderMalla(carrera) {
+    carreraActual = carrera;
+    dibujarInterfaz();
+}
+
+window.onload = () => renderMalla('imec_2023');
     
 function activarResaltado(materiaSeleccionada) {
     const mallaWrapper = document.querySelector('.malla-wrapper');
@@ -491,12 +497,3 @@ document.getElementById('btn-disponibles').addEventListener('click', () => {
     }
     document.getElementById('lista-disponibles').style.display = 'block';
 }); // <-- Esta llave cierra el eventListener correctamente
-
-// ESTA ES LA FUNCIÓN QUE BUSCA EL BOTÓN "¡DALE!"
-function cerrarBienvenida() {
-    const modal = document.getElementById('modal-bienvenida');
-    if (modal) {
-        modal.style.display = 'none';
-        // No hay localStorage aquí, así que volverá a aparecer al refrescar.
-    }
-}
