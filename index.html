@@ -38,6 +38,37 @@
     </div>
 </div>
 
+<div id="modal-calculadora" class="modal-fondo" style="display:none;">
+    <div class="modal-contenido" style="max-width: 550px; width: 95%;">
+        <h2>🧮 Calculadora de Notas UTEC</h2>
+        
+        <label>Selecciona el Sistema de Calificación (SCP):</label>
+        <select id="scp-tipo" onchange="generarCamposDinamicos()" style="width: 100%; padding: 10px; margin-bottom: 15px;">
+            <option value="1">SCP 1: Ev1(25%) + Ev2(35%) + EC(40%)</option>
+            <option value="2">SCP 2: Ev1(30%) + Ev2(30%) + EC(40%)</option>
+            <option value="3">SCP 3: Ev1(25%) + Ev2(35%) + Lab(20%) + EC(20%)</option>
+            <option value="4">SCP 4: Participación(70%) + Trabajo(30%)</option>
+            <option value="5">SCP 5: Ev1(30%) + Ev2(50%) + Ev3(20%)</option>
+            <option value="6">SCP 6: Actividades(60%) + Participación(40%)</option>
+            <option value="7">SCP 7: Ev1(50%) + Ev2(50%)</option>
+            <option value="8">SCP 8: Ev1(40%) + Ev2(60%)</option>
+            <option value="9">SCP 9: Teórico-Práctico(70%) + EC(30%)</option>
+            <option value="10">SCP 10: Participación(70%) + Trabajo(30%)</option>
+            <option value="11">SCP 11 (Sin Examen): Múltiples componentes</option>
+            <option value="12">SCP 12 (Sin Examen): Lab(30%) + EC(30%) + Proy(40%)</option>
+        </select>
+
+        <div id="contenedor-dinamico" class="campos-calculadora">
+            </div>
+
+        <button class="btn-theme" onclick="procesarCalculo()" style="width:100%; margin-top:15px; background: var(--secondary);">Calcular Situación</button>
+        
+        <div id="resultado-calc" style="margin-top:20px; padding:15px; border-radius:10px; display:none; text-align: center;"></div>
+        
+        <button class="btn-theme" onclick="cerrarCalculadora()" style="width:100%; margin-top:10px;">Cerrar</button>
+    </div>
+</div>
+    
 <header>
     <img src="logo.png" alt="Logo Universidad" class="logo-uni">
     <img src="imec_logo.png" alt="Logo IMEC" class="logo-imec">
