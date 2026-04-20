@@ -444,12 +444,14 @@ function generarCamposDinamicos() {
         const div = document.createElement('div');
         div.className = 'input-group';
         div.innerHTML = `
-            <label>${nombre} (0-100%):</label>
-            <input type="number" class="nota-input" data-peso="${config.pesos[index]}" placeholder="Puntaje obtenido">
+            <label>${nombre} (Escala 1-5):</label>
+            <input type="number" step="0.1" min="1" max="5" class="nota-input" 
+                   data-peso="${config.pesos[index]}" placeholder="Ej: 3.5">
         `;
         contenedor.appendChild(div);
     });
 }
+
 function abrirCalculadora() {
     const modal = document.getElementById('modal-calculadora');
     if (modal) {
@@ -465,25 +467,24 @@ function cerrarCalculadora() {
     document.getElementById('modal-calculadora').style.display = 'none';
 }
 
-
 function procesarCalculo() {
     const scpId = document.getElementById('scp-tipo').value;
     const config = configuracionSCP[scpId];
     const inputs = document.querySelectorAll('.nota-input');
     const resDiv = document.getElementById('resultado-calc');
     
-    let notaAcumulada = 0;
+    let porcentajeAcumulado = 0;
     let pesoFaltante = 0;
     let camposVacios = [];
 
-    // 1. Analizar qué notas tenemos y qué falta
     inputs.forEach((input, index) => {
-        const valor = parseFloat(input.value);
+        const notaEscala = parseFloat(input.value);
         const peso = parseFloat(input.dataset.peso);
         const nombreCampo = config.campos[index];
 
-        if (!isNaN(valor)) {
-            notaAcumulada += valor * peso;
+        if (!isNaN(notaEscala)) {
+            // Convertimos la nota 1-5 a porcentaje de logro
+            porcentajeAcumulado += convertirEscalaAPorcentaje(notaEscala) * peso;
         } else {
             pesoFaltante += peso;
             camposVacios.push(nombreCampo);
@@ -492,63 +493,104 @@ function procesarCalculo() {
 
     resDiv.style.display = 'block';
     let msg = "";
-    let color = "";
-
-    // 2. CASO A: El estudiante ya ingresó todas las notas
+    
+    // Si no faltan notas, mostramos el resultado final convertido
     if (camposVacios.length === 0) {
-        if (notaAcumulada >= 70) {
-            msg = `🟢 <strong>¡EXONERADO!</strong><br>Nota Final: ${notaAcumulada.toFixed(1)}%`;
+        const notaFinalEscala = convertirAPuntajeUTEC(porcentajeAcumulado);
+        let situacion = "";
+        let color = "";
+
+        if (porcentajeAcumulado >= 70) {
+            situacion = "🟢 EXONERADO";
             color = "#a8e6cf";
-        } else if (notaAcumulada >= 40) {
-            msg = `🟡 <strong>EXAMEN REGLAMENTADO</strong><br>Nota Final: ${notaAcumulada.toFixed(1)}%`;
+        } else if (porcentajeAcumulado >= 40) {
+            situacion = "🟡 EXAMEN REGLAMENTADO";
             color = "#fff9c4";
-        } else if (notaAcumulada >= 25) {
-            msg = `🟠 <strong>TUTORÍA / EXAMEN ÚNICO</strong><br>Nota Final: ${notaAcumulada.toFixed(1)}%`;
+        } else if (porcentajeAcumulado >= 25) {
+            situacion = "🟠 TUTORÍA ";
             color = "#ffd1a1";
         } else {
-            msg = `🔴 <strong>RECURSA</strong><br>Nota Final: ${notaAcumulada.toFixed(1)}%`;
+            situacion = "🔴 RECURSA / EXAMEN ÚNICO";
             color = "#ff8b94";
         }
+
+        msg = `<strong>${situacion}</strong><br>Nota Final: <span style="font-size:1.5rem">${notaFinalEscala}</span><br><small>(${porcentajeAcumulado.toFixed(1)}% de logro)</small>`;
+        resDiv.style.backgroundColor = color;
     } 
-    // 3. CASO B: Falta UNA nota (Predicción)
+    // Predicción en escala UTEC
     else if (camposVacios.length === 1) {
-        const objetivoExonerar = 70;
-        const objetivoExamen = 40;
-        const campoFaltante = camposVacios[0];
-        const pesoDelFaltante = pesoFaltante;
+        const porcNecesarioExonerar = (70 - porcentajeAcumulado) / pesoFaltante;
+        const porcNecesarioExamen = (40 - porcentajeAcumulado) / pesoFaltante;
 
-        const notaNecesariaExonerar = (objetivoExonerar - notaAcumulada) / pesoDelFaltante;
-        const notaNecesariaExamen = (objetivoExamen - notaAcumulada) / pesoDelFaltante;
+        const notaEscalaExon = convertirAPuntajeUTEC(porcNecesarioExonerar);
+        const notaEscalaExam = convertirAPuntajeUTEC(porcNecesarioExamen);
 
-        color = "var(--card-bg)"; // Fondo neutro para predicción
-        resDiv.style.border = "2px solid var(--secondary)";
+        msg = `<strong>Predicción para ${camposVacios[0]}:</strong><br><br>`;
         
-        msg = `<strong>Calculando para ${campoFaltante}:</strong><br>`;
-        msg += `Llevas acumulado: <strong>${notaAcumulada.toFixed(1)}%</strong><br><br>`;
-
-        if (notaNecesariaExonerar <= 100) {
-            msg += `Para <strong>Exonerar</strong> necesitas: <br><span style="font-size:1.2rem; color: #2a9d8f;"><strong>${Math.max(0, notaNecesariaExonerar).toFixed(1)}%</strong></span><br>`;
+        if (porcNecesarioExonerar <= 100) {
+            msg += `Para <strong>Exonerar</strong> necesitas: <strong>${notaEscalaExon}</strong><br>`;
         } else {
-            msg += `Ya no es posible llegar a la Exoneración.<br>`;
+            msg += `Ya no llegas a exonerar.<br>`;
         }
 
-        if (notaNecesariaExamen <= 100) {
-            msg += `Para <strong>Examen</strong> necesitas: <br><strong>${Math.max(0, notaNecesariaExamen).toFixed(1)}%</strong>`;
-        } else {
-            msg += `Situación crítica.`;
+        if (porcNecesarioExamen <= 100) {
+            msg += `Para <strong>Examen</strong> necesitas: <strong>${notaEscalaExam}</strong>`;
         }
-    } 
-    // 4. CASO C: Faltan muchas notas
-    else {
-        msg = `Llevas acumulado <strong>${notaAcumulada.toFixed(1)}%</strong>.<br>Ingresa más notas para predecir qué necesitas.`;
-        color = "#e0e1dd";
+        resDiv.style.backgroundColor = "var(--card-bg)";
+        resDiv.style.border = "2px solid var(--secondary)";
     }
 
-    resDiv.style.backgroundColor = color;
     resDiv.innerHTML = msg;
     resDiv.style.color = "#333";
 }
+
+
 // Inicializar campos la primera vez
 document.addEventListener('DOMContentLoaded', () => {
     generarCamposDinamicos();
 });
+
+function convertirAPuntajeUTEC(porcentaje) {
+    // Redondeamos el porcentaje al entero más cercano para buscar en la tabla
+    const p = Math.round(porcentaje);
+    
+    const tablaUtec = {
+        0: "1.00", 1: "1.04", 2: "1.08", 3: "1.12", 4: "1.17", 5: "1.21", 6: "1.25", 7: "1.29", 8: "1.33", 9: "1.37",
+        10: "1.41", 11: "1.45", 12: "1.49", 13: "1.53", 14: "1.57", 15: "1.61", 16: "1.65", 17: "1.69", 18: "1.73", 19: "1.77",
+        20: "1.81", 21: "1.85", 22: "1.89", 23: "1.93", 24: "1.97", 25: "2.01", 26: "2.04", 27: "2.07", 28: "2.10", 29: "2.13",
+        30: "2.16", 31: "2.19", 32: "2.22", 33: "2.25", 34: "2.28", 35: "2.31", 36: "2.34", 37: "2.37", 38: "2.40", 39: "2.43",
+        40: "2.46", 41: "2.49", 42: "2.52", 43: "2.56", 44: "2.59", 45: "2.62", 46: "2.65", 47: "2.68", 48: "2.71", 49: "2.74",
+        50: "2.77", 51: "2.81", 52: "2.84", 53: "2.88", 54: "2.91", 55: "2.95", 56: "2.99", 57: "3.04", 58: "3.08", 59: "3.13",
+        60: "3.19", 61: "3.25", 62: "3.32", 63: "3.40", 64: "3.48", 65: "3.57", 66: "3.66", 67: "3.76", 68: "3.88", 69: "3.99",
+        70: "4.00", 71: "4.05", 72: "4.10", 73: "4.16", 74: "4.21", 75: "4.26", 76: "4.31", 77: "4.36", 78: "4.42", 79: "4.47",
+        80: "4.52", 81: "4.57", 82: "4.61", 83: "4.66", 84: "4.70", 85: "4.74", 86: "4.78", 87: "4.82", 88: "4.86", 89: "4.89",
+        90: "4.91", 91: "4.93", 92: "4.95", 93: "4.96", 94: "4.97", 95: "4.98", 96: "4.99", 97: "5.00", 98: "5.00", 99: "5.00", 100: "5.00"
+    };
+
+    return tablaUtec[p] || "1.00";
+}
+
+function convertirEscalaAPorcentaje(nota) {
+    const n = parseFloat(nota);
+    if (isNaN(n)) return 0;
+    if (n >= 5.0) return 100;
+    if (n <= 1.0) return 0;
+
+    // Tabla de referencia inversa (Puntos clave de la Circular)
+    const tablaInversa = [
+        {p: 0, n: 1.00}, {p: 20, n: 1.81}, {p: 25, n: 2.01}, {p: 40, n: 2.46},
+        {p: 50, n: 2.77}, {p: 60, n: 3.19}, {p: 69, n: 3.99}, {p: 70, n: 4.00},
+        {p: 80, n: 4.52}, {p: 90, n: 4.91}, {p: 97, n: 5.00}
+    ];
+
+    // Buscamos el rango donde cae la nota para interpolar
+    for (let i = 0; i < tablaInversa.length - 1; i++) {
+        let inf = tablaInversa[i];
+        let sup = tablaInversa[i+1];
+        if (n >= inf.n && n <= sup.n) {
+            // Interpolación lineal simple entre puntos clave
+            return inf.p + (n - inf.n) * (sup.p - inf.p) / (sup.n - inf.n);
+        }
+    }
+    return 0;
+}
