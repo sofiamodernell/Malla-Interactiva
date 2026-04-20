@@ -138,7 +138,6 @@ function cerrarBienvenida() {
     }
 }
 
-
 function dibujarInterfaz() {
     const container = document.getElementById('malla-container');
     if (!container) return;
@@ -479,8 +478,7 @@ function generarCamposDinamicos() {
         div.innerHTML = `
             <label>${nombre} (Escala 1-5):</label>
             <input type="number" step="0.01" min="1" max="5" class="nota-input" 
-                   data-peso="${config.pesos[index]}" placeholder="Ej: 3.50">
-        `;
+                   data-peso="${config.pesos[index]}" placeholder="Ej: 3.50">`;
         contenedor.appendChild(div);
     });
 }
