@@ -473,7 +473,6 @@ document.getElementById('btn-disponibles').addEventListener('click', () => {
     const todas = plan.flatMap(sem => sem.materias); // Aplana la lista de materias
     const listaUl = document.getElementById('items-disponibles');
     listaUl.innerHTML = '';
-
     const disponibles = todas.filter(mat => {
         // Solo considerar materias que no están cursadas ni aprobadas (estado 0)
         if ((estadoMaterias.get(mat.id) || 0) > 0) return false;
@@ -500,21 +499,13 @@ document.getElementById('btn-disponibles').addEventListener('click', () => {
 });
 
 /**
- * Cierra el modal de bienvenida y guarda la configuración 
- * para que no vuelva a aparecer en la sesión actual o futura.
+ * Cierra el modal de bienvenida solo por esta vez.
+ * Al recargar la página, volverá a aparecer.
  */
 function cerrarBienvenida() {
     const modal = document.getElementById('modal-bienvenida');
-    
     if (modal) {
-        // 1. Efecto visual: ocultar el modal
         modal.style.display = 'none';
-        
-        // 2. Persistencia: guardar en el navegador que el usuario ya lo vio
-        localStorage.setItem('bienvenida_vista', 'true');
-        
-        console.log("Bienvenida cerrada y preferencia guardada.");
-    } else {
-        console.warn("No se encontró el elemento 'modal-bienvenida' en el DOM.");
+        console.log("Modal cerrado temporalmente.");
     }
 }
