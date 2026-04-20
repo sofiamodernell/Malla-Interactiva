@@ -176,7 +176,7 @@ select {
     display: flex;
     justify-content: space-between;
 }
-/* === IDEA 5: SCROLLBAR PERSONALIZADO === */
+
 .malla-wrapper::-webkit-scrollbar {
     height: 10px; /* Barra horizontal */
 }
@@ -831,22 +831,39 @@ body, .controls, .materia, .semestre, .modal-contenido {
 /* Recuadro de Resultado y Predicción */
 #resultado-calc {
     margin-top: 20px;
-    padding: 15px;
-    border-radius: 12px;
     font-size: 0.95rem;
     line-height: 1.4;
-    border: 1px solid rgba(0,0,0,0.1);
-    animation: fadeIn 0.4s ease; /* Animación suave al aparecer */
+    animation: fadeIn 0.4s ease;
 }
 
-/* Estilo para las predicciones */
-#resultado-calc strong {
-    font-size: 1.1rem;
+#resultado-calc table {
+    width: 100%;
+    border-collapse: collapse;
 }
 
-#resultado-calc span {
-    display: block;
-    margin-top: 5px;
+#resultado-calc table thead tr {
+    background: rgba(0,0,0,0.06);
+}
+
+#resultado-calc table td,
+#resultado-calc table th {
+    padding: 6px 8px;
+    border-bottom: 1px solid rgba(0,0,0,0.07);
+    text-align: left;
+}
+
+[data-theme="dark"] #resultado-calc table thead tr {
+    background: rgba(255,255,255,0.08);
+}
+
+[data-theme="dark"] #resultado-calc table td,
+[data-theme="dark"] #resultado-calc table th {
+    border-bottom-color: rgba(255,255,255,0.08);
+    color: var(--text);
+}
+
+[data-theme="dark"] #resultado-calc div {
+    color: inherit !important;
 }
 
 /* --- AJUSTES PARA CELULARES --- */
