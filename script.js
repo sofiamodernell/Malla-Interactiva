@@ -142,6 +142,7 @@ function renderMalla(carreraId) {
 }
 
 function dibujarInterfaz() {
+    localStorage.setItem('progreso_imec', JSON.stringify(Array.from(estadoMaterias.entries())));
     const container = document.getElementById('malla-container');
     if (!container) return;
     container.innerHTML = '';
