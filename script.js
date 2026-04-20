@@ -499,3 +499,22 @@ document.getElementById('btn-disponibles').addEventListener('click', () => {
     document.getElementById('lista-disponibles').style.display = 'block';
 });
 
+/**
+ * Cierra el modal de bienvenida y guarda la configuración 
+ * para que no vuelva a aparecer en la sesión actual o futura.
+ */
+function cerrarBienvenida() {
+    const modal = document.getElementById('modal-bienvenida');
+    
+    if (modal) {
+        // 1. Efecto visual: ocultar el modal
+        modal.style.display = 'none';
+        
+        // 2. Persistencia: guardar en el navegador que el usuario ya lo vio
+        localStorage.setItem('bienvenida_vista', 'true');
+        
+        console.log("Bienvenida cerrada y preferencia guardada.");
+    } else {
+        console.warn("No se encontró el elemento 'modal-bienvenida' en el DOM.");
+    }
+}
