@@ -146,6 +146,7 @@ function renderMalla(carreraId) {
     estadoMaterias.clear();
     dibujarInterfaz();
 }
+let materiaEnfocadaId = null;
 
 function dibujarInterfaz() {
     const container = document.getElementById('malla-container');
@@ -162,10 +163,17 @@ function dibujarInterfaz() {
 
         // === BOTÓN DE APROBAR SEMESTRE ENTERO ===
         const btnSemestre = document.createElement('button');
-        btnSemestre.className = 'btn-semestre';
+
+        btnSemestre.className = 'btn-semestre' + (semestreCompleto ? ' completado' : '');
+        btnSemestre.innerText = semestreCompleto ? "Desmarcar Semestre" : "Aprobar Semestre ✓";
         
         // Verificamos si TODAS las materias de este semestre ya están en estado 2 (Aprobadas)
         const semestreCompleto = semestre.materias.every(mat => estadoMaterias.get(mat.id) === 2);
+
+        btnSemestre.addEventListener('click', () => {
+        // Limpiamos cualquier resaltado previo para que no se vea gris
+        desactivarResaltado();
+        materiaEnfocadaId = null;
         
         if (semestreCompleto) {
             btnSemestre.innerText = "Desmarcar Semestre";
@@ -175,7 +183,6 @@ function dibujarInterfaz() {
         }
 
         // Qué pasa al hacer clic en el botón del semestre
-        btnSemestre.addEventListener('click', () => {
             if (semestreCompleto) {
                 semestre.materias.forEach(m => estadoMaterias.set(m.id, 0));
             } else {
@@ -199,82 +206,89 @@ function dibujarInterfaz() {
         semestre.materias.forEach(mat => {
             const matDiv = document.createElement('div');
             matDiv.id = mat.id; // Asignar el ID para que el resaltado lo encuentre
-            
-            // Eventos para el efecto enfoque
-            matDiv.addEventListener('mouseenter', () => activarResaltado(mat));
-            matDiv.addEventListener('mouseleave', () => desactivarResaltado());
-            
             matDiv.className = 'materia';
+
+        // --- LÓGICA DE INTERACCIÓN (PC y MÓVIL) ---
             
+// En PC: Hover normal
+            matDiv.addEventListener('mouseenter', () => {
+                if (window.innerWidth > 768) activarResaltado(mat);
+            });
+            matDiv.addEventListener('mouseleave', () => {
+                if (window.innerWidth > 768) desactivarResaltado();
+            });
+
+            // En Móvil y PC: Click
+            matDiv.addEventListener('click', (e) => {
+                const esMovil = window.innerWidth <= 768;
+
+                // Si es móvil y no está enfocada, primero la enfocamos (mostramos previas)
+                if (esMovil && materiaEnfocadaId !== mat.id) {
+                    desactivarResaltado(); // Limpiar el gris de otras
+                    activarResaltado(mat);
+                    materiaEnfocadaId = mat.id;
+                    return; // Detenemos aquí para que no cambie el estado en el primer toque
+                }
+
+                // Si es PC, o si es móvil y ya estaba enfocada, procedemos a marcar/desmarcar
+                if (estaBloqueada) {
+                    alert('🔒 No podés acceder a esta materia!. Te falta:\n' + faltanTextos.join('\n'));
+                    return; 
+                }
+
+                const estadoActual = estadoMaterias.get(mat.id) || 0;
+                if (estadoActual === 0) estadoMaterias.set(mat.id, 1);
+                else if (estadoActual === 1) estadoMaterias.set(mat.id, 2);
+                else estadoMaterias.set(mat.id, 0);
+                
+                materiaEnfocadaId = null; // Resetear enfoque tras marcar
+                desactivarResaltado();
+                dibujarInterfaz();
+            });
+
+            // --- LÓGICA DE ESTADOS Y RENDERIZADO ---
             let estaBloqueada = false;
             let faltanTextos = [];
 
             if (mat.reqExamen) {
                 mat.reqExamen.forEach(reqId => {
-                    if (estadoMaterias.get(reqId) !== 2) {
-                        faltanTextos.push(`${reqId} (Examen)`);
-                    }
+                    if (estadoMaterias.get(reqId) !== 2) faltanTextos.push(`${reqId} (Aprobada)`);
                 });
             }
-            
             if (mat.reqCurso) {
                 mat.reqCurso.forEach(reqId => {
-                    if ((estadoMaterias.get(reqId) || 0) < 1) {
-                        faltanTextos.push(`${reqId} (Curso)`);
-                    }
+                    if ((estadoMaterias.get(reqId) || 0) < 1) faltanTextos.push(`${reqId} (Cursada)`);
                 });
             }
 
             if (faltanTextos.length > 0) estaBloqueada = true;
 
             const estadoActual = estadoMaterias.get(mat.id) || 0;
-            
-            if (estaBloqueada) {
-                matDiv.classList.add('bloqueada');
-            } else if (estadoActual === 1) {
-                matDiv.classList.add('cursada');
-            } else if (estadoActual === 2) {
+            if (estaBloqueada) matDiv.classList.add('bloqueada');
+            else if (estadoActual === 1) matDiv.classList.add('cursada');
+            else if (estadoActual === 2) {
                 matDiv.classList.add('aprobada');
                 totalCreditos += mat.c;
             }
 
             matDiv.setAttribute('data-area', mat.a);
-            
-            let previasTexto = "";
-            if (mat.reqExamen && mat.reqExamen.length > 0) previasTexto += `Ex: ${mat.reqExamen.join(', ')} `;
-            if (mat.reqCurso && mat.reqCurso.length > 0) previasTexto += `Cur: ${mat.reqCurso.join(', ')}`;
-            if (!previasTexto) previasTexto = "Ninguna";
-
             matDiv.innerHTML = `
                 <span class="area-tag">${mat.a}</span>
                 <span class="materia-name">${mat.n}</span>
                 <div class="materia-info">
                     <span>${mat.c} Créditos</span>
-                    <span title="Previas necesarias" style="font-size: 0.7rem; color:#888;">Previas: ${previasTexto}</span>
                 </div>
             `;
             
-            matDiv.addEventListener('click', () => {
-                if (estaBloqueada) {
-                    alert('🔒 No podés acceder a esta materia!. Te falta:\n' + faltanTextos.join('\n') + '\n\n¡Revisa el plan de estudios!');
-                    return; 
-                }
-
-                if (estadoActual === 0) {
-                    estadoMaterias.set(mat.id, 1);
-                } else if (estadoActual === 1) {
-                    estadoMaterias.set(mat.id, 2);
-                } else {
-                    estadoMaterias.set(mat.id, 0);
-                }
-                
-                dibujarInterfaz();
-            });
-
             semDiv.appendChild(matDiv);
         });
         container.appendChild(semDiv);
     });
+
+    // Actualizar contador de créditos si tienes el elemento
+    const totalElement = document.getElementById('total-creditos');
+    if (totalElement) totalElement.innerText = totalCreditos;
+}
     
 // === CÁLCULO DE CRÉDITOS Y BARRA DE PROGRESO ===
     // Extraemos TODAS las materias del plan actual en una sola lista
@@ -336,6 +350,7 @@ function desactivarResaltado() {
         div.classList.remove('highlight-self', 'highlight-req', 'highlight-post');
     });
 }
+
 document.getElementById('btn-reset').addEventListener('click', () => {
     if (confirm("¿Estás seguro de que quieres borrar todo tu progreso? Esta acción no se puede deshacer.")) {
         estadoMaterias.clear(); // Limpia el mapa de estados
