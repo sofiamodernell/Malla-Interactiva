@@ -306,8 +306,6 @@ function renderMalla(carreraId) {
     estadoMaterias.clear();
     dibujarInterfaz();
 }
-
-
     
 // === CÁLCULO DE CRÉDITOS Y BARRA DE PROGRESO ===
     // Extraemos TODAS las materias del plan actual en una sola lista
@@ -327,7 +325,7 @@ function renderMalla(carreraId) {
         creditosCount.innerText = `Créditos: ${totalCreditos} / ${maxCreditos} (${porcentaje.toFixed(1)}%)`;
         progressBar.style.width = `${porcentaje}%`;
     }
-}
+
 
 window.onload = () =>    renderMalla('imec_2023'); // Renderiza la malla
     
