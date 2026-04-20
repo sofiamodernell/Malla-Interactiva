@@ -108,6 +108,20 @@ const basesDeDatos = {
     ]
 };
 
+const configuracionSCP = {
+    "1": { campos: ["Ev1", "Ev2", "EC"], pesos: [0.25, 0.35, 0.40] },
+    "2": { campos: ["Ev1", "Ev2", "EC"], pesos: [0.30, 0.30, 0.40] },
+    "3": { campos: ["Ev1", "Ev2", "Lab", "EC"], pesos: [0.25, 0.35, 0.20, 0.20] },
+    "4": { campos: ["Participación", "Trabajo"], pesos: [0.70, 0.30] },
+    "5": { campos: ["Ev1", "Ev2", "Ev3"], pesos: [0.30, 0.50, 0.20] },
+    "6": { campos: ["Actividades", "Participación"], pesos: [0.60, 0.40] },
+    "7": { campos: ["Ev1", "Ev2"], pesos: [0.50, 0.50] },
+    "8": { campos: ["Ev1", "Ev2"], pesos: [0.40, 0.60] },
+    "9": { campos: ["Teórico-Práctico", "EC"], pesos: [0.70, 0.30] },
+    "10": { campos: ["Participación", "Trabajo"], pesos: [0.70, 0.30] },
+    "11": { campos: ["Lab", "EC", "Proy", "Ev1", "Ev2", "Ev3", "Ev4"], pesos: [0.3, 0.1, 0.2, 0.1, 0.1, 0.1, 0.1] },
+    "12": { campos: ["Lab", "EC", "Proy"], pesos: [0.30, 0.30, 0.40] }
+};
 // --- ESTADO GLOBAL ---
 let estadoMaterias = new Map(); 
 let carreraActual = "imec_2023";
@@ -125,18 +139,9 @@ document.addEventListener('DOMContentLoaded', () => {
         const modal = document.getElementById('modal-bienvenida');
         if (modal) modal.style.display = 'none';
     }
-
     // 3. Dibujar
     dibujarInterfaz();
 });
-
-function cerrarBienvenida() {
-    const modal = document.getElementById('modal-bienvenida');
-    if (modal) {
-        modal.style.display = 'none';
-        localStorage.setItem('bienvenida_vista', 'true');
-    }
-}
 
 function dibujarInterfaz() {
     const container = document.getElementById('malla-container');
@@ -264,11 +269,101 @@ function dibujarInterfaz() {
         });
         container.appendChild(semDiv);
     });
+    
+// Actualización de progreso (Lógica restaurada)
+    const todasLasMaterias = plan.flatMap(sem => sem.materias);
+    const maxCreditos = todasLasMatrias.reduce((acc, materia) => acc + materia.c, 0);
+    const porcentaje = maxCreditos > 0 ? (totalCreditos / maxCreditos) * 100 : 0;
+    const creditosCount = document.getElementById('creditos-count');
+    const progressBar = document.getElementById('progress-bar');
+    if (creditosCount && progressBar) {
+        creditosCount.innerText = `Créditos: ${totalCreditos} / ${maxCreditos} (${porcentaje.toFixed(1)}%)`;
+        progressBar.style.width = `${porcentaje}%`;
+    }
 
-    const totalElement = document.getElementById('total-creditos');
-    if (totalElement) totalElement.innerText = totalCreditos;
+// FUNCIONES DE LA CALCULADORA 
+function abrirCalculadora() {
+    const modal = document.getElementById('modal-calculadora');
+    if (modal) {
+        modal.style.display = 'flex';
+        // Generamos los campos por defecto (SCP 1) al abrir
+        generarCamposDinamicos(); 
+    } else {
+        console.error("No se encontró el modal de la calculadora en el HTML");
+    }
 }
 
+function cerrarCalculadora() {
+    document.getElementById('modal-calculadora').style.display = 'none';
+}
+
+function generarCamposDinamicos() {
+    const scpId = document.getElementById('scp-tipo').value;
+    const config = configuracionSCP[scpId];
+    const contenedor = document.getElementById('contenedor-dinamico');
+    contenedor.innerHTML = '';
+
+    config.campos.forEach((nombre, index) => {
+        const div = document.createElement('div');
+        div.className = 'input-group';
+        div.innerHTML = `<label>${nombre} (Escala UTEEC):</label><input type="number" step="0.01" min="1" max="5" class="nota-input" data-peso="${config.pesos[index]}" placeholder="Ej: 3.50">`;
+        contenedor.appendChild(div);
+    });
+}
+
+function procesarCalculo() {
+    const scpId = document.getElementById('scp-tipo').value;
+    const config = configuracionSCP[scpId];
+    const inputs = document.querySelectorAll('.nota-input');
+    const resDiv = document.getElementById('resultado-calc');
+    
+    let notaFinalEscala = 0;
+    let pesoFaltante = 0;
+    let camposVacios = [];
+
+    inputs.forEach((input, index) => {
+        const notaEntrada = parseFloat(input.value);
+        const peso = parseFloat(input.dataset.peso);
+        const nombreCampo = config.campos[index];
+
+        if (!isNaN(notaEntrada)) {
+            notaFinalEscala += notaEntrada * peso;
+        } else {
+            pesoFaltante += peso;
+            camposVacios.push(nombreCampo);
+        }
+    });
+
+    resDiv.style.display = 'block';
+    let msg = "";
+
+    if (camposVacios.length === 0) {
+        const nf = parseFloat(notaFinalEscala.toFixed(2));
+        let situacion = nf >= 4.00 ? "🟢 EXONERA" : (nf >= 3.00 ? "🟡 EXAMEN" : "🟠 TUTORÍA");
+        msg = `<strong>${situacion}</strong><br>Nota Final: <span style="font-size:1.8rem">${nf}</span>`;
+    } else if (camposVacios.length === 1) {
+        const notaNecExon = (4.00 - notaFinalEscala) / pesoFaltante;
+        msg = `Para exonerar necesitás un: <strong>${Math.max(1, notaNecExon).toFixed(2)}</strong> en ${camposVacios[0]}`;
+    } else {
+        msg = "Ingresá más notas para predecir.";
+    }
+
+    resDiv.innerHTML = msg;
+    resDiv.style.color = "#333";
+
+} 
+
+    function cerrarBienvenida() {
+    const modal = document.getElementById('modal-bienvenida');
+    if (modal) {
+        modal.style.display = 'none';
+        localStorage.setItem('bienvenida_vista', 'true');
+    }
+}
+
+
+
+    
 
 // --- LÓGICA DEL MODO OSCURO ---
 const themeToggleBtn = document.getElementById('theme-toggle');
@@ -294,41 +389,10 @@ themeToggleBtn.addEventListener('click', () => {
 });
 
 
-// Cargar progreso guardado al iniciar
-const progresoGuardado = localStorage.getItem('progreso_imec');
-if (progresoGuardado) {
-    estadoMaterias = new Map(JSON.parse(progresoGuardado));
-}
-
-function renderMalla(carreraId) {
-    carreraActual = carreraId;
-    estadoMaterias.clear();
-    dibujarInterfaz();
-}
-    
-// === CÁLCULO DE CRÉDITOS Y BARRA DE PROGRESO ===
-    // Extraemos TODAS las materias del plan actual en una sola lista
-    const todasLasMaterias = plan.flatMap(sem => sem.materias);
-    
-    // Calculamos el máximo de créditos posibles
-    const maxCreditos = todasLasMaterias.reduce((acc, materia) => acc + materia.c, 0); 
-    
-    // Calculamos el porcentaje
-    const porcentaje = maxCreditos > 0 ? (totalCreditos / maxCreditos) * 100 : 0;
-
-    // Actualizamos los textos y el ancho de la barra
-    const creditosCount = document.getElementById('creditos-count');
-    const progressBar = document.getElementById('progress-bar');
-    
-    if (creditosCount && progressBar) {
-        creditosCount.innerText = `Créditos: ${totalCreditos} / ${maxCreditos} (${porcentaje.toFixed(1)}%)`;
-        progressBar.style.width = `${porcentaje}%`;
-    }
-
-
 window.onload = () =>    renderMalla('imec_2023'); // Renderiza la malla
+
+
     
-// --- FUNCIONES DE EFECTO ENFOQUE ---
 function activarResaltado(materiaSeleccionada) {
     const mallaWrapper = document.querySelector('.malla-wrapper');
     if(mallaWrapper) mallaWrapper.classList.add('dimming-active');
@@ -451,52 +515,6 @@ document.addEventListener('DOMContentLoaded', () => {
     if(btnRes) btnRes.onclick = reiniciarTodo;
 });
 
-const configuracionSCP = {
-    "1": { campos: ["Ev1", "Ev2", "EC"], pesos: [0.25, 0.35, 0.40] },
-    "2": { campos: ["Ev1", "Ev2", "EC"], pesos: [0.30, 0.30, 0.40] },
-    "3": { campos: ["Ev1", "Ev2", "Lab", "EC"], pesos: [0.25, 0.35, 0.20, 0.20] },
-    "4": { campos: ["Participación", "Trabajo"], pesos: [0.70, 0.30] },
-    "5": { campos: ["Ev1", "Ev2", "Ev3"], pesos: [0.30, 0.50, 0.20] },
-    "6": { campos: ["Actividades", "Participación"], pesos: [0.60, 0.40] },
-    "7": { campos: ["Ev1", "Ev2"], pesos: [0.50, 0.50] },
-    "8": { campos: ["Ev1", "Ev2"], pesos: [0.40, 0.60] },
-    "9": { campos: ["Teórico-Práctico", "EC"], pesos: [0.70, 0.30] },
-    "10": { campos: ["Participación", "Trabajo"], pesos: [0.70, 0.30] },
-    "11": { campos: ["Lab", "EC", "Proy", "Ev1", "Ev2", "Ev3", "Ev4"], pesos: [0.3, 0.1, 0.2, 0.1, 0.1, 0.1, 0.1] },
-    "12": { campos: ["Lab", "EC", "Proy"], pesos: [0.30, 0.30, 0.40] }
-};
-
-function generarCamposDinamicos() {
-    const scpId = document.getElementById('scp-tipo').value;
-    const config = configuracionSCP[scpId];
-    const contenedor = document.getElementById('contenedor-dinamico');
-    contenedor.innerHTML = '';
-
-    config.campos.forEach((nombre, index) => {
-        const div = document.createElement('div');
-        div.className = 'input-group';
-        div.innerHTML = `
-            <label>${nombre} (Escala 1-5):</label>
-            <input type="number" step="0.01" min="1" max="5" class="nota-input" 
-                   data-peso="${config.pesos[index]}" placeholder="Ej: 3.50">`;
-        contenedor.appendChild(div);
-    });
-}
-
-function abrirCalculadora() {
-    const modal = document.getElementById('modal-calculadora');
-    if (modal) {
-        modal.style.display = 'flex';
-        // Generamos los campos por defecto (SCP 1) al abrir
-        generarCamposDinamicos(); 
-    } else {
-        console.error("No se encontró el modal de la calculadora en el HTML");
-    }
-}
-
-function cerrarCalculadora() {
-    document.getElementById('modal-calculadora').style.display = 'none';
-}
 
 function procesarCalculo() {
     const scpId = document.getElementById('scp-tipo').value;
