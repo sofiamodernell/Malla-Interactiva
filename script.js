@@ -466,14 +466,7 @@ function reiniciarTodo() {
         dibujarInterfaz();
     }
 }
-    
-document.addEventListener('DOMContentLoaded', () => {
-    const btndisponibles = document.getElementById('btn-disponibles');
-    if(btndisponibles) btn-disponibles.onclick = mostrarDisponibles;
-    
-    const btnReset = document.getElementById('btn-reset');
-    if(btnReset) btn-reset.onclick = reiniciarTodo;
-});
+   
 
 document.getElementById('btn-disponibles').addEventListener('click', () => {
     const plan = basesDeDatos[carreraActual]; // Obtiene el plan actual
