@@ -552,7 +552,6 @@ body, .controls, .materia, .semestre, .modal-contenido {
     --cursada: #e9c46a;        /* Amarillo/mostaza para cursadas */
 }
 
-   Forzamos al SVG del HTML a que tome el color de fondo oscuro */
 [data-theme="dark"] header svg path {
     fill: var(--bg) !important;
 }
