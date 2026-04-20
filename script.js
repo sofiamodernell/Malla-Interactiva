@@ -450,6 +450,21 @@ function generarCamposDinamicos() {
         contenedor.appendChild(div);
     });
 }
+function abrirCalculadora() {
+    const modal = document.getElementById('modal-calculadora');
+    if (modal) {
+        modal.style.display = 'flex';
+        // Generamos los campos por defecto (SCP 1) al abrir
+        generarCamposDinamicos(); 
+    } else {
+        console.error("No se encontró el modal de la calculadora en el HTML");
+    }
+}
+
+function cerrarCalculadora() {
+    document.getElementById('modal-calculadora').style.display = 'none';
+}
+
 
 function procesarCalculo() {
     const scpId = document.getElementById('scp-tipo').value;
