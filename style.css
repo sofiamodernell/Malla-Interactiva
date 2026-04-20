@@ -522,7 +522,6 @@ body, .controls, .materia, .semestre, .modal-contenido {
     --cursada: #e9c46a;        /* Amarillo/mostaza para cursadas */
 }
 
-/* 🌊 EL SECRETO DE LA OLA: 
    Forzamos al SVG del HTML a que tome el color de fondo oscuro */
 [data-theme="dark"] header svg path {
     fill: var(--bg) !important;
@@ -549,4 +548,45 @@ body, .controls, .materia, .semestre, .modal-contenido {
 
 .lista-instrucciones .sub-lista li {
     margin-bottom: 6px; /* Da un poquito de espacio entre cada línea */
+}
+
+/* --- MEJORAS PARA CELULAR --- */
+@media (max-width: 600px) {
+    /* Achicamos el modal de bienvenida */
+    .modal-contenido {
+        width: 92% !important;
+        padding: 15px !important;
+        margin: 10px auto;
+    }
+    
+    .modal-contenido h2 { font-size: 1.3rem; }
+    .lista-instrucciones { font-size: 0.85rem; }
+
+    /* Reducimos el tamaño de las materias para que entren más en pantalla */
+    .materia {
+        width: 130px !important; 
+        height: 130px !important;
+        padding: 8px !important;
+    }
+
+    .materia-name {
+        font-size: 0.75rem !important;
+        line-height: 1.1;
+    }
+
+    .semestre {
+        min-width: 150px !important;
+    }
+
+    /* Ajuste de controles para que no se amontonen */
+    .controls {
+        flex-direction: column;
+        gap: 10px;
+        padding: 10px;
+    }
+
+    .btn-theme {
+        width: 100%; /* Botones a lo ancho del cel */
+        justify-content: center;
+    }
 }
