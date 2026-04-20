@@ -135,6 +135,12 @@ themeToggleBtn.addEventListener('click', () => {
 let estadoMaterias = new Map(); 
 let carreraActual = "imec_2023";
 
+// Cargar progreso guardado al iniciar
+const progresoGuardado = localStorage.getItem('progreso_imec');
+if (progresoGuardado) {
+    estadoMaterias = new Map(JSON.parse(progresoGuardado));
+}
+
 function renderMalla(carreraId) {
     carreraActual = carreraId;
     estadoMaterias.clear();
@@ -171,16 +177,19 @@ function dibujarInterfaz() {
         // Qué pasa al hacer clic en el botón del semestre
         btnSemestre.addEventListener('click', () => {
             if (semestreCompleto) {
-                semestre.materias.forEach(mat => estadoMaterias.set(mat.id, 0));
+                semestre.materias.forEach(m => estadoMaterias.set(m.id, 0));
             } else {
-                semestre.materias.forEach(mat => estadoMaterias.set(mat.id, 2));
-                // Disparar confetti al completar semestre
+                semestre.materias.forEach(m => estadoMaterias.set(m.id, 2));
+                // 🎉 EFECTO CONFETTI
                 confetti({
                     particleCount: 100,
                     spread: 70,
-                    origin: { y: 0.6 }
+                    origin: { y: 0.6 },
+                    colors: ['#007ea7', '#00a8e8', '#a8e6cf']
                 });
             }
+            // Guardar progreso automáticamente
+            localStorage.setItem('progreso_imec', JSON.stringify(Array.from(estadoMaterias.entries())));
             dibujarInterfaz();
         });
 
@@ -363,4 +372,49 @@ document.getElementById('btn-disponibles').addEventListener('click', () => {
         });
     }
     document.getElementById('lista-disponibles').style.display = 'block';
+});
+// Función para el botón de Reiniciar (Debes añadir el ID 'btn-reset' a un botón en el HTML si quieres usarlo)
+function reiniciarTodo() {
+    if (confirm("¿Seguro que quieres borrar todo tu progreso?")) {
+        estadoMaterias.clear();
+        localStorage.removeItem('progreso_imec');
+        dibujarInterfaz();
+    }
+}
+
+// Lógica para ver qué materias puedes cursar
+function mostrarDisponibles() {
+    const plan = basesDeDatos[carreraActual];
+    const todas = plan.flatMap(s => s.materias);
+    const listaUl = document.getElementById('items-disponibles');
+    listaUl.innerHTML = '';
+
+    const disponibles = todas.filter(mat => {
+        if ((estadoMaterias.get(mat.id) || 0) > 0) return false;
+        const cumpleExamen = !mat.reqExamen || mat.reqExamen.every(id => estadoMaterias.get(id) === 2);
+        const cumpleCurso = !mat.reqCurso || mat.reqCurso.every(id => (estadoMaterias.get(id) || 0) >= 1);
+        return cumpleExamen && cumpleCurso;
+    });
+
+    if (disponibles.length === 0) {
+        listaUl.innerHTML = '<li>No hay materias nuevas disponibles.</li>';
+    } else {
+        disponibles.forEach(m => {
+            const li = document.createElement('li');
+            li.style.marginBottom = "5px";
+            li.innerHTML = `<strong>${m.id}</strong> - ${m.n}`;
+            listaUl.appendChild(li);
+        });
+    }
+    document.getElementById('lista-disponibles').style.display = 'block';
+}
+
+// Vincular botones (Asegúrate de que los IDs coincidan con tu HTML)
+// Puedes poner esto al final del script
+document.addEventListener('DOMContentLoaded', () => {
+    const btnDisp = document.getElementById('btn-disponibles');
+    if(btnDisp) btnDisp.onclick = mostrarDisponibles;
+    
+    const btnRes = document.getElementById('btn-reset');
+    if(btnRes) btnRes.onclick = reiniciarTodo;
 });
