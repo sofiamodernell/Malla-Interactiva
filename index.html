@@ -9,32 +9,30 @@
 <body>
 <div id="modal-bienvenida" class="modal-fondo">
     <div class="modal-contenido">
-        <h2>¡Bienvenido! 🎓</h2>
-        <p>Optimiza el seguimiento de tu carrera con esta herramienta visual.</p>
-        
+        <h2>¡Bienvenido! 🎓</h2>        
         <div class="modal-seccion">
-            <h3>📖 Instructivo de Uso</h3>
+            <h3> Instructivo </h3>
             <ul class="lista-instrucciones">
                 <li><strong>Gestión de Materias:</strong>
                     <ul class="sub-lista">
-                        <li>🖱️ <strong>1 Click:</strong> <span class="badge cursada">Cursada</span> (Cursaste pero no has salvado examen o estás cursando).</li>
-                        <li>🖱️ <strong>2 Clicks:</strong> <span class="badge aprobada">Aprobada</span> (Examen salvado o exonerada).</li>
-                        <li>🖱️ <strong>3 Clicks:</strong> Reiniciar estado.</li>
+                        <li><strong>1 Click:</strong> <span class="badge cursada">Cursada</span> (Cursaste pero no has salvado examen o estás cursando).</li>
+                        <li><strong>2 Clicks:</strong> <span class="badge aprobada">Aprobada</span> (Exoneraste o salvaste examen).</li>
+                        <li><strong>3 Clicks:</strong> Reinicia estado.</li>
                     </ul>
                 </li>
                 <li><strong>Funciones:</strong>
                     <ul class="sub-lista">
-                        <li>✨ <strong>Efecto Enfoque:</strong> Pasa el mouse sobre una materia para ver sus previas y qué otras materias destraba mas adelante.</li>
-                        <li>✅ <strong>Aprobar Semestre:</strong> Usa los botones de cada semestre para marcarlo como completo rápidamente.</li>
-                        <li>🔒 <strong>Bloqueo:</strong> No podrás marcar una materia si no cumples con las previas (Curso o Aprobada) requeridas.</li>
+                        <li><strong>Efecto Enfoque:</strong> Pasá el mouse sobre una materia para ver sus previas y qué otras materias destraba mas adelante.</li>
+                        <li><strong>Aprobar Semestre:</strong> Usá los botones de cada semestre para marcarlo como completo rápidamente.</li>
+                        <li><strong>Bloqueo:</strong> No podrás marcar una materia si no cumplís con las previas (Curso o Aprobada) requeridas.</li>
                     </ul>
                 </li>
             </ul>
         </div>
 
         <div class="disclaimer">
-            <strong>⚠️ IMPORTANTE (Disclaimer):</strong>
-            <p>Esta es una herramienta <strong>no oficial</strong> desarrollada para estudiantes. Los datos de créditos y previas están basados en el Plan 2023, pero pueden estar sujetos a cambios. Para trámites formales, consulta siempre el <strong>Plan de Estudios</strong>.</p>
+            <strong>⚠️ IMPORTANTE:</strong>
+            <p>Esta es una herramienta <strong>NO oficial</strong> desarrollada para estudiantes. Los datos de créditos y previas están basados en el Plan 2023, pero pueden estar sujetos a cambios o errores de typeo. Para trámites formales, consulta siempre el <strong>Plan de Estudios</strong>.</p>
         </div>
         
         <button id="btn-entendido" class="btn-modal" onclick="document.getElementById('modal-bienvenida').style.display='none'">¡Entendido!</button>
@@ -57,7 +55,7 @@
 </header>
 
 <div class="controls">
-    <button id="theme-toggle" class="btn-theme">🌙 Modo Oscuro</button>
+    <button id="theme-toggle" class="btn-theme">🌙 Dark Mode</button>
     <label>Carrera: </label>
     <select id="carrera-selector" onchange="renderMalla(this.value)">
         <option value="imec_2023">Ingeniería en Mecatrónica (Plan 2023)</option>
@@ -72,9 +70,7 @@
     </div>
     <span id="creditos-count">Créditos: 0</span>
 </div>
-    
-<img src="bombon.png" alt="Bombón" class="chica-superpoderosa">
-    
+        
 <script src="script.js"></script>
 
 <footer class="site-footer">
