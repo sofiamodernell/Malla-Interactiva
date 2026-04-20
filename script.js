@@ -361,10 +361,6 @@ function procesarCalculo() {
     }
 }
 
-
-
-    
-
 // --- LÓGICA DEL MODO OSCURO ---
 const themeToggleBtn = document.getElementById('theme-toggle');
 const currentTheme = localStorage.getItem('theme') || 'light';
@@ -388,10 +384,7 @@ themeToggleBtn.addEventListener('click', () => {
     }
 });
 
-
 window.onload = () =>    renderMalla('imec_2023'); // Renderiza la malla
-
-
     
 function activarResaltado(materiaSeleccionada) {
     const mallaWrapper = document.querySelector('.malla-wrapper');
@@ -438,6 +431,50 @@ document.getElementById('btn-reset').addEventListener('click', () => {
     }
 });
 
+// Lógica para ver qué materias puedes cursar
+function mostrarDisponibles() {
+    const plan = basesDeDatos[carreraActual];
+    const todas = plan.flatMap(s => s.materias);
+    const listaUl = document.getElementById('items-disponibles');
+    listaUl.innerHTML = '';
+
+    const disponibles = todas.filter(mat => {
+        if ((estadoMaterias.get(mat.id) || 0) > 0) return false;
+        const cumpleExamen = !mat.reqExamen || mat.reqExamen.every(id => estadoMaterias.get(id) === 2);
+        const cumpleCurso = !mat.reqCurso || mat.reqCurso.every(id => (estadoMaterias.get(id) || 0) >= 1);
+        return cumpleExamen && cumpleCurso;
+    });
+
+    if (disponibles.length === 0) {
+        listaUl.innerHTML = '<li>No hay materias nuevas disponibles.</li>';
+    } else {
+        disponibles.forEach(m => {
+            const li = document.createElement('li');
+            li.style.marginBottom = "5px";
+            li.innerHTML = `<strong>${m.id}</strong> - ${m.n}`;
+            listaUl.appendChild(li);
+        });
+    }
+    document.getElementById('lista-disponibles').style.display = 'block';
+}
+
+// Función para el botón de Reiniciar (Debes añadir el ID 'btn-reset' a un botón en el HTML si quieres usarlo)
+function reiniciarTodo() {
+    if (confirm("¿Seguro que quieres borrar todo tu progreso?")) {
+        estadoMaterias.clear();
+        localStorage.removeItem('progreso_imec');
+        dibujarInterfaz();
+    }
+}
+    
+document.addEventListener('DOMContentLoaded', () => {
+    const btn-disponibles = document.getElementById('btn-disponibles');
+    if(btn-disponibles) btn-disponibles.onclick = mostrarDisponibles;
+    
+    const btnRes = document.getElementById('btn-reset');
+    if(btn-reset) btn-reset.onclick = reiniciarTodo;
+});
+
 document.getElementById('btn-disponibles').addEventListener('click', () => {
     const plan = basesDeDatos[carreraActual]; // Obtiene el plan actual
     const todas = plan.flatMap(sem => sem.materias); // Aplana la lista de materias
@@ -468,93 +505,4 @@ document.getElementById('btn-disponibles').addEventListener('click', () => {
     }
     document.getElementById('lista-disponibles').style.display = 'block';
 });
-
-// Función para el botón de Reiniciar (Debes añadir el ID 'btn-reset' a un botón en el HTML si quieres usarlo)
-function reiniciarTodo() {
-    if (confirm("¿Seguro que quieres borrar todo tu progreso?")) {
-        estadoMaterias.clear();
-        localStorage.removeItem('progreso_imec');
-        dibujarInterfaz();
-    }
-}
-
-// Lógica para ver qué materias puedes cursar
-function mostrarDisponibles() {
-    const plan = basesDeDatos[carreraActual];
-    const todas = plan.flatMap(s => s.materias);
-    const listaUl = document.getElementById('items-disponibles');
-    listaUl.innerHTML = '';
-
-    const disponibles = todas.filter(mat => {
-        if ((estadoMaterias.get(mat.id) || 0) > 0) return false;
-        const cumpleExamen = !mat.reqExamen || mat.reqExamen.every(id => estadoMaterias.get(id) === 2);
-        const cumpleCurso = !mat.reqCurso || mat.reqCurso.every(id => (estadoMaterias.get(id) || 0) >= 1);
-        return cumpleExamen && cumpleCurso;
-    });
-
-    if (disponibles.length === 0) {
-        listaUl.innerHTML = '<li>No hay materias nuevas disponibles.</li>';
-    } else {
-        disponibles.forEach(m => {
-            const li = document.createElement('li');
-            li.style.marginBottom = "5px";
-            li.innerHTML = `<strong>${m.id}</strong> - ${m.n}`;
-            listaUl.appendChild(li);
-        });
-    }
-    document.getElementById('lista-disponibles').style.display = 'block';
-}
-
-// Vincular botones (Asegúrate de que los IDs coincidan con tu HTML)
-// Puedes poner esto al final del script
-document.addEventListener('DOMContentLoaded', () => {
-    const btnDisp = document.getElementById('btn-disponibles');
-    if(btnDisp) btnDisp.onclick = mostrarDisponibles;
-    
-    const btnRes = document.getElementById('btn-reset');
-    if(btnRes) btnRes.onclick = reiniciarTodo;
-});
-
-
-function procesarCalculo() {
-    const scpId = document.getElementById('scp-tipo').value;
-    const config = configuracionSCP[scpId];
-    const inputs = document.querySelectorAll('.nota-input');
-    const resDiv = document.getElementById('resultado-calc');
-    
-    let notaFinalEscala = 0;
-    let pesoFaltante = 0;
-    let camposVacios = [];
-
-    inputs.forEach((input, index) => {
-        const notaEntrada = parseFloat(input.value);
-        const peso = parseFloat(input.dataset.peso);
-        const nombreCampo = config.campos[index];
-
-        if (!isNaN(notaEntrada)) {
-            notaFinalEscala += notaEntrada * peso;
-        } else {
-            pesoFaltante += peso;
-            camposVacios.push(nombreCampo);
-        }
-    });
-
-    resDiv.style.display = 'block';
-    let msg = "";
-
-    if (camposVacios.length === 0) {
-        const nf = parseFloat(notaFinalEscala.toFixed(2));
-        let situacion = nf >= 4.00 ? "🟢 EXONERA" : (nf >= 3.00 ? "🟡 EXAMEN" : "🟠 TUTORÍA");
-        msg = `<strong>${situacion}</strong><br>Nota Final: <span style="font-size:1.8rem">${nf}</span>`;
-    } else if (camposVacios.length === 1) {
-        const notaNecExon = (4.00 - notaFinalEscala) / pesoFaltante;
-        msg = `Para exonerar necesitás un: <strong>${Math.max(1, notaNecExon).toFixed(2)}</strong> en ${camposVacios[0]}`;
-    } else {
-        msg = "Ingresá más notas para predecir.";
-    }
-
-    resDiv.innerHTML = msg;
-    resDiv.style.color = "#333";
-
-} 
 
