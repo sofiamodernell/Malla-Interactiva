@@ -108,53 +108,36 @@ const basesDeDatos = {
     ]
 };
 
+// --- ESTADO GLOBAL ---
+let estadoMaterias = new Map(); 
+let carreraActual = "imec_2023";
+let materiaEnfocadaId = null;
+
+// --- INICIALIZACIÓN ---
+document.addEventListener('DOMContentLoaded', () => {
+    // 1. Cargar progreso
+    const progresoGuardado = localStorage.getItem('progreso_imec');
+    if (progresoGuardado) {
+        estadoMaterias = new Map(JSON.parse(progresoGuardado));
+    }
+    // 2. Control del modal de bienvenida
+    if (localStorage.getItem('bienvenida_vista') === 'true') {
+        const modal = document.getElementById('modal-bienvenida');
+        if (modal) modal.style.display = 'none';
+    }
+
+    // 3. Dibujar
+    dibujarInterfaz();
+});
+
 function cerrarBienvenida() {
     const modal = document.getElementById('modal-bienvenida');
     if (modal) {
         modal.style.display = 'none';
-        // Opcional: Guardar en localStorage para que no aparezca siempre
         localStorage.setItem('bienvenida_vista', 'true');
     }
 }
 
-// --- LÓGICA DEL MODO OSCURO ---
-const themeToggleBtn = document.getElementById('theme-toggle');
-const currentTheme = localStorage.getItem('theme') || 'light';
-
-// Aplicar tema guardado al cargar
-if (currentTheme === 'dark') {
-    document.documentElement.setAttribute('data-theme', 'dark');
-    themeToggleBtn.innerText = '☀️ Light Mode';
-}
-
-themeToggleBtn.addEventListener('click', () => {
-    let theme = document.documentElement.getAttribute('data-theme');
-    if (theme === 'dark') {
-        document.documentElement.setAttribute('data-theme', 'light');
-        localStorage.setItem('theme', 'light');
-        themeToggleBtn.innerText = '🌙 Dark Mode';
-    } else {
-        document.documentElement.setAttribute('data-theme', 'dark');
-        localStorage.setItem('theme', 'dark');
-        themeToggleBtn.innerText = '☀️ Light Mode';
-    }
-});
-
-let estadoMaterias = new Map(); 
-let carreraActual = "imec_2023";
-
-// Cargar progreso guardado al iniciar
-const progresoGuardado = localStorage.getItem('progreso_imec');
-if (progresoGuardado) {
-    estadoMaterias = new Map(JSON.parse(progresoGuardado));
-}
-
-function renderMalla(carreraId) {
-    carreraActual = carreraId;
-    estadoMaterias.clear();
-    dibujarInterfaz();
-}
-let materiaEnfocadaId = null;
 
 function dibujarInterfaz() {
     const container = document.getElementById('malla-container');
@@ -172,13 +155,13 @@ function dibujarInterfaz() {
         // === BOTÓN DE APROBAR SEMESTRE ENTERO ===
         // 1. Primero calculamos si está completo
         const semestreCompleto = semestre.materias.every(mat => estadoMaterias.get(mat.id) === 2);
-        
         // 2. Luego creamos el botón usando ese dato
         const btnSemestre = document.createElement('button');
         btnSemestre.className = 'btn-semestre' + (semestreCompleto ? ' completado' : '');
         btnSemestre.innerText = semestreCompleto ? "Desmarcar Semestre" : "Aprobar Semestre ✓";
 
         btnSemestre.addEventListener('click', () => {
+            e.stopPropagation();
             // Limpiamos cualquier resaltado previo para que no se vea gris en móviles
             desactivarResaltado();
             materiaEnfocadaId = null;
@@ -224,7 +207,6 @@ function dibujarInterfaz() {
             if (faltanTextos.length > 0) estaBloqueada = true;
 
             // --- LÓGICA DE INTERACCIÓN (PC y MÓVIL) ---
-            
             // En PC: Hover normal
             matDiv.addEventListener('mouseenter', () => {
                 if (window.innerWidth > 768) activarResaltado(mat);
@@ -233,10 +215,9 @@ function dibujarInterfaz() {
                 if (window.innerWidth > 768) desactivarResaltado();
             });
 
-            // En Móvil y PC: Click
             matDiv.addEventListener('click', (e) => {
                 const esMovil = window.innerWidth <= 768;
-
+                
                 // Si es móvil y no está enfocada, primero la enfocamos
                 if (esMovil && materiaEnfocadaId !== mat.id) {
                     desactivarResaltado(); 
@@ -288,6 +269,45 @@ function dibujarInterfaz() {
     const totalElement = document.getElementById('total-creditos');
     if (totalElement) totalElement.innerText = totalCreditos;
 }
+
+
+// --- LÓGICA DEL MODO OSCURO ---
+const themeToggleBtn = document.getElementById('theme-toggle');
+const currentTheme = localStorage.getItem('theme') || 'light';
+
+// Aplicar tema guardado al cargar
+if (currentTheme === 'dark') {
+    document.documentElement.setAttribute('data-theme', 'dark');
+    themeToggleBtn.innerText = '☀️ Light Mode';
+}
+
+themeToggleBtn.addEventListener('click', () => {
+    let theme = document.documentElement.getAttribute('data-theme');
+    if (theme === 'dark') {
+        document.documentElement.setAttribute('data-theme', 'light');
+        localStorage.setItem('theme', 'light');
+        themeToggleBtn.innerText = '🌙 Dark Mode';
+    } else {
+        document.documentElement.setAttribute('data-theme', 'dark');
+        localStorage.setItem('theme', 'dark');
+        themeToggleBtn.innerText = '☀️ Light Mode';
+    }
+});
+
+
+// Cargar progreso guardado al iniciar
+const progresoGuardado = localStorage.getItem('progreso_imec');
+if (progresoGuardado) {
+    estadoMaterias = new Map(JSON.parse(progresoGuardado));
+}
+
+function renderMalla(carreraId) {
+    carreraActual = carreraId;
+    estadoMaterias.clear();
+    dibujarInterfaz();
+}
+
+
     
 // === CÁLCULO DE CRÉDITOS Y BARRA DE PROGRESO ===
     // Extraemos TODAS las materias del plan actual en una sola lista
