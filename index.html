@@ -3,18 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Malla Interactiva IMEC - Plan 2023</title>
+    <title>Malla Interactiva UTEC</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 <div id="modal-bienvenida" class="modal-fondo">
     <div class="modal-contenido">
-        <h2>¡Hola! Qué bueno verte por acá 🎓</h2>
-        
-        <p><strong>Tu camino en la carrera</strong></p>
-        
+        <h2>¡Hola! Qué bueno verte por acá 🎓</h2>        
         <p>Esta es tu herramienta para trackear el progreso en la malla de forma fácil. ¡Mirá todo lo que podés hacer!</p>
-
         <ul class="lista-funciones">
             <li>
                 <strong>Efecto Enfoque:</strong> 🖱️ Pasá el mouse (o tocá una vez en el celu 📱) sobre una materia para ver qué necesitás y cual desbloqueás después.
@@ -86,7 +82,11 @@
 </header>
 
 <div class="controls">
-    <button id="theme-toggle" class="btn-theme">🌙 Dark Mode</button>
+    <label class="theme-toggle-wrapper" id="theme-toggle" title="Cambiar tema">
+        <span class="toggle-icon">☀️</span>
+        <div class="toggle-track"><div class="toggle-thumb"></div></div>
+        <span class="toggle-icon">🌙</span>
+    </label>
     <button id="btn-disponibles" class="btn-theme" style="border-color: var(--secondary);">🔍 ¿Qué puedo cursar?</button>
     <button onclick="abrirCalculadora()" class="btn-theme" style="border-color: var(--secondary); font-weight: bold;"> 🧮 Calcular Mis Notas </button>
     <button id="btn-reset" class="btn-theme" style="border-color: #ff5252; color: #ff5252;">Reiniciar Malla</button>
