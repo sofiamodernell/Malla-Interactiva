@@ -9,32 +9,33 @@
 <body>
 <div id="modal-bienvenida" class="modal-fondo">
     <div class="modal-contenido">
-        <h2>¡Bienvenido! 🎓</h2>        
-        <div class="modal-seccion">
-            <h3> Instructivo </h3>
-            <ul class="lista-instrucciones">
-                <strong>Gestión de Materias:</strong>
-                    <ul class="sub-lista">
-                        <li>Clickea una vez para marcar una UC como <span class="badge cursada">Cursada</span> (Cursaste pero no has salvado examen o estás cursando), dos veces para marcar como <span class="badge aprobada">Aprobada</span> (Exoneraste o salvaste examen) y tres si deseas reiniciar su estado.
-                    </li>
-                    </ul>
-                
-                <strong>Funciones:</strong>
-                    <ul class="sub-lista">
-                        <li><strong>Efecto Enfoque:</strong> Pasá el mouse sobre una materia para ver sus previas y qué otras materias destraba mas adelante.</li>
-                        <li><strong>Aprobar Semestre:</strong> Usá los botones de cada semestre para marcarlo como completo rápidamente.</li>
-                        <li><strong>Calculadora de Notas:</strong> Calculá tu promedio final o predecí cuánto necesitás para exonerar según tu SCP.</li>
-                        <li><strong>Bloqueo:</strong> No podrás marcar una materia si no cumplís con las previas (Curso o Aprobada) requeridas.</li>
-                    </ul>
-            </ul>
+        <h2>¡Hola! Qué bueno verte por acá 🎓</h2>
+        
+        <p><strong>Tu camino en la carrera</strong></p>
+        
+        <p>Esta es tu herramienta para trackear el progreso en la malla de forma fácil. ¡Mirá todo lo que podés hacer!</p>
+
+        <ul class="lista-funciones">
+            <li>
+                <strong>Efecto Enfoque:</strong> 🖱️ Pasá el mouse (o tocá una vez en el celu 📱) sobre una materia para ver qué necesitás y cual desbloqueás después.
+            </li>
+            <li>
+                <strong>Calculadora de Notas:</strong> 🧮 ¡No saques cuentas a mano! Usá nuestra calculadora para ver si exonerás o cuánto te falta según tu SCP.
+            </li>
+            <li>
+                <strong>Check de Semestre:</strong> ✅ ¿Metiste todo un semestre? Dale al botón de <em>"Aprobar Semestre"</em> y llená la pantalla de confetti. 🎉
+            </li>
+            <li>
+                <strong>Gestión Inteligente:</strong> 🖱️🖱️ Dos clicks para <strong>Aprobada</strong>, un click para <strong>Cursada</strong>. El sistema te avisa si te falta alguna previa. 🔒
+            </li>
+        </ul>
+
+        <div class="alerta-importante">
+            <p>⚠️ <strong>IMPORTANTE:</strong></p>
+            <p>Esta herramienta es <strong>NO oficial</strong> desarrollada por estudiantes. Los créditos y previas se basan en el Plan 2023 y pueden estar sujetas a cambios o errores de typeo. Para trámites formales, consultá siempre el Plan de Estudios oficial.</p>
         </div>
 
-        <div class="disclaimer">
-            <strong>⚠️ IMPORTANTE:</strong>
-            <p>Esta es una herramienta <strong>NO oficial</strong> desarrollada para estudiantes. Los datos de créditos y previas están basados en el Plan 2023, pero pueden estar sujetos a cambios o errores de typeo. Para trámites formales, consulta siempre el <strong>Plan de Estudios</strong>.</p>
-        </div>
-        
-        <button id="btn-entendido" class="btn-modal" onclick="document.getElementById('modal-bienvenida').style.display='none'">¡Entendido!</button>
+        <button class="btn-modal" onclick="cerrarBienvenida()">¡Dale!</button>
     </div>
 </div>
 
