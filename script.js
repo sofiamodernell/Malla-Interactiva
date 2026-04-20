@@ -353,7 +353,7 @@ function procesarCalculo() {
 
 } 
 
-    function cerrarBienvenida() {
+function cerrarBienvenida() {
     const modal = document.getElementById('modal-bienvenida');
     if (modal) {
         modal.style.display = 'none';
