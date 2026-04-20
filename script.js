@@ -467,22 +467,16 @@ function reiniciarTodo() {
     }
 }
    
-
 document.getElementById('btn-disponibles').addEventListener('click', () => {
-    const plan = basesDeDatos[carreraActual]; // Obtiene el plan actual
-    const todas = plan.flatMap(sem => sem.materias); // Aplana la lista de materias
+    const plan = basesDeDatos[carreraActual];
+    const todas = plan.flatMap(sem => sem.materias);
     const listaUl = document.getElementById('items-disponibles');
     listaUl.innerHTML = '';
+
     const disponibles = todas.filter(mat => {
-        // Solo considerar materias que no están cursadas ni aprobadas (estado 0)
         if ((estadoMaterias.get(mat.id) || 0) > 0) return false;
-
-        // Verificar requisitos de Examen
         const cumpleExamen = !mat.reqExamen || mat.reqExamen.every(reqId => estadoMaterias.get(reqId) === 2);
-        
-        // Verificar requisitos de Curso
         const cumpleCurso = !mat.reqCurso || mat.reqCurso.every(reqId => (estadoMaterias.get(reqId) || 0) >= 1);
-
         return cumpleExamen && cumpleCurso;
     });
 
@@ -496,16 +490,13 @@ document.getElementById('btn-disponibles').addEventListener('click', () => {
         });
     }
     document.getElementById('lista-disponibles').style.display = 'block';
-});
+}); // <-- Esta llave cierra el eventListener correctamente
 
-/**
- * Cierra el modal de bienvenida solo por esta vez.
- * Al recargar la página, volverá a aparecer.
- */
+// ESTA ES LA FUNCIÓN QUE BUSCA EL BOTÓN "¡DALE!"
 function cerrarBienvenida() {
     const modal = document.getElementById('modal-bienvenida');
     if (modal) {
         modal.style.display = 'none';
-        console.log("Modal cerrado temporalmente.");
+        // No hay localStorage aquí, así que volverá a aparecer al refrescar.
     }
 }
