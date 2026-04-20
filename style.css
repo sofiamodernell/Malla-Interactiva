@@ -353,6 +353,27 @@ select {
     font-weight: bold;
     transition: all 0.2s;
 }
+
+.alerta-importante {
+    background-color: #fff3cd; /* Amarillo suave */
+    border-left: 4px solid #ffc107;
+    padding: 10px;
+    margin: 15px 0;
+    border-radius: 4px;
+    font-size: 0.85rem;
+    color: #856404;
+    text-align: left;
+}
+
+.lista-funciones {
+    list-style: none; /* Quitamos los puntos de lista por defecto */
+    padding: 0;
+}
+
+.lista-funciones li {
+    margin-bottom: 12px;
+    padding-left: 5px;
+}
 /* === ESTILOS DEL LOGO DE LA UNIVERSIDAD (VERSIÓN GRANDE) === */
 .logo-uni {
     position: absolute; 
