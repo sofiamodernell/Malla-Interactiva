@@ -418,3 +418,79 @@ document.addEventListener('DOMContentLoaded', () => {
     const btnRes = document.getElementById('btn-reset');
     if(btnRes) btnRes.onclick = reiniciarTodo;
 });
+
+const configuracionSCP = {
+    "1": { campos: ["Ev1", "Ev2", "EC"], pesos: [0.25, 0.35, 0.40] },
+    "2": { campos: ["Ev1", "Ev2", "EC"], pesos: [0.30, 0.30, 0.40] },
+    "3": { campos: ["Ev1", "Ev2", "Lab", "EC"], pesos: [0.25, 0.35, 0.20, 0.20] },
+    "4": { campos: ["Participación", "Trabajo"], pesos: [0.70, 0.30] },
+    "5": { campos: ["Ev1", "Ev2", "Ev3"], pesos: [0.30, 0.50, 0.20] },
+    "6": { campos: ["Actividades", "Participación"], pesos: [0.60, 0.40] },
+    "7": { campos: ["Ev1", "Ev2"], pesos: [0.50, 0.50] },
+    "8": { campos: ["Ev1", "Ev2"], pesos: [0.40, 0.60] },
+    "9": { campos: ["Teórico-Práctico", "EC"], pesos: [0.70, 0.30] },
+    "10": { campos: ["Participación", "Trabajo"], pesos: [0.70, 0.30] },
+    "11": { campos: ["Lab", "EC", "Proy", "Ev1", "Ev2", "Ev3", "Ev4"], pesos: [0.3, 0.1, 0.2, 0.1, 0.1, 0.1, 0.1] },
+    "12": { campos: ["Lab", "EC", "Proy"], pesos: [0.30, 0.30, 0.40] }
+};
+
+function generarCamposDinamicos() {
+    const scpId = document.getElementById('scp-tipo').value;
+    const config = configuracionSCP[scpId];
+    const contenedor = document.getElementById('contenedor-dinamico');
+    contenedor.innerHTML = '';
+
+    config.campos.forEach((nombre, index) => {
+        const div = document.createElement('div');
+        div.className = 'input-group';
+        div.innerHTML = `
+            <label>${nombre} (0-100%):</label>
+            <input type="number" class="nota-input" data-peso="${config.pesos[index]}" placeholder="Puntaje obtenido">
+        `;
+        contenedor.appendChild(div);
+    });
+}
+
+function procesarCalculo() {
+    const inputs = document.querySelectorAll('.nota-input');
+    let notaFinal = 0;
+    let faltanNotas = false;
+
+    inputs.forEach(input => {
+        const valor = parseFloat(input.value);
+        if (isNaN(valor)) faltanNotas = true;
+        notaFinal += (valor || 0) * parseFloat(input.dataset.peso);
+    });
+
+    const resDiv = document.getElementById('resultado-calc');
+    resDiv.style.display = 'block';
+    
+    // Lógica de colores y estados según Circular 37_DE_2023
+    let msg = "";
+    let color = "";
+
+    if (notaFinal >= 70) {
+        msg = `🟢 <strong>EXONERADO</strong><br>Puntaje Final: ${notaFinal.toFixed(1)}%`;
+        color = "#a8e6cf";
+    } else if (notaFinal >= 40) {
+        msg = `🟡 <strong>EXAMEN REGLAMENTADO</strong><br>Puntaje Final: ${notaFinal.toFixed(1)}%`;
+        color = "#fff9c4";
+    } else if (notaFinal >= 25) {
+        msg = `🟠 <strong>TUTORÍA / EXAMEN ÚNICO</strong><br>Puntaje Final: ${notaFinal.toFixed(1)}%`;
+        color = "#ffd1a1";
+    } else {
+        msg = `🔴 <strong>RECURSA</strong><br>Puntaje Final: ${notaFinal.toFixed(1)}%`;
+        color = "#ff8b94";
+    }
+
+    if (faltanNotas) msg += `<br><small>⚠️ (Cálculo basado solo en notas ingresadas)</small>`;
+    
+    resDiv.style.backgroundColor = color;
+    resDiv.innerHTML = msg;
+    resDiv.style.color = "#333";
+}
+
+// Inicializar campos la primera vez
+document.addEventListener('DOMContentLoaded', () => {
+    generarCamposDinamicos();
+});
