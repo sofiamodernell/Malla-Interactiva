@@ -307,7 +307,7 @@ function generarCamposDinamicos() {
     config.campos.forEach((nombre, index) => {
         const div = document.createElement('div');
         div.className = 'input-group';
-        div.innerHTML = `<label>${nombre} (Escala UTEEC):</label><input type="number" step="0.01" min="1" max="5" class="nota-input" data-peso="${config.pesos[index]}" placeholder="Ej: 3.50">`;
+        div.innerHTML = `<label>${nombre} (Escala UTEC):</label><input type="number" step="0.01" min="1" max="5" class="nota-input" data-peso="${config.pesos[index]}" placeholder="Ej: 3.50">`;
         contenedor.appendChild(div);
     });
 }
