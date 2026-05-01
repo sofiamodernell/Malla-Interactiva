@@ -302,10 +302,11 @@ export default function App() {
 }
 
 function Header() {
+  const baseUrl = import.meta.env.BASE_URL || '/';
   return (
     <header className="overflow-hidden">
-      <img src="/utec_logo.jpg" alt="UTEC" className="logo-container logo-utec" />
-      <img src="/imec_logo.jpg" alt="IMEC" className="logo-container logo-imec" />
+      <img src={`${baseUrl}utec_logo.jpg`} alt="UTEC" className="logo-container logo-utec" />
+      <img src={`${baseUrl}imec_logo.jpg`} alt="IMEC" className="logo-container logo-imec" />
 
       <div className="header-content">
         <p className="mb-4">ENGINEERING DIAGRAM // SPEC_023</p>
