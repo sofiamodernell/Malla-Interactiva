@@ -33,9 +33,13 @@ export default function App() {
     const saved = localStorage.getItem('progreso_imec');
     if (saved) {
       try {
-        setEstadoMaterias(new Map(JSON.parse(saved)));
+        const parsed = JSON.parse(saved);
+        if (Array.isArray(parsed)) {
+          setEstadoMaterias(new Map(parsed));
+        }
       } catch (e) {
         console.error("Error loading progress", e);
+        localStorage.removeItem('progreso_imec');
       }
     }
   }, []);
@@ -180,19 +184,29 @@ export default function App() {
       {showDisponibles && (
         <div className="modal-fondo" onClick={() => setShowDisponibles(false)}>
           <div className="modal-contenido" onClick={e => e.stopPropagation()}>
-            <h2 className="text-xl font-bold mb-4">📚 Podés cursar:</h2>
+            <h2>
+              <Search size={22} />
+              DIAGNÓSTICO_DE_DISPONIBILIDAD
+            </h2>
+            <p className="mb-6 text-sm opacity-60 font-mono">// MATERIAS_DESBLOQUEADAS_PARA_CURSADO_INMEDIATO</p>
             {materiasDisponibles.length === 0 ? (
-              <p>No hay materias nuevas disponibles por ahora.</p>
+              <div className="p-8 border border-dashed border-white/20 text-center opacity-40">
+                NO SE DETECTARON NUEVAS MATERIAS DISPONIBLES.
+              </div>
             ) : (
-              <ul className="space-y-2 max-h-60 overflow-y-auto pr-2">
+              <ul className="space-y-3 max-h-60 overflow-y-auto pr-4 custom-scrollbar">
                 {materiasDisponibles.map(m => (
-                  <li key={m.id} className="p-2 border-b border-gray-100 dark:border-gray-800">
-                    <span className="font-bold text-[var(--primary)]">{m.id}</span> - {m.n}
+                  <li key={m.id} className="p-3 border border-white/10 bg-white/5 flex justify-between items-center group hover:border-[var(--secondary)] transition-colors">
+                    <div className="flex flex-col">
+                      <span className="text-[var(--secondary)] font-bold text-xs">[{m.id}]</span>
+                      <span className="text-sm font-bold uppercase">{m.n}</span>
+                    </div>
+                    <span className="text-[0.6rem] opacity-40 font-mono">{m.c}_CRED</span>
                   </li>
                 ))}
               </ul>
             )}
-            <button className="btn-theme w-full mt-6" onClick={() => setShowDisponibles(false)}>Cerrar</button>
+            <button className="btn-theme w-full mt-8" onClick={() => setShowDisponibles(false)}>CERRAR_DIAGNÓSTICO</button>
           </div>
         </div>
       )}
