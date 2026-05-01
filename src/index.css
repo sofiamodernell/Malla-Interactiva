@@ -83,12 +83,12 @@ header::before {
 
 .logo-utec {
     left: 2rem;
-    height: 50px;
+    height: 80px;
 }
 
 .logo-imec {
     right: 2rem;
-    height: 50px;
+    height: 80px;
 }
 
 @media (max-width: 768px) {
