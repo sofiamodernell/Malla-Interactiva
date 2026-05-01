@@ -1,0 +1,452 @@
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700;800&family=Inter:wght@400;700&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --color-blueprint: #0047AB;
+  --color-blueprint-dark: #003399;
+  --color-blueprint-light: #00BFFF;
+  --color-success: #00FFCC;
+  --color-cursada: #FFD700;
+}
+
+:root {
+    --bg: #002D80;
+    --line: rgba(255, 255, 255, 0.1);
+    --line-major: rgba(255, 255, 255, 0.18);
+    --text: #ffffff;
+    --primary: #ffffff;
+    --secondary: #00BFFF;
+    --card-bg: rgba(0, 20, 50, 0.8);
+    --success: #00FFCC;
+    --cursada: #FFD700;
+    --f-mono: 'JetBrains Mono', monospace;
+    --br: 0px;
+}
+
+[data-theme="dark"] {
+    --bg: #001A3D;
+    --card-bg: rgba(0, 26, 61, 0.8);
+    --line: rgba(100, 200, 255, 0.1);
+    --line-major: rgba(100, 200, 255, 0.2);
+}
+
+body {
+    font-family: var(--f-mono);
+    background-color: var(--bg);
+    background-image: 
+        linear-gradient(var(--line) 1px, transparent 1px),
+        linear-gradient(90deg, var(--line) 1px, transparent 1px),
+        linear-gradient(var(--line-major) 1px, transparent 1px),
+        linear-gradient(90deg, var(--line-major) 1px, transparent 1px);
+    background-size: 20px 20px, 20px 20px, 100px 100px, 100px 100px;
+    margin: 0;
+    color: var(--text);
+    padding-bottom: 120px;
+    transition: background-color 0.4s, color 0.4s;
+    line-height: 1.4;
+}
+
+header {
+    background: transparent;
+    color: white;
+    padding: 6rem 1.5rem 4rem 1.5rem;
+    text-align: center;
+    position: relative;
+    border-bottom: 2px solid var(--primary);
+}
+
+header::before {
+    content: 'TECHNICAL SPECIFICATION // IMEC PLAN 2023';
+    position: absolute;
+    top: 1rem;
+    left: 1rem;
+    font-size: 0.6rem;
+    letter-spacing: 0.2em;
+    opacity: 0.5;
+}
+
+.header-content h1 {
+    font-size: clamp(2rem, 6vw, 4rem);
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: -0.02em;
+    margin: 0;
+}
+
+.logo-container {
+    position: absolute;
+    top: 1.5rem;
+    display: flex;
+    align-items: center;
+    z-index: 20;
+}
+
+.logo-utec {
+    left: 2rem;
+    height: 50px;
+}
+
+.logo-imec {
+    right: 2rem;
+    height: 50px;
+}
+
+@media (max-width: 768px) {
+    .logo-container {
+        top: 1rem;
+        height: 30px;
+    }
+    .logo-utec { left: 1rem; }
+    .logo-imec { right: 1rem; }
+}
+
+.controls {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    padding: 1rem;
+    background: color-mix(in srgb, var(--bg), transparent 5%);
+    backdrop-filter: blur(8px);
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1.5rem;
+    align-items: center;
+    border-bottom: 1px solid var(--primary);
+}
+
+select {
+    padding: 0.4rem 0.8rem;
+    border: 1px solid var(--primary);
+    background: transparent;
+    color: white;
+    font-family: var(--f-mono);
+    font-size: 0.7rem;
+    outline: none;
+    cursor: pointer;
+    text-transform: uppercase;
+}
+
+select option {
+    background: var(--bg);
+    color: white;
+}
+
+.malla-wrapper {
+    display: flex;
+    padding: 4rem 2rem;
+    gap: 5rem;
+    overflow-x: auto;
+}
+
+.semestre {
+    min-width: 300px;
+}
+
+.semestre h3 {
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    color: var(--secondary);
+    margin-bottom: 2rem;
+    padding-left: 1rem;
+    border-left: 4px solid var(--secondary);
+    font-weight: 800;
+}
+
+.materia {
+    background: var(--card-bg);
+    border: 1px solid var(--line-major);
+    padding: 1.25rem;
+    margin-bottom: 1.5rem;
+    width: 260px;
+    min-height: 140px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    transition: all 0.2s;
+    cursor: pointer;
+    position: relative;
+}
+
+/* Blueprint "Corner" Accents */
+.materia::after {
+    content: '';
+    position: absolute;
+    bottom: -5px;
+    right: -5px;
+    width: 15px;
+    height: 15px;
+    border-right: 2px solid var(--primary);
+    border-bottom: 2px solid var(--primary);
+    opacity: 0.4;
+}
+
+.materia:hover:not(.bloqueada) {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: var(--primary);
+    transform: translate(-3px, -3px);
+    box-shadow: 6px 6px 0px var(--primary);
+}
+
+/* Card States with hatch patterns or solid feels */
+.materia.aprobada {
+    border-color: var(--success);
+    color: var(--success);
+}
+.materia.aprobada::before {
+    content: 'STATUS: OK_PASSED';
+    position: absolute;
+    top: 5px;
+    right: 10px;
+    font-size: 0.5rem;
+    font-weight: 800;
+}
+
+.materia.cursada {
+    border-color: var(--cursada);
+    color: var(--cursada);
+}
+.materia.cursada::before {
+    content: 'STATUS: IN_PROGRESS';
+    position: absolute;
+    top: 5px;
+    right: 10px;
+    font-size: 0.5rem;
+    font-weight: 800;
+}
+
+.materia.bloqueada {
+    opacity: 0.4;
+    border-style: dotted;
+    background: repeating-linear-gradient(
+        45deg,
+        transparent,
+        transparent 10px,
+        rgba(255,255,255,0.05) 10px,
+        rgba(255,255,255,0.05) 11px
+    );
+}
+
+.materia-name {
+    font-weight: 700;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin: 1rem 0;
+    line-height: 1.2;
+}
+
+.materia-info {
+    font-size: 0.6rem;
+    display: flex;
+    justify-content: space-between;
+    opacity: 0.7;
+    border-top: 1px dashed var(--line-major);
+    padding-top: 0.5rem;
+}
+
+.area-tag {
+    font-size: 0.5rem;
+    text-transform: uppercase;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    color: var(--secondary);
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+.area-tag::before {
+    content: '[';
+}
+.area-tag::after {
+    content: ']';
+}
+
+/* Dimming / Highlighting */
+.malla-wrapper.dimming-active .materia {
+    opacity: 0.2;
+    filter: blur(1px);
+}
+
+.malla-wrapper.dimming-active .materia.highlight-self {
+    opacity: 1;
+    filter: none;
+    border: 2px solid var(--primary);
+    box-shadow: 0 0 20px rgba(255,255,255,0.2);
+    transform: scale(1.05);
+    z-index: 50;
+    background: var(--bg);
+}
+
+.malla-wrapper.dimming-active .materia.highlight-req {
+    opacity: 1;
+    filter: none;
+    border: 2px solid #FF5722;
+    color: #FF5722;
+    background: rgba(255, 87, 34, 0.1);
+}
+
+.malla-wrapper.dimming-active .materia.highlight-post {
+    opacity: 1;
+    filter: none;
+    border: 2px solid var(--secondary);
+    color: var(--secondary);
+    background: rgba(0, 191, 255, 0.1);
+}
+
+/* Floating Stats Control */
+.stats-bar {
+    position: fixed;
+    bottom: 2rem;
+    left: 2rem;
+    right: 2rem;
+    background: #000;
+    color: white;
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border: 1px solid var(--primary);
+    z-index: 200;
+}
+
+.progress-container {
+    flex: 1;
+    height: 6px;
+    background: rgba(255,255,255,0.1);
+    margin: 0 2rem;
+    max-width: 400px;
+    position: relative;
+}
+
+.progress-container::after {
+    content: '0%';
+    position: absolute;
+    left: -2rem;
+    top: -0.2rem;
+    font-size: 0.6rem;
+}
+.progress-container::before {
+    content: '100%';
+    position: absolute;
+    right: -2.5rem;
+    top: -0.2rem;
+    font-size: 0.6rem;
+}
+
+.progress-bar {
+    height: 100%;
+    background: var(--primary);
+    box-shadow: 0 0 10px var(--primary);
+}
+
+.btn-theme {
+    font-family: var(--f-mono);
+    font-size: 0.65rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    background: transparent;
+    color: white;
+    border: 1px solid var(--primary);
+    padding: 0.5rem 1.25rem;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btn-theme:hover {
+    background: var(--primary);
+    color: var(--bg);
+}
+
+.btn-semestre {
+    background: transparent;
+    color: var(--primary);
+    border: 1px solid var(--primary);
+    font-family: var(--f-mono);
+    font-size: 0.6rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    width: 100%;
+    padding: 0.5rem;
+    margin-bottom: 2rem;
+    cursor: pointer;
+}
+
+.btn-semestre:hover {
+    background: rgba(255,255,255,0.1);
+}
+
+.btn-semestre.completado {
+    background: var(--success);
+    color: black;
+    border-color: var(--success);
+}
+
+/* Modals */
+.modal-fondo {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    background: rgba(0, 15, 45, 0.85);
+    backdrop-filter: blur(12px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 1.5rem;
+}
+
+.modal-contenido {
+    background: #003399;
+    border: 3px solid var(--primary);
+    border-radius: 0;
+    padding: 3rem;
+    max-width: 800px;
+    width: 100%;
+    position: relative;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 20px 20px 0px rgba(0,0,0,0.5);
+}
+
+.modal-contenido::before {
+    content: 'TECHNICAL_DIAGRAM_V2.1';
+    position: absolute;
+    top: 5px;
+    left: 10px;
+    font-size: 0.5rem;
+    opacity: 0.5;
+}
+
+.modal-contenido h2 {
+    font-size: 2rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    color: var(--primary);
+    border-bottom: 2px solid var(--primary);
+    padding-bottom: 1rem;
+    margin-bottom: 2rem;
+}
+
+.site-footer {
+    background: rgba(0,0,0,0.3);
+    border-top: 1px solid var(--primary);
+    padding: 6rem 2rem 10rem 2rem;
+    font-family: var(--f-mono);
+    font-size: 0.7rem;
+    color: var(--secondary);
+}
+
+@media (max-width: 768px) {
+    .malla-wrapper { padding: 2rem 1rem; gap: 3rem; }
+    .materia { width: 220px; }
+    .stats-bar {
+        flex-direction: column;
+        gap: 1rem;
+        bottom: 0.5rem;
+        left: 0.5rem;
+        right: 0.5rem;
+    }
+    .progress-container { margin: 1rem 0; width: 80%; }
+}
