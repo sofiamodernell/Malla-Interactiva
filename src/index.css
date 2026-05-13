@@ -23,11 +23,113 @@
     --br: 0px;
 }
 
-[data-theme="dark"] {
-    --bg: #001A3D;
-    --card-bg: rgba(0, 26, 61, 0.8);
-    --line: rgba(100, 200, 255, 0.1);
-    --line-major: rgba(100, 200, 255, 0.2);
+[data-theme="light"] {
+    --bg: #eceff4;
+    --line: rgba(0, 45, 128, 0.05);
+    --line-major: rgba(0, 45, 128, 0.1);
+    --text: #001533;
+    --primary: #002d80;
+    --secondary: #0055ff;
+    --card-bg: #ffffff;
+    --success: #10b981;
+    --cursada: #f59e0b;
+}
+
+[data-theme="light"] header,
+[data-theme="light"] .stats-bar {
+    background: #ffffff;
+    color: #001533;
+    border-color: #002d80;
+}
+
+[data-theme="light"] .header-content h1,
+[data-theme="light"] .header-content p,
+[data-theme="light"] .stats-bar span {
+    color: #001533;
+}
+
+[data-theme="light"] .btn-theme {
+    border-color: #002d80;
+    color: #002d80;
+}
+
+[data-theme="light"] .btn-theme:hover {
+    background: #002d80;
+    color: #ffffff;
+}
+
+[data-theme="light"] .materia {
+    background: #ffffff;
+    border-color: rgba(0, 45, 128, 0.2);
+    color: #001533;
+    box-shadow: 4px 4px 0px rgba(0, 45, 128, 0.1);
+}
+
+[data-theme="light"] .materia:hover:not(.bloqueada) {
+    background: #f8fafc;
+    border-color: #002d80;
+    box-shadow: 6px 6px 0px #002d80;
+}
+
+[data-theme="light"] .materia.aprobada {
+    border-color: #10b981;
+    color: #059669;
+    background: #f0fdf4;
+}
+
+[data-theme="light"] .materia.cursada {
+    border-color: #f59e0b;
+    color: #d97706;
+    background: #fffbeb;
+}
+
+[data-theme="light"] .area-tag {
+    color: #0055ff;
+}
+
+[data-theme="light"] .btn-semestre {
+    border-color: #002d80;
+    color: #002d80;
+}
+
+[data-theme="light"] .btn-semestre:hover {
+    background: rgba(0, 45, 128, 0.05);
+}
+
+[data-theme="light"] .btn-semestre.completado {
+    background: #10b981;
+    color: white;
+}
+
+[data-theme="light"] .materia.bloqueada {
+    background: repeating-linear-gradient(
+        45deg,
+        transparent,
+        transparent 10px,
+        rgba(0,0,0,0.03) 10px,
+        rgba(0,0,0,0.03) 11px
+    );
+}
+
+[data-theme="light"] .progress-container {
+    background: rgba(0,0,0,0.05);
+    border-color: rgba(0,0,0,0.1);
+}
+
+[data-theme="light"] select {
+    color: #002d80;
+    border-color: #002d80;
+}
+
+[data-theme="light"] .modal-contenido {
+    background: #ffffff;
+    color: #001533;
+    border-color: #002d80;
+}
+
+[data-theme="light"] .modal-contenido h2 {
+    color: #002d80;
+    border-bottom-color: #002d80;
 }
 
 body {
