@@ -18,3 +18,11 @@ export interface SCPConfig {
 }
 
 export type MateriaEstado = 0 | 1 | 2; // 0: nada, 1: cursada, 2: aprobada
+
+export interface StudentTip {
+  id: string;
+  content: string;
+  author: string;
+  approved: boolean;
+  createdAt: any; // Firestore Timestamp
+}
