@@ -45,6 +45,21 @@ service cloud.firestore {
       allow delete: if isAdmin();
     }
 
+    match /stats/{docId} {
+      allow read: if true;
+      allow update: if docId == 'counters' && 
+                    request.resource.data.diff(resource.data).affectedKeys().hasOnly(['totalVisits']) &&
+                    request.resource.data.totalVisits == resource.data.totalVisits + 1;
+    }
+
+    match /presence/{sessionId} {
+      allow list: if true;
+      allow get: if isValidId(sessionId);
+      allow write: if isValidId(sessionId) && 
+                   request.resource.data.keys().hasAll(['lastSeen']) &&
+                   request.resource.data.lastSeen == request.time;
+    }
+
     // Admins collection
     match /admins/{userId} {
       allow read: if isSignedIn();
