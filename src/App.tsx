@@ -436,7 +436,7 @@ export default function App() {
               <li><strong>[!] PROTOCOLO_ENFOQUE:</strong> Hover para detectar dependencias (pre-requisitos y post-requisitos).</li>
               <li><strong>[!] MÓDULO_CÁLCULO:</strong> Herramienta de predicción de exoneración integrada.</li>
               <li><strong>[!] REGISTRO_PROGRESO:</strong> 1 click [CURSADA] // 2 clicks [APROBADA] // 3 clicks [RESET].</li>
-              <li><strong>[!] REPOSITORIO_TIPS: Dejale un mensaje a la comunidad IMEC.</li>
+              <li><strong>[!] REPOSITORIO_TIPS:</strong> Dejale un mensaje a la comunidad IMEC.</li>
             </ul>
             <div className="p-4 bg-blue-900/20 border-l-4 border-blue-400 rounded text-[0.7rem] mb-6 font-mono">
               <p className="font-bold mb-1 uppercase tracking-widest text-[#00BFFF]">ADVERTENCIA_DE_SEGURIDAD:</p>
