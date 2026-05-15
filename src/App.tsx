@@ -121,6 +121,9 @@ export default function App() {
         return (now - lastSeen) < 120000; // 2 minutes threshold to be safe
       }).length;
       setLiveUsers(activeCount || 1); // At least 1 (me)
+    }, (error) => {
+      console.warn("Presence snapshot failed:", error);
+      
     });
 
     return () => {
