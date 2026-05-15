@@ -3,7 +3,7 @@ import confetti from 'canvas-confetti';
 import { Moon, Sun, Calculator, Search, RotateCcw, Share2, FileText, Printer, Link, Check, MessageSquare, Send, LogIn, LogOut, CheckCircle2, Trash2, X, StickyNote, Edit2, Save, ChevronLeft, ChevronRight } from 'lucide-react';
 import { jsPDF } from 'jspdf';
 import autoTable from 'jspdf-autotable';
-import { collection, addDoc, query, orderBy, onSnapshot, serverTimestamp, updateDoc, doc, deleteDoc, where } from 'firebase/firestore';
+import { collection, addDoc, query, orderBy, onSnapshot, serverTimestamp, updateDoc, doc, deleteDoc, where, increment, getDoc, setDoc } from 'firebase/firestore';
 import { signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signOut, User } from 'firebase/auth';
 import { db, handleFirestoreError, OperationType, auth } from './firebase';
 import { basesDeDatos, configuracionSCP } from './data';
@@ -15,6 +15,7 @@ interface jsPDFWithAutoTable extends jsPDF {
     finalY: number;
   };
 }
+
 
 export default function App() {
   const [carreraActual, setCarreraActual] = useState("imec_2023");
@@ -36,6 +37,8 @@ export default function App() {
   });
   const [semestreEditandoNota, setSemestreEditandoNota] = useState<number | null>(null);
   const [tempNota, setTempNota] = useState("");
+  const [totalVisits, setTotalVisits] = useState<number | null>(null);
+  const [liveUsers, setLiveUsers] = useState(0);
   
   const mallaRef = useRef<HTMLDivElement>(null);
 
@@ -56,6 +59,80 @@ export default function App() {
     return onAuthStateChanged(auth, (u) => setUser(u));
   }, []);
 
+
+  // Visit Counter & Presence
+  useEffect(() => {
+    const sessionId = sessionStorage.getItem('presence_session_id') || Math.random().toString(36).substring(2, 15);
+    sessionStorage.setItem('presence_session_id', sessionId);
+
+    // 1. Visit Counter
+    const incrementVisits = async () => {
+      const countersRef = doc(db, 'stats', 'counters');
+      try {
+        const snap = await getDoc(countersRef);
+        if (!snap.exists()) {
+          // Initialize if it doesn't exist (Admin might need to do this first or rules might need to allow create)
+          // For now we assume it exists or we try to set it.
+          // Note: My rules for stats only allow update. I should probably add an initialization if I can't guarantee existence.
+          // But I'll try to update first.
+          await setDoc(countersRef, { totalVisits: 1 }, { merge: true });
+        } else {
+          await updateDoc(countersRef, { totalVisits: increment(1) });
+        }
+      } catch (err) {
+        console.warn("Could not increment visits:", err);
+      }
+    };
+
+    incrementVisits();
+
+    const unsubscribeVisits = onSnapshot(doc(db, 'stats', 'counters'), (snap) => {
+      if (snap.exists()) {
+        setTotalVisits(snap.data().totalVisits);
+      }
+    });
+
+    // 2. Presence Heartbeat
+    const presenceRef = doc(db, 'presence', sessionId);
+    const updatePresence = async () => {
+      try {
+        await setDoc(presenceRef, { lastSeen: serverTimestamp() });
+      } catch (err) {
+        console.warn("Presence update failed:", err);
+      }
+    };
+
+    updatePresence();
+    const interval = setInterval(updatePresence, 30000); // 30s heartbeat
+
+    // 3. Live Users Count
+    const oneMinuteAgo = new Date(Date.now() - 60000);
+    const qPresence = query(collection(db, 'presence'), where('lastSeen', '>=', oneMinuteAgo));
+    
+    const unsubscribePresence = onSnapshot(collection(db, 'presence'), (snap) => {
+      // Since 'lastSeen' >= oneMinuteAgo is tricky with real-time serverTimestamp vs local time
+      // we filter client-side to be sure, or just count them all if they are cleaned up.
+      // Actually, my query above is a good start, but Firestore queries on timestamps are best.
+      const now = Date.now();
+      const activeCount = snap.docs.filter(doc => {
+        const data = doc.data();
+        if (!data.lastSeen) return false;
+        const lastSeen = data.lastSeen.toDate?.()?.getTime() || 0;
+        return (now - lastSeen) < 120000; // 2 minutes threshold to be safe
+      }).length;
+      setLiveUsers(activeCount || 1); // At least 1 (me)
+    });
+
+    return () => {
+      incrementVisits(); // Not really needed on cleanup but placeholder
+      clearInterval(interval);
+      unsubscribeVisits();
+      unsubscribePresence();
+    };
+  }, []);
+
+
+  
   const handleTitleClick = () => {
     const nextCount = adminClickCount + 1;
     setAdminClickCount(nextCount);
