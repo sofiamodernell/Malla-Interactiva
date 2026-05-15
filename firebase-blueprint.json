@@ -24,12 +24,45 @@
         }
       },
       "required": ["content", "createdAt", "approved"]
+    },
+    "Stats": {
+      "title": "Application Stats",
+      "description": "Global statistics for the application.",
+      "type": "object",
+      "properties": {
+        "totalVisits": {
+          "type": "number",
+          "description": "The total number of page visits"
+        }
+      },
+      "required": ["totalVisits"]
+    },
+    "Presence": {
+      "title": "User Presence",
+      "description": "Real-time presence record for an active user session.",
+      "type": "object",
+      "properties": {
+        "lastSeen": {
+          "type": "string",
+          "format": "date-time",
+          "description": "The last time this session was active"
+        }
+      },
+      "required": ["lastSeen"]
     }
   },
   "firestore": {
     "/tips/{tipId}": {
       "schema": "Tip",
       "description": "General collection of student tips"
+    },
+    "/stats/counters": {
+      "schema": "Stats",
+      "description": "Global counters"
+    },
+    "/presence/{sessionId}": {
+      "schema": "Presence",
+      "description": "Active user sessions"
     }
   }
 }
