@@ -148,6 +148,43 @@ body {
     line-height: 1.4;
 }
 
+/* Global Scrollbar Styles */
+::-webkit-scrollbar {
+    width: 12px;
+    height: 12px;
+}
+
+::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.6);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--secondary);
+    border-radius: 10px;
+    border: 3px solid transparent;
+    background-clip: padding-box;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--secondary);
+    filter: brightness(1.2);
+    background-clip: padding-box;
+}
+
+/* Firefox */
+* {
+    scrollbar-width: auto;
+    scrollbar-color: var(--secondary) rgba(0, 0, 0, 0.3);
+}
+
+.app-container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    overflow: hidden;
+    position: relative;
+}
+
 header {
     background: transparent;
     color: white;
@@ -177,7 +214,7 @@ header::before {
 
 .logo-container {
     position: absolute;
-    top: 1.5rem;
+    top: 1.7rem;
     display: flex;
     align-items: center;
     z-index: 20;
@@ -185,21 +222,24 @@ header::before {
 
 .logo-utec {
     left: 2rem;
-    height: 80px;
+    height: 85px;
 }
 
 .logo-imec {
     right: 2rem;
-    height: 80px;
+    height: 85px;
 }
 
 @media (max-width: 768px) {
+     header {
+      padding: 4rem 1rem 2rem 1rem;
+    }
     .logo-container {
-        top: 1rem;
+        top: 0.75rem;
         height: 30px;
     }
-    .logo-utec { left: 1rem; }
-    .logo-imec { right: 1rem; }
+    .logo-utec { left: 0.75rem; }
+    .logo-imec { right: 0.75rem; }
 }
 
 .controls {
@@ -217,6 +257,20 @@ header::before {
     border-bottom: 1px solid var(--primary);
 }
 
+main {
+    flex: 1;
+    display: flex;
+    overflow: hidden; /* We'll use sub-scrolling */
+    min-height: 0;
+}
+
+.main-content-scroll {
+    flex: 1;
+    overflow-x: auto;
+    overflow-y: auto;
+    position: relative;
+    -webkit-overflow-scrolling: touch;
+}
 select {
     padding: 0.4rem 0.8rem;
     border: 1px solid var(--primary);
@@ -238,11 +292,38 @@ select option {
     display: flex;
     padding: 4rem 2rem;
     gap: 5rem;
-    overflow-x: auto;
+    min-width: max-content;
 }
 
 .semestre {
     min-width: 300px;
+}
+
+.semestre-header {
+    position: sticky;
+    top: 0.5rem;
+    z-index: 80;
+    margin-bottom: 2rem;
+    border-left: 2px solid var(--secondary);
+    padding: 0.5rem 0.75rem;
+    background: transparent;
+    backdrop-filter: blur(4px);
+    border-radius: 0 4px 4px 0;
+    transition: all 0.3s ease;
+}
+
+.semestre-header:hover {
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(8px);
+}
+
+[data-theme="light"] .semestre-header {
+    background: transparent;
+    border-left-color: var(--primary);
+}
+
+[data-theme="light"] .semestre-header:hover {
+    background: rgba(0, 45, 128, 0.02);
 }
 
 .semestre h3 {
@@ -250,12 +331,35 @@ select option {
     text-transform: uppercase;
     letter-spacing: 0.2em;
     color: var(--secondary);
-    margin-bottom: 2rem;
-    padding-left: 1rem;
-    border-left: 4px solid var(--secondary);
+    margin-bottom: 0.5rem;
     font-weight: 800;
+    border: none;
+    padding: 0;
 }
 
+.semestre-summary {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.summary-item {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.55rem;
+    font-weight: 700;
+    opacity: 0.8;
+    font-family: var(--f-mono);
+}
+
+.summary-item .label {
+    color: var(--text);
+    opacity: 0.5;
+}
+
+.summary-item .value {
+    color: var(--secondary);
+}
 .materia {
     background: var(--card-bg);
     border: 1px solid var(--line-major);
@@ -398,20 +502,18 @@ select option {
     background: rgba(0, 191, 255, 0.1);
 }
 
-/* Floating Stats Control */
+/* Stats bar at the bottom, matching theme */
 .stats-bar {
-    position: fixed;
-    bottom: 2rem;
-    left: 2rem;
-    right: 2rem;
+    position: relative;
     background: #000;
     color: white;
     padding: 1rem 2rem;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    border: 1px solid var(--primary);
+    border-top: 2px solid var(--primary);
     z-index: 200;
+    flex-shrink: 0;
 }
 
 .progress-container {
@@ -513,11 +615,11 @@ select option {
 }
 
 .modal-contenido::before {
-    content: 'TECHNICAL_DIAGRAM_V2.1';
+    content: 'TECHNICAL_DIAGRAM_V4.1';
     position: absolute;
     top: 5px;
     left: 10px;
-    font-size: 0.5rem;
+    font-size: 0.7rem;
     opacity: 0.5;
 }
 
@@ -566,24 +668,85 @@ select option {
     font-family: var(--f-mono);
     font-size: 0.7rem;
     color: var(--secondary);
+    width: 3784px; /* Requested fixed width to cover full horizontal scroll */
+}
+.sticky-horizontal {
+    position: sticky;
+    left: 0;
+    width: fit-content;
+    min-width: 100%;
+    z-index: 150;
+    /* top: 0 removed to allow vertical scrolling away */
 }
 
 .custom-scrollbar::-webkit-scrollbar {
-    width: 6px;
-    height: 6px;
+    width: 12px;
+    height: 12px;
 }
-
 .custom-scrollbar::-webkit-scrollbar-track {
-    background: rgba(255, 255, 255, 0.05);
+    background: rgba(0, 0, 0, 0.6);
 }
-
 .custom-scrollbar::-webkit-scrollbar-thumb {
     background: var(--secondary);
-    border-radius: 0;
+    border-radius: 10px;
+    border: 3px solid transparent;
+    background-clip: padding-box;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: var(--secondary);
+    filter: brightness(1.2);
+    background-clip: padding-box;
+}
+/* Sidebar Area removed */
+
+@media (max-width: 1024px) {
+    .main-content-scroll {
+        overflow-x: auto;
+    }
 }
 
-.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+.modal-contenido section h4 {
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    padding-bottom: 0.5rem;
+}
+
+.share-menu-dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    margin-top: 0.5rem;
+    background: #000;
+    border: 1px solid var(--primary);
+    width: 240px;
+    z-index: 1000;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+    display: flex;
+    flex-direction: column;
+}
+
+.share-menu-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem 1rem;
+    width: 100%;
+    text-align: left;
+    font-size: 0.6rem;
+    font-weight: bold;
+    font-family: var(--f-mono);
+    color: var(--primary);
+    border-bottom: 1px solid var(--line-major);
+    transition: all 0.2s;
+    cursor: pointer;
+}
+
+.share-menu-item:last-child {
+    border-bottom: none;
+}
+
+.share-menu-item:hover {
     background: var(--primary);
+    color: #000;
 }
 
 @media (max-width: 768px) {
@@ -597,4 +760,91 @@ select option {
         right: 0.5rem;
     }
     .progress-container { margin: 1rem 0; width: 80%; }
+}
+
+@media print {
+    body {
+        background: white !important;
+        color: black !important;
+        overflow: visible !important;
+        height: auto !important;
+    }
+
+    .app-container {
+        height: auto !important;
+        overflow: visible !important;
+    }
+
+    .controls, 
+    .site-footer, 
+    .stats-bar, 
+    .modal-fondo,
+    .btn-semestre,
+    .share-menu-dropdown {
+        display: none !important;
+    }
+
+    main {
+        overflow: visible !important;
+        height: auto !important;
+    }
+
+    .main-scroll-area {
+        overflow: visible !important;
+    }
+
+    .malla-wrapper {
+        padding: 0 !important;
+        background: white !important;
+        min-width: unset !important;
+        display: block !important;
+    }
+
+    .semestre {
+        page-break-inside: avoid;
+        margin-bottom: 3rem;
+        width: 100% !important;
+    }
+
+    .materia {
+        background: white !important;
+        border: 1px solid #ccc !important;
+        color: black !important;
+        page-break-inside: avoid;
+        box-shadow: none !important;
+        transform: none !important;
+    }
+
+    .materia::after {
+        display: none;
+    }
+
+    .materia.aprobada {
+        background: #e6fff7 !important;
+        border-color: var(--success) !important;
+    }
+
+    .materia.cursada {
+        background: #fffbe6 !important;
+        border-color: var(--cursada) !important;
+    }
+
+    header {
+        padding: 2rem !important;
+        border-bottom: 1px solid black !important;
+    }
+
+    .logo-container {
+        position: relative !important;
+        top: 0 !important;
+        left: 0 !important;
+        right: 0 !important;
+        display: inline-block !important;
+        height: 60px !important;
+        margin: 0 1rem !important;
+    }
+
+    .header-content h1 {
+        color: black !important;
+    }
 }
