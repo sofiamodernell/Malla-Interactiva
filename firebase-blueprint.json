@@ -1,0 +1,35 @@
+{
+  "entities": {
+    "Tip": {
+      "title": "Student Tip",
+      "description": "A piece of advice left by a student for a specific subject.",
+      "type": "object",
+      "properties": {
+        "content": {
+          "type": "string",
+          "description": "The tip content"
+        },
+        "author": {
+          "type": "string",
+          "description": "Name or handle of the student"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "When the tip was created"
+        },
+        "approved": {
+          "type": "boolean",
+          "description": "Whether the tip has been approved by an authorized user"
+        }
+      },
+      "required": ["content", "createdAt", "approved"]
+    }
+  },
+  "firestore": {
+    "/tips/{tipId}": {
+      "schema": "Tip",
+      "description": "General collection of student tips"
+    }
+  }
+}

@@ -1,0 +1,53 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Global safety net
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Validation helpers
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function isAdmin() {
+      return isSignedIn() && (
+        request.auth.token.email == 'sofaaa163@gmail.com' ||
+        exists(/databases/$(database)/documents/admins/$(request.auth.uid))
+      );
+    }
+
+    function isValidTip(data) {
+      return data.content is string && data.content.size() <= 500 &&
+             data.createdAt == request.time &&
+             data.author is string && 
+             data.author.matches('^[a-z]+\\.[a-z]+$') &&
+             data.approved == false;
+    }
+
+    match /tips/{tipId} {
+      // Allow everyone to list approved tips
+      allow list: if resource.data.approved == true || isAdmin();
+      allow get: if isValidId(tipId) && (resource.data.approved == true || isAdmin());
+      
+      // Allow creation only if data is valid and initialized as NOT approved
+      allow create: if isValidId(tipId) && isValidTip(request.resource.data);
+
+      // Only admin can approve or delete tips
+      allow update: if isAdmin() && 
+                    request.resource.data.diff(resource.data).affectedKeys().hasOnly(['approved']);
+      
+      allow delete: if isAdmin();
+    }
+
+    // Admins collection
+    match /admins/{userId} {
+      allow read: if isSignedIn();
+    }
+  }
+}
