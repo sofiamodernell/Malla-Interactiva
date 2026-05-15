@@ -34,7 +34,7 @@ export const basesDeDatos: Record<string, Semestre[]> = {
       { id: "PE3", n: "Programas Especiales 3", c: 2, a: "Otro" }
     ]},
     { sem: 4, materias: [
-      { id: "TMPR", n: "Tecnologías de Microprocesadores", c: 7, a: "Electrónica", reqCurso: ["EDG1"], reqExamen: ["FMIN"] },
+      { id: "TMPR", n: "Tecnologías de Microprocesamiento", c: 7, a: "Electrónica", reqCurso: ["EDG1"], reqExamen: ["FMIN"] },
       { id: "PRG3", n: "Programación 3", c: 7, a: "Informática", reqCurso: ["PRG1","MAT1"] },
       { id: "MEM1", n: "Materiales y Elementos de Maquinas 1", c: 6, a: "Mecánica", reqCurso: ["DIES"], reqExamen: ["FMIN"] },
       { id: "FIS2", n: "Física 2", c: 7, a: "Básicas", reqExamen: ["MAT1", "FMIN","FIS1"] },
