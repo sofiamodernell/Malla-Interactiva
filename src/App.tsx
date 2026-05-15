@@ -221,7 +221,7 @@ export default function App() {
     // Header
     doc.setFontSize(18);
     doc.setTextColor(40);
-    doc.text("REPORTE DE AVANCE ACADÉMICO - UTEC", 14, 22);
+    doc.text("REPORTE NO OFICIAL DE AVANCE ACADÉMICO - IMEC", 14, 22);
     
     doc.setFontSize(10);
     doc.setFont("helvetica", "normal");
@@ -302,7 +302,7 @@ export default function App() {
     for (let i = 1; i <= totalPages; i++) {
         doc.setPage(i);
         doc.setFontSize(8);
-        doc.text(`SCP UTEC Tool - Reporte Académico Ref_023 - Pag. ${i} de ${totalPages}`, doc.internal.pageSize.width / 2, doc.internal.pageSize.height - 10, { align: 'center' });
+        doc.text(`MALLA INTERACTIVA UTEC - Reporte Académico NO OFICIAL - Pag. ${i} de ${totalPages}`, doc.internal.pageSize.width / 2, doc.internal.pageSize.height - 10, { align: 'center' });
     }
 
     doc.save(`avance_utec_${carreraActual}_${nombre.replace(/\s+/g, '_')}.pdf`);
