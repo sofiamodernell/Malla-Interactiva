@@ -1110,7 +1110,7 @@ function ResultDisplay({ nf, sit, isNoExamen }: { nf: number, sit: any, isNoExam
       <div className="text-5xl font-black mb-1">{normNf}</div>
       <div className="text-[0.6rem] opacity-70 tracking-tighter">CALIFICACIÓN_FINAL_CURSO</div>
       <div className="text-xs mt-4 font-mono opacity-90 max-w-[280px] mx-auto">
-        {!isNoExamen && normNf >= 3 && normNf < 4 ? `// ADVERTENCIA: SE REQUIERE MIN_EXAMEN: ~${((3 - normNf * 0.7) / 0.3).toFixed(2)} PARA APROBACIÓN FINAL.` : ''}
+        {!isNoExamen && normNf >= 3 && normNf < 4 ? `// ADVERTENCIA: SE REQUIERE MIN_EXAMEN: ~${3} PARA APROBACIÓN FINAL.` : ''}
       </div>
     </div>
   );
