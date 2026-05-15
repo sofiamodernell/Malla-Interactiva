@@ -16,7 +16,6 @@ interface jsPDFWithAutoTable extends jsPDF {
   };
 }
 
-
 export default function App() {
   const [carreraActual, setCarreraActual] = useState("imec_2023");
   const [estadoMaterias, setEstadoMaterias] = useState<Map<string, MateriaEstado>>(new Map());
@@ -58,7 +57,6 @@ export default function App() {
   useEffect(() => {
     return onAuthStateChanged(auth, (u) => setUser(u));
   }, []);
-
 
   // Visit Counter & Presence
   useEffect(() => {
@@ -109,21 +107,18 @@ export default function App() {
     const oneMinuteAgo = new Date(Date.now() - 60000);
     const qPresence = query(collection(db, 'presence'), where('lastSeen', '>=', oneMinuteAgo));
     
-    const unsubscribePresence = onSnapshot(collection(db, 'presence'), (snap) => {
-      // Since 'lastSeen' >= oneMinuteAgo is tricky with real-time serverTimestamp vs local time
-      // we filter client-side to be sure, or just count them all if they are cleaned up.
-      // Actually, my query above is a good start, but Firestore queries on timestamps are best.
+    const unsubscribePresence = onSnapshot(qPresence, (snap) => {
+      // Filter client-side as well to be sure we only count truly active ones
       const now = Date.now();
       const activeCount = snap.docs.filter(doc => {
         const data = doc.data();
         if (!data.lastSeen) return false;
         const lastSeen = data.lastSeen.toDate?.()?.getTime() || 0;
-        return (now - lastSeen) < 120000; // 2 minutes threshold to be safe
+        return (now - lastSeen) < 120000; // 2 minutes threshold
       }).length;
       setLiveUsers(activeCount || 1); // At least 1 (me)
     }, (error) => {
       console.warn("Presence snapshot failed:", error);
-      
     });
 
     return () => {
@@ -134,8 +129,6 @@ export default function App() {
     };
   }, []);
 
-
-  
   const handleTitleClick = () => {
     const nextCount = adminClickCount + 1;
     setAdminClickCount(nextCount);
@@ -301,7 +294,7 @@ export default function App() {
     // Header
     doc.setFontSize(18);
     doc.setTextColor(40);
-    doc.text("REPORTE NO OFICIAL DE AVANCE ACADÉMICO - IMEC", 14, 22);
+    doc.text("REPORTE DE AVANCE ACADÉMICO NO OFICIAL", 14, 22);
     
     doc.setFontSize(10);
     doc.setFont("helvetica", "normal");
@@ -382,7 +375,7 @@ export default function App() {
     for (let i = 1; i <= totalPages; i++) {
         doc.setPage(i);
         doc.setFontSize(8);
-        doc.text(`MALLA INTERACTIVA UTEC - Reporte Académico NO OFICIAL - Pag. ${i} de ${totalPages}`, doc.internal.pageSize.width / 2, doc.internal.pageSize.height - 10, { align: 'center' });
+        doc.text(`MALLA CURRICULAR INTERACTIVA IMEC - Reporte Académico NO OFICIAL! - Pag. ${i} de ${totalPages}`, doc.internal.pageSize.width / 2, doc.internal.pageSize.height - 10, { align: 'center' });
     }
 
     doc.save(`avance_utec_${carreraActual}_${nombre.replace(/\s+/g, '_')}.pdf`);
@@ -443,13 +436,13 @@ export default function App() {
               <li><strong>[!] PROTOCOLO_ENFOQUE:</strong> Hover para detectar dependencias (pre-requisitos y post-requisitos).</li>
               <li><strong>[!] MÓDULO_CÁLCULO:</strong> Herramienta de predicción de exoneración integrada.</li>
               <li><strong>[!] REGISTRO_PROGRESO:</strong> 1 click [CURSADA] // 2 clicks [APROBADA] // 3 clicks [RESET].</li>
-              <li><strong>[!] REPOSITORIO_TIPS:</strong> Dejá un tip para otros estudiantes! [tendrá que ser leído y aprobado antes de ser publicado oficialmente].</li>
+              <li><strong>[!] REPOSITORIO_TIPS: Dejale un mensaje a la comunidad IMEC.</li>
             </ul>
-            <div className="p-4 bg-blue-900/20 border-l-4 border-blue-400 rounded text-[0.6rem] mb-6 font-mono">
+            <div className="p-4 bg-blue-900/20 border-l-4 border-blue-400 rounded text-[0.7rem] mb-6 font-mono">
               <p className="font-bold mb-1 uppercase tracking-widest text-[#00BFFF]">ADVERTENCIA_DE_SEGURIDAD:</p>
-              <p className="mb-2">DOCUMENTACIÓN NO OFICIAL. REFERENCIA ACADÉMICA ÚNICAMENTE. VERIFICAR SIEMPRE PLAN DE ESTUDIOS.</p>
-              <p className="opacity-70">Desarrollado por una estudiante para estudiantes :).</p>
-              <p className="opacity-70">Contacto por feedback: <a href="mailto:sofia.modernell@estudiantes.utec.edu.uy" className="underline">sofia.modernell@estudiantes.utec.edu.uy</a></p>
+              <p className="mb-2">DOCUMENTACIÓN <strong>NO OFICIAL</strong>. REFERENCIA ACADÉMICA ÚNICAMENTE. VERIFICAR SIEMPRE POR MEDIOS OFICIALES.</p>
+              <p className="opacity-70">Desarrollado por una estudiante para estudiantes.</p>
+              <p className="opacity-70">Contacto: <a href="mailto:sofia.modernell@estudiantes.utec.edu.uy" className="underline">sofia.modernell@estudiantes.utec.edu.uy</a></p>
             </div>
             <button 
               className="btn-theme w-full py-3"
@@ -521,7 +514,11 @@ export default function App() {
       <main>
         <div className="main-content-scroll custom-scrollbar">
           <div className="sticky-horizontal">
-            <Header onTitleClick={handleTitleClick} />
+            <Header 
+              onTitleClick={handleTitleClick} 
+              liveUsers={liveUsers} 
+              totalVisits={totalVisits} 
+            />
             
             <div className="controls">
               <button className="flex items-center gap-2 btn-theme" onClick={() => setIsDarkMode(!isDarkMode)}>
@@ -728,7 +725,7 @@ export default function App() {
 
           <footer className="site-footer">
             <p className="mb-2"><strong>[!] DISCLAIMER:</strong> PROYECTO NO OFICIAL. DOCUMENTACIÓN TÉCNICA PARA REFERENCIA ESTUDIANTIL.</p>
-            <p>IDENTIFICACIÓN ESTUDIANTE: <a href="mailto:sofia.modernell@estudiantes.utec.edu.uy" className="text-white hover:underline">sofia.modernell@estudiantes.utec.edu.uy</a></p>
+            <p>IDENTIFICACIÓN ESTUDIANTE ENCARGADA: <a href="mailto:sofia.modernell@estudiantes.utec.edu.uy" className="text-white hover:underline">sofia.modernell@estudiantes.utec.edu.uy</a></p>
           </footer>
         </div>
       </main>
@@ -745,7 +742,7 @@ export default function App() {
   );
 }
 
-function Header({ onTitleClick }: { onTitleClick: () => void }) {
+function Header({ onTitleClick, liveUsers, totalVisits }: { onTitleClick: () => void, liveUsers: number, totalVisits: number | null }) {
   const baseUrl = import.meta.env.BASE_URL || '/';
   return (
     <header className="overflow-hidden">
@@ -761,6 +758,17 @@ function Header({ onTitleClick }: { onTitleClick: () => void }) {
           Malla Curricular
         </h1>
         <p className="text-white/60">INGENIERÍA_MECATRÓNICA // UTEC</p>
+        <div className="flex items-center gap-4 mt-2 text-[0.7rem] font-mono opacity-80 uppercase tracking-widest justify-center">
+          <div className="flex items-center gap-1.5 bg-green-500/10 px-2 py-1 rounded-sm border border-green-500/20">
+            <span className="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse"></span>
+            <span className="text-green-400 font-bold">{liveUsers} EN_VIVO</span>
+          </div>
+          {totalVisits !== null && (
+            <div className="flex items-center gap-1.5 bg-white/5 px-2 py-1 rounded-sm border border-white/10">
+              <span className="text-white/70">{totalVisits} VISITAS_TOTALES</span>
+            </div>
+          )}
+        </div>
       </div>
     </header>
   );
@@ -1138,4 +1146,3 @@ function PredictionDisplay({ fId, fPeso, notaAcum, isNoExamen }: { fId: string, 
     </div>
   );
 }
-
