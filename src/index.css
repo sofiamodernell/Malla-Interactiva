@@ -222,7 +222,7 @@ header::before {
 
 .logo-utec {
     left: 2rem;
-    height: 85px;
+    height: 90px;
 }
 
 .logo-imec {
@@ -236,10 +236,10 @@ header::before {
     }
     .logo-container {
         top: 0.75rem;
-        height: 30px;
+        height: 40px;
     }
     .logo-utec { left: 0.75rem; }
-    .logo-imec { right: 0.75rem; }
+    .logo-imec { right: 0.75rem; height: 40px; }
 }
 
 .controls {
