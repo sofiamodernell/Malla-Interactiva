@@ -20,8 +20,8 @@ export const basesDeDatos: Record<string, Semestre[]> = {
       { id: "TDM1", n: "Tecnologías de Materiales", c: 6, a: "Mecánica", reqCurso: ["QMCA"] },
       { id: "DCAD", n: "Dibujo Computarizado", c: 5, a: "Mecánica", reqCurso: ["INTM"] },
       { id: "PIC1", n: "Proyecto Integrador de Competencias 1", c: 3, a: "Competencias", reqCurso: ["INTM", "FMIN","TDC2","TDM1","DCAD"] },
-      { id: "ING2", n: "Inglés 2", c: 4, a: "Idiomas" },
-      { id: "PE2", n: "Programas Especiales 2", c: 2, a: "Otro" }
+      { id: "ING2", n: "Inglés 2", c: 4, a: "Idiomas", reqExamen:["ING1"] },
+      { id: "PE2", n: "Programas Especiales 2", c: 2, a: "Otro", reqExamen:["PE1"] }
     ]},
     { sem: 3, materias: [
       { id: "MAT3", n: "Matemática 3", c: 8, a: "Básicas", reqCurso: ["MAT2"], reqExamen: ["MAT1"] },
@@ -30,8 +30,8 @@ export const basesDeDatos: Record<string, Semestre[]> = {
       { id: "SLSO", n: "Seguridad Laboral y Salud Ocupacional", c: 5, a: "General", reqExamen: ["MAT1","QMCA","INTM","COES","PRG1","TDC1"] },
       { id: "DIES", n: "Dinámica y Estática", c: 7, a: "Mecánica" ,reqCurso: ["FIS1"], reqExamen: ["INTM"]},
       { id: "EDG1", n: "Electrónica Digital 1", c: 7, a: "Electrónica", reqCurso: ["FMIN"], reqExamen: ["TDC1"] },
-      { id: "ING3", n: "Inglés 3", c: 4, a: "Idiomas" },
-      { id: "PE3", n: "Programas Especiales 3", c: 2, a: "Otro" }
+      { id: "ING3", n: "Inglés 3", c: 4, a: "Idiomas", reqExamen:["ING2"] },
+      { id: "PE3", n: "Programas Especiales 3", c: 2, a: "Otro", reqExamen:["PE2"]}
     ]},
     { sem: 4, materias: [
       { id: "TMPR", n: "Tecnologías de Microprocesamiento", c: 7, a: "Electrónica", reqCurso: ["EDG1"], reqExamen: ["FMIN"] },
@@ -40,8 +40,8 @@ export const basesDeDatos: Record<string, Semestre[]> = {
       { id: "FIS2", n: "Física 2", c: 7, a: "Básicas", reqExamen: ["MAT1", "FMIN","FIS1"] },
       { id: "AEIN", n: "Aplicaciones Electro Industriales", c: 6, a: "Electrónica", reqCurso: ["EALG"], reqExamen: ["TDC2", "FMIN"] },
       { id: "PIC2", n: "Proyecto Integrador de Competencias 2", c: 3, a: "Competencias", reqCurso: ["TMPR","PRG3","MEM1","AEIN"], reqExamen:["PIC1"] },
-      { id: "ING4", n: "Inglés 4", c: 4, a: "Idiomas" },
-      { id: "PE4", n: "Programas Especiales 4", c: 2, a: "Otro" }
+      { id: "ING4", n: "Inglés 4", c: 4, a: "Idiomas", reqExamen:["ING3"] },
+      { id: "PE4", n: "Programas Especiales 4", c: 2, a: "Otro", reqExamen:["PE3"] }
     ]},
     { sem: 5, materias: [
       { id: "MAEL", n: "Máquinas Eléctricas", c: 7, a: "Electrónica", reqCurso: ["AEIN"], reqExamen: ["EALG"]  },
@@ -52,8 +52,8 @@ export const basesDeDatos: Record<string, Semestre[]> = {
       { id: "PFAB", n: "Procesos de Fabricación", c: 5, a: "Mecánica", reqExamen: ["PRG2","EALG","SLSO","EDG1","MAT3","DIES"] },
       { id: "APTM", n: "Anteproyecto de Tecnólogo", c: 5, a: "Competencias", reqExamen: ["PIC2"] },
       { id: "PPCU", n: "Practica Profesional Curricular", c: 8, a: "Competencias", reqExamen: ["PRG2","EALG","SLSO","EDG1","MAT3","DIES"] },
-      { id: "ING5", n: "Inglés 5", c: 4, a: "Idiomas" },
-      { id: "PE5", n: "Programas Especiales 5", c: 2, a: "Otro" }
+      { id: "ING5", n: "Inglés 5", c: 4, a: "Idiomas", reqExamen:["ING4"] },
+      { id: "PE5", n: "Programas Especiales 5", c: 2, a: "Otro", reqExamen:["PE4"] }
     ]},
     { sem: 6, materias: [
       { id: "EDG2", n: "Electrónica Digital 2", c: 7, a: "Electrónica", reqExamen: ["EALG","EDG1"] },
@@ -63,8 +63,8 @@ export const basesDeDatos: Record<string, Semestre[]> = {
       { id: "IMEL", n: "Instrumentación y Medidas Eléctricas", c: 7, a: "Electrónica", reqCurso: ["MAEL", "INSC"], reqExamen: ["TMPR","PRG3","MEM1","FIS2","AEIN","PIC2" ]  },
       { id: "PIND", n: "Procesos Industriales", c: 5, a: "Soporte", reqExamen: ["TMPR","PRG3","MEM1","FIS2","AEIN","PIC2" ] },
       { id: "PFTM", n: "Proyecto Final de Tecnólogo", c: 5, a: "Competencias", reqExamen: ["APTM"] },
-      { id: "ING6", n: "Inglés 6", c: 4, a: "Idiomas" },
-      { id: "PE6", n: "Programas Especiales 6", c: 2, a: "Otro" }
+      { id: "ING6", n: "Inglés 6", c: 4, a: "Idiomas", reqExamen:["ING5"] },
+      { id: "PE6", n: "Programas Especiales 6", c: 2, a: "Otro" , reqExamen:["PE5"]}
     ]},
     { sem: 7, materias: [
       { id: "MAT4", n: "Matemática 4", c: 8, a: "Básicas", reqExamen: ["MAEL","TIND","INSC","FIS3","LEGL","APTM","PFAB","PPCU"]},
@@ -73,8 +73,8 @@ export const basesDeDatos: Record<string, Semestre[]> = {
       { id: "GPYE", n: "Gestión de Proyectos y Emprendimientos", c: 4, a: "General", reqExamen:["MAEL","TIND","INSC","FIS3","LEGL","APTM","PFAB","PPCU"] },
       { id: "SEMB", n: "Sistemas Embebidos", c: 6, a: "Telemática" , reqCurso: ["TDCR"], reqExamen:["MAEL","TIND","INSC","FIS3","LEGL","APTM","PFAB","PPCU"]},
       { id: "TCYF", n: "Transferencia de Calor y Fluidos", c: 6, a: "Mecánica", reqExamen: ["MAEL","TIND","INSC","FIS3","LEGL","APTM","PFAB","PPCU"]},
-      { id: "ING7", n: "Inglés 7", c: 4, a: "Idiomas" },
-      { id: "PE7", n: "Programas Especiales 7", c: 2, a: "Otro" }
+      { id: "ING7", n: "Inglés 7", c: 4, a: "Idiomas", reqExamen:["ING6"] },
+      { id: "PE7", n: "Programas Especiales 7", c: 2, a: "Otro", reqExamen:["PE6"]}
     ]},
     { sem: 8, materias: [
       { id: "PYES", n: "Probabilidad y Estadística", c: 5, a: "Básicas", reqExamen:["EDG2","HYNE","AUTM","TDCR","IMEL","PIND","PFTM"] },
@@ -83,8 +83,8 @@ export const basesDeDatos: Record<string, Semestre[]> = {
       { id: "MDSA", n: "Mantenimiento de Sistemas Automaizados", c: 6, a: "Mecánica", reqCurso: ["SEMB"], reqExamen:["EDG2","HYNE","AUTM","TDCR","IMEL","PIND","PFTM"]},
       { id: "SCAP", n: "Sistemas de Control Aplicados ", c: 7, a: "Mecatrónica", reqCurso: ["EPOT"], reqExamen:["EDG2","HYNE","AUTM","TDCR","IMEL","PIND","PFTM"]},
       { id: "TDM2", n: "Tecnologías de Materiales 2", c: 6, a: "Mecánica", reqExamen: ["EDG2","HYNE","AUTM","TDCR","IMEL","PIND","PFTM"] },
-      { id: "ING8", n: "Inglés 8", c: 4, a: "Idiomas" },
-      { id: "PE8", n: "Programas Especiales 8", c: 2, a: "Otro" }
+      { id: "ING8", n: "Inglés 8", c: 4, a: "Idiomas", reqExamen:["ING7"] },
+      { id: "PE8", n: "Programas Especiales 8", c: 2, a: "Otro", reqExamen:["PE7"] }
     ]},
     { sem: 9, materias: [
       { id: "DMEC", n: "Diseño Mecatónico", c: 7, a: "Mecatrónica", reqCurso: ["SCAP","MDSA"], reqExamen: ["TCYF","MAT4","EPOT","MEM2","GPYE","SEMB"] },
@@ -93,8 +93,8 @@ export const basesDeDatos: Record<string, Semestre[]> = {
       { id: "CPIN", n: "Costos para Ingeniería ", c: 5, a: "Soporte" , reqExamen:["TCYF","MAT4","EPOT","MEM2","GPYE","SEMB"]},
       { id: "OPT1", n: "Optativa 1", c: 6, a: "Optativa", reqExamen:["TCYF","MAT4","EPOT","MEM2","GPYE","SEMB"] },
       { id: "PFG1", n: "Proyecto Final de Grado 1", c: 8, a: "Competencias" , reqExamen:["PYES","MNPI","PRDS","MDSA","SCAP","TDM2"]},
-      { id: "ING9", n: "Inglés 9", c: 4, a: "Idiomas" },
-      { id: "PE9", n: "Programas Especiales 9", c: 2, a: "Otro" }
+      { id: "ING9", n: "Inglés 9", c: 4, a: "Idiomas", reqExamen:["ING8"] },
+      { id: "PE9", n: "Programas Especiales 9", c: 2, a: "Otro", reqExamen:["PE8"] }
     ]},
     { sem: 10, materias: [
       { id: "GCAL", n: "Gestion de Calidad", c: 5, a: "Soporte" , reqExamen:["TDM2","PYES","MNPI","PRDS","MDSA","SCAP"]},
@@ -102,8 +102,8 @@ export const basesDeDatos: Record<string, Semestre[]> = {
       { id: "SICF", n: "Sistemas Inteligentes y Ciberfísicos", c: 7, a: "Mecatrónica", reqExamen: ["TDM2","PYES","MNPI","PRDS","MDSA","SCAP"] },
       { id: "OPT2", n: "Optativa 2", c: 6, a: "Optativa", reqExamen: ["TDM2","PYES","MNPI","PRDS","MDSA","SCAP"]},
       { id: "PFG2", n: "Proyecto Final de Grado 2", c: 8, a: "Competencias", reqExamen: ["TDM2","PYES","MNPI","PRDS","SCAP","MDSA","OPT1","CPIN","MIAC","PFG1"] },
-      { id: "ING10", n: "Inglés 10", c: 4, a: "Idiomas" },
-      { id: "PE10", n: "Programas Especiales 10", c: 2, a: "Otro" }
+      { id: "ING10", n: "Inglés 10", c: 4, a: "Idiomas", reqExamen:["ING9"] },
+      { id: "PE10", n: "Programas Especiales 10", c: 2, a: "Otro", reqExamen:["PE9"] }
     ]}
   ]
 };
