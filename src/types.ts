@@ -5,6 +5,7 @@ export interface Materia {
   a: string; // area
   reqCurso?: string[];
   reqExamen?: string[];
+  anualId?: string; // ID para agrupar partes de materias anuales
 }
 
 export interface Semestre {
