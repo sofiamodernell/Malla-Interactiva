@@ -6,7 +6,7 @@ import autoTable from 'jspdf-autotable';
 import { collection, addDoc, query, orderBy, onSnapshot, serverTimestamp, updateDoc, doc, deleteDoc, where, increment, getDoc, setDoc } from 'firebase/firestore';
 import { signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signOut, User } from 'firebase/auth';
 import { db, handleFirestoreError, OperationType, auth } from './firebase';
-import { basesDeDatos, configuracionSCP } from './data';
+import { basesDeDatos, configuracionSCP, nombresCarreras } from './data';
 import { Materia, Semestre, MateriaEstado, StudentTip } from './types';
 
 // Extend jsPDF with autoTable type
@@ -50,10 +50,19 @@ export default function App() {
     }
   };
 
+    // Load notes when career changes
   useEffect(() => {
-    localStorage.setItem('notas_semestres', JSON.stringify(notasSemestres));
-  }, [notasSemestres]);
+    const saved = localStorage.getItem(`notas_semestres_${carreraActual}`);
+    setNotasSemestres(saved ? JSON.parse(saved) : {});
+  }, [carreraActual]);
 
+  // Save notes when they change
+  useEffect(() => {
+    if (Object.keys(notasSemestres).length > 0) {
+      localStorage.setItem(`notas_semestres_${carreraActual}`, JSON.stringify(notasSemestres));
+    }
+  }, [notasSemestres, carreraActual]);
+  
   useEffect(() => {
     return onAuthStateChanged(auth, (u) => setUser(u));
   }, []);
@@ -155,14 +164,48 @@ export default function App() {
 
   // Stats
   const plan = useMemo(() => basesDeDatos[carreraActual] || [], [carreraActual]);
+  const infoCarrera = useMemo(() => nombresCarreras[carreraActual] || { titulo: "UTEC", subtitulo: "" }, [carreraActual]);
   const todasLasMaterias = useMemo(() => plan.flatMap(s => s.materias), [plan]);
+
+  const isMateriaCompletada = useCallback((m: Materia) => {
+    if (estadoMaterias.get(m.id) !== 2) return false;
+    if (m.anualId) {
+      const g = todasLasMaterias.filter(x => x.anualId === m.anualId);
+      return g.every(x => estadoMaterias.get(x.id) === 2);
+    }
+    return true;
+  }, [estadoMaterias, todasLasMaterias]);
+  
   const maxCreditos = useMemo(() => todasLasMaterias.reduce((acc, m) => acc + m.c, 0), [todasLasMaterias]);
   
   const totalCreditos = useMemo(() => {
     let count = 0;
+    
+    // Agrupamos las materias anuales para verificar si están completas
+    const anualGroups = new Map<string, { materias: Materia[], todasAprobadas: boolean }>();
+    
     todasLasMaterias.forEach(m => {
+      if (m.anualId) {
+        if (!anualGroups.has(m.anualId)) {
+          anualGroups.set(m.anualId, { materias: [], todasAprobadas: true });
+        }
+        const group = anualGroups.get(m.anualId)!;
+        group.materias.push(m);
+        if (estadoMaterias.get(m.id) !== 2) {
+          group.todasAprobadas = false;
+        }
+      } else {
       if (estadoMaterias.get(m.id) === 2) count += m.c;
+      }
     });
+
+    // Sumamos grupos anuales solo si están completos
+    anualGroups.forEach(group => {
+      if (group.todasAprobadas) {
+        group.materias.forEach(m => count += m.c);
+      }
+    });
+    
     return count;
   }, [todasLasMaterias, estadoMaterias]);
 
@@ -206,7 +249,7 @@ export default function App() {
       }
     }
 
-    const saved = localStorage.getItem('progreso_imec');
+    const saved = localStorage.getItem(`progreso_${carreraActual}`);
     if (saved) {
       try {
         const parsed = JSON.parse(saved);
@@ -215,14 +258,14 @@ export default function App() {
         }
       } catch (e) {
         console.error("Error loading progress", e);
-        localStorage.removeItem('progreso_imec');
+        localStorage.removeItem(`progreso_${carreraActual}`);
       }
     }
   }, []);
 
   useEffect(() => {
     if (estadoMaterias.size > 0) {
-      localStorage.setItem('progreso_imec', JSON.stringify(Array.from(estadoMaterias.entries())));
+      localStorage.setItem(`progreso_${carreraActual}`, JSON.stringify(Array.from(estadoMaterias.entries())));
     }
   }, [estadoMaterias]);
 
@@ -392,12 +435,12 @@ export default function App() {
     });
   };
 
-  const handleReset = () => {
+   const handleReset = () => {
     if (confirm("¿Estás seguro de que quieres borrar todo tu progreso y notas?")) {
       setEstadoMaterias(new Map());
       setNotasSemestres({});
-      localStorage.removeItem('progreso_imec');
-      localStorage.removeItem('notas_semestres');
+      localStorage.removeItem(`progreso_${carreraActual}`);
+      localStorage.removeItem(`notas_semestres_${carreraActual}`);
     }
   };
 
@@ -500,7 +543,7 @@ export default function App() {
                 <X size={24} />
               </button>
             </div>
-            <CommunityBoard />
+            <CommunityBoard carreraActual={carreraActual} />
             <button 
               className="btn-theme w-full mt-4 py-4" 
               onClick={() => setShowCommunityBoard(false)}
@@ -518,6 +561,7 @@ export default function App() {
               onTitleClick={handleTitleClick} 
               liveUsers={liveUsers} 
               totalVisits={totalVisits} 
+              carreraKey={carreraActual}
             />
             
             <div className="controls">
@@ -587,7 +631,9 @@ export default function App() {
               <div className="flex items-center gap-2">
                 <span className="text-[0.6rem] font-bold opacity-50 uppercase tracking-widest">PROYECTO:</span>
                 <select value={carreraActual} onChange={(e) => setCarreraActual(e.target.value)}>
-                  <option value="imec_2023">IMEC_PLAN_2023</option>
+                  {Object.keys(nombresCarreras).map(key => (
+                    <option key={key} value={key}>{nombresCarreras[key].titulo}</option>
+                  ))}
                 </select>
               </div>
             </div>
@@ -682,7 +728,7 @@ export default function App() {
                     <div className="summary-item">
                       <span className="label">CRÉDITOS:</span>
                       <span className="value">
-                        {semestre.materias.reduce((acc, m) => acc + (estadoMaterias.get(m.id) === 2 ? m.c : 0), 0)} / {semestre.materias.reduce((acc, m) => acc + m.c, 0)}
+                        {semestre.materias.reduce((acc, m) => acc + (isMateriaCompletada(m) ? m.c : 0), 0)} / {semestre.materias.reduce((acc, m) => acc + m.c, 0)}
                       </span>
                     </div>
                   </div>
@@ -709,6 +755,7 @@ export default function App() {
                         materia={m}
                         estado={status}
                         isBlocked={isBlocked}
+                        isCompletada={isMateriaCompletada(m)}
                         isHighlighted={materiaEnfocada?.id === m.id}
                         isReq={highlightedReqs.has(m.id)}
                         isPost={highlightedPosts.has(m.id)}
@@ -742,22 +789,26 @@ export default function App() {
   );
 }
 
-function Header({ onTitleClick, liveUsers, totalVisits }: { onTitleClick: () => void, liveUsers: number, totalVisits: number | null }) {
+function Header({ onTitleClick, liveUsers, totalVisits, carreraKey }: { onTitleClick: () => void, liveUsers: number, totalVisits: number | null, carreraKey: string }) {
   const baseUrl = import.meta.env.BASE_URL || '/';
+  const infoCarrera = nombresCarreras[carreraKey];
+  
   return (
     <header className="overflow-hidden">
       <img src={`${baseUrl}utec_logo.jpg`} alt="UTEC" className="logo-container logo-utec" />
-      <img src={`${baseUrl}imec_logo.jpg`} alt="IMEC" className="logo-container logo-imec" />
-
+      {infoCarrera.logo && (
+        <img src={`${baseUrl}${infoCarrera.logo}`} alt={infoCarrera.titulo} className="logo-container logo-imec" />
+      )}
+      
       <div className="header-content">
-        <p className="mb-4">ENGINEERING DIAGRAM // SPEC_023</p>
+        <p className="mb-4">ENGINEERING DIAGRAM // SPEC</p>
         <h1 
           className="text-white cursor-default select-none" 
           onClick={onTitleClick}
         >
           Malla Curricular
         </h1>
-        <p className="text-white/60">INGENIERÍA_MECATRÓNICA // UTEC</p>
+        <p className="text-white/60">{infoCarrera.subtitulo}</p>
         <div className="flex items-center gap-4 mt-2 text-[0.7rem] font-mono opacity-80 uppercase tracking-widest justify-center">
           <div className="flex items-center gap-1.5 bg-green-500/10 px-2 py-1 rounded-sm border border-green-500/20">
             <span className="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse"></span>
@@ -779,6 +830,7 @@ interface MateriaCardProps {
   materia: Materia;
   estado: number;
   isBlocked: boolean;
+  isCompletada: boolean;
   isHighlighted: boolean;
   isReq: boolean;
   isPost: boolean;
@@ -791,6 +843,7 @@ function MateriaCard({
   materia, 
   estado, 
   isBlocked, 
+  isCompletada,
   isHighlighted, 
   isReq, 
   isPost,
@@ -802,6 +855,7 @@ function MateriaCard({
     'materia',
     estado === 1 ? 'cursada' : '',
     estado === 2 ? 'aprobada' : '',
+    estado === 2 && !isCompletada ? 'pendiente-anual' : '',
     isBlocked ? 'bloqueada' : '',
     isHighlighted ? 'highlight-self' : '',
     isReq ? 'highlight-req' : '',
@@ -819,16 +873,25 @@ function MateriaCard({
     >
       <div className="flex justify-between items-start">
         <span className="area-tag">{materia.a}</span>
+       {materia.anualId && (
+          <span className="text-[0.5rem] font-bold opacity-50 bg-white/10 px-1 rounded" title="Materia Anual">
+            ANUAL
+          </span>
+        )}
+        
       </div>
       <span className="materia-name">{materia.n}</span>
       <div className="materia-info">
         <span>{materia.c} Créditos</span>
+        {estado === 2 && !isCompletada && (
+        <span className="text-[0.5rem] text-yellow-500 font-bold ml-2 animate-pulse">PARTIAL_PASS</span>
+        )}
       </div>
     </div>
   );
 }
 
-function CommunityBoard() {
+function CommunityBoard({ carreraActual }: { carreraActual: string }) {
   const [tips, setTips] = useState<StudentTip[]>([]);
   const [newTip, setNewTip] = useState("");
   const [authorName, setAuthorName] = useState("");
