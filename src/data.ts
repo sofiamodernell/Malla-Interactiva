@@ -134,7 +134,7 @@ export const basesDeDatos: Record<string, Semestre[]> = {
       { id: "NCEA_IBIO", n: "Números Complejos y Ecuaciones Diferenciales", c: 8, a: "Básicas", reqCurso: ["AAGA_IBIO"] },
       { id: "EMAG_IBIO", n: "Electricidad y Magnetismo", c: 10, a: "Básicas", reqCurso: ["AAGA_IBIO", "MEC_IBIO"] },
       { id: "QOB_IBIO", n: "Química Orgánica y Biológica", c: 9, a: "Básicas", reqCurso: ["QGI_IBIO"] },
-      { id: "TIT2_IBIO", n: "Taller Inicial de Tecnologías II", c: 8, a: "General", anualId: "TIT_IBIO" },
+      { id: "TIT2_IBIO", n: "Taller Inicial de Tecnologías II", c: 8, a: "General", anualId: "TIT_IBIO", reqCurso: ["TIT1_IBIO"] },
       { id: "AFH_IBIO", n: "Anatomía y Fisiología Humanas", c: 10, a: "", reqCurso: ["SS_IBIO", "MEC_IBIO"] },
       { id: "ING2_IBIO", n: "Inglés 2", c: 4, a: "Idiomas", reqExamen: ["ING1_IBIO"] },
       { id: "PE2_IBIO", n: "Programas Especiales 2", c: 2, a: "Otros", reqExamen: ["PE1_IBIO"] }
