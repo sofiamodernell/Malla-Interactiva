@@ -2,7 +2,7 @@ import React, { useState, useEffect, useMemo, useCallback, useRef } from 'react'
 import confetti from 'canvas-confetti';
 import { motion, AnimatePresence } from 'motion/react';
 
-import { Moon, Sun, Calculator, Search, RotateCcw, Share2, FileText, Printer, Link, Check, MessageSquare, Send, LogIn, LogOut, CheckCircle2, Trash2, X, StickyNote, Edit2, Save, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Moon, Sun, Calculator, Search, RotateCcw, Share2, FileText, Printer, Link, Check, MessageSquare,messageCircleQuestionMark ,  Send, LogIn, LogOut, CheckCircle2, Trash2, X, StickyNote, Edit2, Save, ChevronLeft, ChevronRight } from 'lucide-react';
 import { jsPDF } from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import { collection, addDoc, query, orderBy, onSnapshot, serverTimestamp, updateDoc, doc, deleteDoc, where, increment, getDoc, setDoc } from 'firebase/firestore';
@@ -916,8 +916,9 @@ export default function App() {
                 REPOSITORIO_COMUNIDAD
               </button>
 
-              <button className="flex items-center gap-2 btn-theme border-[var(--secondary)]/30 bg-[var(--secondary)]/5 hover:bg-[var(--secondary)]/15" onClick={() => { setWelcomeStep(1); setShowWelcome(true); }} title="Abrir asistente de inducción interactivo">
-                <span className="text-[var(--secondary)] font-bold">GUÍA_INTERACTIVA</span>
+              <button className="flex items-center gap-2 btn-theme" onClick={() => { setWelcomeStep(1); setShowWelcome(true)>
+                <messageCircleQuestionMark size={14} />
+                GUÍA_INTERACTIVA
               </button>
 
               <button className="flex items-center gap-2 btn-theme" onClick={handleReset}>
