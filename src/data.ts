@@ -1,5 +1,18 @@
 import { Semestre, SCPConfig } from './types';
 
+export const nombresCarreras: Record<string, { titulo: string; subtitulo: string; logo?: string }> = {
+  "imec_2023": { 
+    titulo: "IMEC_PLAN_2023", 
+    subtitulo: "INGENIERÍA_MECATRÓNICA // UTEC",
+    logo: "imec_logo.jpg"
+  },
+  "ibio_2021": { 
+    titulo: "IBIO_PLAN_2021", 
+    subtitulo: "INGENIERÍA_BIOMÉDICA // UTEC",
+    logo: "ibio_logo.jpg" // Placeholder o logo de IBIO si existe
+  }
+};
+
 export const basesDeDatos: Record<string, Semestre[]> = {
   "imec_2023": [
     { sem: 1, materias: [
@@ -105,7 +118,101 @@ export const basesDeDatos: Record<string, Semestre[]> = {
       { id: "ING10", n: "Inglés 10", c: 4, a: "Idiomas", reqExamen:["ING9"] },
       { id: "PE10", n: "Programas Especiales 10", c: 2, a: "Otro", reqExamen:["PE9"] }
     ]}
-  ]
+  ],
+    
+  "ibio_2021": [
+      { sem: 1, materias: [
+      { id: "AAGA_IBIO", n: "Álgebra, Análisis y Geometría Analítica", c: 8, a: "Básicas" },
+      { id: "MEC_IBIO", n: "Mecánica, Ondas y Calor", c: 10, a: "Básicas" },
+      { id: "QGI_IBIO", n: "Química General e Inorgánicа", c: 9, a: "Básicas"},
+      { id: "TIT1_IBIO", n: "Taller Inicial de Tecnologías I", c: 0, a: "",anualId: "TIT_IBIO"},
+      { id: "SS_IBIO", n: "Salud & Sociedad", c: 8, a: ""},
+      { id: "ING1_IBIO", n: "Inglés 1", c: 4, a: "Idiomas"},
+      { id: "PE1_IBIO", n: "Programas Especiales 1", c: 2, a: "Otro"}
+    ]},
+    { sem: 2, materias: [
+      { id: "NCEA_IBIO", n: "Números Complejos y Ecuaciones Diferenciales", c: 8, a: "Básicas", reqCurso: ["AAGA_IBIO"] },
+      { id: "EMAG_IBIO", n: "Electricidad y Magnetismo", c: 10, a: "Básicas", reqCurso: ["AAGA_IBIO", "MEC_IBIO"] },
+      { id: "QOB_IBIO", n: "Química Orgánica y Biológica", c: 9, a: "Básicas", reqCurso: ["QGI_IBIO"] },
+      { id: "TIT2_IBIO", n: "Taller Inicial de Tecnologías II", c: 8, a: "General", anualId: "TIT_IBIO" },
+      { id: "AFH_IBIO", n: "Anatomía y Fisiología Humanas", c: 10, a: "", reqCurso: ["SS_IBIO", "MEC_IBIO"] },
+      { id: "ING2_IBIO", n: "Inglés 2", c: 4, a: "Idiomas", reqExamen: ["ING1_IBIO"] },
+      { id: "PE2_IBIO", n: "Programas Especiales 2", c: 2, a: "Otros", reqExamen: ["PE1_IBIO"] }
+    ]},
+    { sem: 3, materias: [
+      { id: "RADI_IBIO", n: "Óptica y Radiaciones", c: 10, a: "", reqCurso: ["AAGA_IBIO", "MEC_IBIO"] },
+      { id: "EANA_IBIO", n: "Electrónica Analógica", c: 10, a: "Electrónica", reqCurso: ["NCEA_IBIO", "EMAG_IBIO", "TIT_IBIO"] },
+      { id: "ETEC_IBIO", n: "Electrotecnia", c: 9, a: "Electrónica", reqCurso: ["EMAG_IBIO"] },
+      { id: "IHOS_IBIO", n: "Instalaciones Hospitalarias", c: 9, a: "General", reqCurso: [ "QGI_IBIO","EMAG_IBIO", "AFH_IBIO"] },
+      { id: "PRG_IBIO", n: "Programación de Computadoras", c: 8, a: "Informática", reqCurso: ["AAGA_IBIO"] },
+      { id: "ING3_IBIO", n: "Inglés 3", c: 4, a: "Idiomas", reqExamen: ["ING2_IBIO"] },
+      { id: "PE3_IBIO", n: "Programas Especiales 3", c: 2, a: "Otros", reqExamen: ["PE2_IBIO"] }
+    ]},
+    { sem: 4, materias: [
+      { id: "EFIS_IBIO", n: "Electrofisiología Clínica", c: 10, a: "", reqCurso: ["AFH_IBIO", "EANA_IBIO"] },
+      { id: "EDIG_IBIO", n: "Electrónica Digital", c: 10, a: "Electrónica", reqCurso: ["EANA_IBIO"] },
+      { id: "MMM_IBIO", n: "Mecánica, Máquinas y Materiales", c: 9, a: "Mecánica", reqCurso: ["AAGA_IBIO", "MEC_IBIO"] },
+      { id: "IMED_IBIO", n: "Imágenes Médicas", c: 10, a: "General", reqCurso: ["RADI_IBIO", "AFH_IBIO"] },
+      { id: "PPC_A1", n: "PPC A (Internado Rot.) I", c: 0, a: "Competencias", anualId: "PPC_A", reqCurso: ["AAGA_IBIO","MEC_IBIO","QGI_IBIO","TIT1_IBIO", "SS_IBIO","NCEA_IBIO","EMAG_IBIO","QOB_IBIO","TIT2_IBIO","AFH_IBIO", "RADI_IBIO","EANA_IBIO","ETEC_IBIO", "PRG_IBIO"], reqExamen: ["IHOS_IBIO"]},
+      { id: "ING4_IBIO", n: "Inglés 4", c: 4, a: "Idiomas", reqExamen: ["ING3_IBIO"] },
+      { id: "PE4_IBIO", n: "Programas Especiales 4", c: 2, a: "Otros", reqExamen: ["PE3_IBIO"] }
+    ]},    
+    { sem: 5, materias: [
+      { id: "SERA_IBIO", n: "Seguridad Eléctrica y Radiante", c: 10, a: "General", reqCurso: ["ETEC_IBIO", "IHOS_IBIO", "EFIS_IBIO","IMED_IBIO"] },
+      { id: "NEMA_IBIO", n: "Normativa sobre Equipamiento Médico", c: 8, a: "General", reqCurso: ["ETEC_IBIO", "IHOS_IBIO", "EFIS_IBIO","IMED_IBIO"] },
+      { id: "TMEM_IBIO", n: "Taller Mantenimiento de Equipos Médicos", c: 10, a: "Soporte", reqCurso: ["ETEC_IBIO", "IHOS_IBIO", "EFIS_IBIO","MMM_IBIO","IMED_IBIO" ] },
+      { id: "MAV1_IBIO", n: "Matemática Avanzada I", c: 9, a: "Básicas", reqCurso: ["NCEA_IBIO","PRG_IBIO"] },
+      { id: "PPC_A2", n: "PPC A (Internado Rot.) II", c: 12, a: "Competencias", anualId: "PPC_A", reqCurso: ["AAGA_IBIO","MEC_IBIO","QGI_IBIO","TIT1_IBIO", "SS_IBIO","NCEA_IBIO","EMAG_IBIO","QOB_IBIO","TIT2_IBIO","AFH_IBIO", "RADI_IBIO","EANA_IBIO","ETEC_IBIO", "PRG_IBIO"], reqExamen: ["IHOS_IBIO"] },
+      { id: "ING5_IBIO", n: "Inglés 5", c: 4, a: "Idiomas", reqExamen: ["ING4_IBIO"] },
+      { id: "PE5_IBIO", n: "Programas Especiales 5", c: 2, a: "Otros", reqExamen: ["PE4_IBIO"] }
+    ]},
+    { sem: 6, materias: [
+      { id: "ILC_IBIO", n: "Instrumental de Laboratorio Clínico", c: 9, a: "General", reqCurso: ["QOB_IBIO", "IHOS_IBIO"] },
+      { id: "IMED2_IBIO", n: "Informática Médica", c: 8, a: "Informática", reqCurso: ["PRG_IBIO", "EFIS_IBIO","IMED_IBIO"] },
+      { id: "IMC_IBIO", n: "Instrumentación Médica Complemplementaria", c: 10, a: "General", reqCurso: ["ETEC_IBIO", "IHOS_IBIO", "EFIS_IBIO","IMED_IBIO"] },
+      { id: "MAV2_IBIO", n: "Matemática Avanzada II", c: 9, a: "Básicas", reqCurso: ["MAV1_IBIO"] },
+      { id: "FAV_IBIO", n: "Física Avanzada", c: 8, a: "Básicas", reqCurso: ["RADI_IBIO","ETEC_IBIO"] },
+      { id: "PFT_IBIO", n: "Proyecto Final Tecnólogo", c: 8, a: "Competencias", reqExamen: ["AAGA_IBIO","MEC_IBIO","QGI_IBIO","TIT1_IBIO", "SS_IBIO","NCEA_IBIO","EMAG_IBIO","QOB_IBIO","TIT2_IBIO","AFH_IBIO", "RADI_IBIO","EANA_IBIO","ETEC_IBIO", "PRG_IBIO","EFIS_IBIO","EDIG_IBIO","MMM_IBIO","IMED_IBIO","PPC_A1","SERA_IBIO","NEMA_IBIO","TMEM_IBIO","MAV1_IBIO","PPC_A2","ILC_IBIO","IMED2_IBIO","IMC_IBIO"]},
+      { id: "ING6_IBIO", n: "Inglés 6", c: 4, a: "Idiomas", reqExamen: ["ING5_IBIO"] },
+      { id: "PE6_IBIO", n: "Programas Especiales 6", c: 2, a: "Otros", reqExamen: ["PE5_IBIO"] }
+    ]},    
+    { sem: 7, materias: [
+      { id: "FIP_IBIO", n: "Fisiopatología", c: 9, a: "", reqCurso: ["ILC_IBIO","IMC_IBIO"] },
+      { id: "RNI_IBIO", n: "Radiaciones No-ionizantes", c: 7, a: "", reqCurso: ["MAV1_IBIO","FAV_IBIO"] },
+      { id: "PDA_IBIO", n: "Programación Digital Avanzada", c: 7, a: "Informática", reqCurso: ["IMED2_IBIO","MAV1_IBIO"] },
+      { id: "LEGS_IBIO", n: "Legislación para la Salud", c: 5, a: "General" , reqCurso: [ "NEMA_IBIO","ILC_IBIO","IMED2_IBIO","IMC_IBIO"]},
+      { id: "ECOS_IBIO", n: "Economía para la Salud", c: 5, a: "General", reqCurso: ["TMEM_IBIO","ILC_IBIO","IMED2_IBIO","IMC_IBIO"] },
+      { id: "ING7_IBIO", n: "Inglés 7", c: 4, a: "Idiomas", reqExamen: ["ING6_IBIO"] },
+      { id: "PE7_IBIO", n: "Programas Especiales 7", c: 2, a: "Otros", reqExamen: ["PE6_IBIO"] }
+    ]},    
+    { sem: 8, materias: [
+      { id: "BEST_IBIO", n: "Bioestadística", c: 7, a: "Básicas", reqCurso: ["IMED2_IBIO"] },
+      { id: "SSIS_IBIO", n: "Señales y Sistemas", c: 8, a: "Electrónica", reqCurso: ["EFIS_IBIO","EDIG_IBIO","MAV2_IBIO"] },
+      { id: "BMBM_IBIO", n: "Biomecánica y Biomateriales", c: 7, a: "Mecánica", reqCurso: ["AFH_IBIO", "MMM_IBIO"] },
+      { id: "MINV_IBIO", n: "Metodología de la Investigación", c: 5, a: "Soporte", reqCurso: ["FAV_IBIO","FIP_IBIO"] },
+      { id: "HSAM_IBIO", n: "Higiene y Seguidad en Ambientes Hospitarios", c: 5, a: "Soporte", reqCurso:["FIP_IBIO","LEGS_IBIO"] },
+      { id: "ING8_IBIO", n: "Inglés 8", c: 4, a: "Idiomas", reqExamen: ["ING7_IBIO"] },
+      { id: "PE8_IBIO", n: "Programas Especiales 8", c: 2, a: "Otros", reqExamen: ["PE7_IBIO"] }
+    ]},
+    { sem: 9, materias: [
+      { id: "RT_IBIO", n: "Radioterapia", c: 7, a: "", reqCurso: ["SERA_IBIO","FAV_IBIO","FIP_IBIO"] },
+      { id: "GSAL_IBIO", n: "Gestión de Sist. de Salud", c: 9, a: "General", reqCurso: ["FIP_IBIO","LEGS_IBIO", "ECOS_IBIO","BEST_IBIO"] },
+      { id: "ICB_IBIO", n: "Investigación Clínica y Bioética", c: 5, a: "Soporte", reqCurso: ["MINV_IBIO","HSAM_IBIO"] },
+      { id: "UCE1_IBIO", n: "UC Electiva 1", c: 4, a: "Optativa"},
+      { id: "UCE2_IBIO", n: "UC Electiva 2", c: 4, a: "Optativa"},
+      { id: "PPCB1", n: "PPC B", c: 6, a: "Competencias", anualId: "PPC_B", reqCurso: ["AAGA_IBIO","MEC_IBIO","QGI_IBIO","TIT1_IBIO", "SS_IBIO","NCEA_IBIO","EMAG_IBIO","QOB_IBIO","TIT2_IBIO","AFH_IBIO", "RADI_IBIO","EANA_IBIO","ETEC_IBIO", "PRG_IBIO","EFIS_IBIO","EDIG_IBIO","MMM_IBIO","IMED_IBIO","PPC_A1","SERA_IBIO","NEMA_IBIO","TMEM_IBIO","MAV1_IBIO","PPC_A2",    "ILC_IBIO","IMED2_IBIO","IMC_IBIO","MAV2_IBIO","FAV_IBIO","PFT_IBIO","FIP_IBIO","RNI_IBIO", "PDA_IBIO","LEGS_IBIO","ECOS_IBIO","BEST_IBIO","SSIS_IBIO","BMBM_IBIO","MINV_IBIO","HSAM_IBIO"]},
+      { id: "ING9_IBIO", n: "Inglés 9", c: 4, a: "Idiomas", reqExamen: ["ING8_IBIO"] },
+      { id: "PE9_IBIO", n: "Programas Especiales 9", c: 2, a: "Otros", reqExamen: ["PE8_IBIO"] }   
+    ]},
+    { sem: 10, materias: [
+      { id: "TELE_IBIO", n: "Telesalud y Telemedicina", c: 8, a: "Telematica", reqCurso: ["GSAL_IBIO"]  },
+      { id: "UCE3_IBIO", n: "UC Electiva 3", c: 4, a: "Optativa"},
+      { id: "UCE4_IBIO", n: "UC Electiva 4", c: 4, a: "Optativa"},
+      { id: "PFTI", n: "Proyecto Final Ingeniero", c: 8, a: "Competencias", anualId: "PFTI", reqExamen: ["AAGA_IBIO","MEC_IBIO","QGI_IBIO","TIT1_IBIO", "SS_IBIO","NCEA_IBIO","EMAG_IBIO","QOB_IBIO","TIT2_IBIO","AFH_IBIO", "RADI_IBIO","EANA_IBIO","ETEC_IBIO", "PRG_IBIO","EFIS_IBIO","EDIG_IBIO","MMM_IBIO","IMED_IBIO","PPC_A1","SERA_IBIO","NEMA_IBIO","TMEM_IBIO","MAV1_IBIO","PPC_A2",    "ILC_IBIO","IMED2_IBIO","IMC_IBIO","MAV2_IBIO","FAV_IBIO","PFT_IBIO","FIP_IBIO","RNI_IBIO", "PDA_IBIO","LEGS_IBIO","ECOS_IBIO","BEST_IBIO","SSIS_IBIO","BMBM_IBIO","MINV_IBIO","HSAM_IBIO","TELE_IBIO","UCE1_IBIO","UCE2_IBIO","UCE3_IBIO","UCE4_IBIO"]  },
+      { id: "ING10_IBIO", n: "Inglés 10", c: 4, a: "Idiomas", reqExamen: ["ING9_IBIO"] },
+      { id: "PE10_IBIO", n: "Programas Especiales 10", c: 2, a: "Otros", reqExamen: ["PE9_IBIO"] }
+    ]}
+    ]
 };
 
 export const configuracionSCP: Record<string, SCPConfig> = {
