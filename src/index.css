@@ -238,7 +238,7 @@ header::before {
 
 .logo-imec {
     right: 2rem;
-    height: 100px;
+    height: 120px;
 }
 
 @media (max-width: 768px) {
@@ -247,10 +247,10 @@ header::before {
     }
     .logo-container {
         top: 0.75rem;
-        height: 70px;
+        height: 90px;
     }
     .logo-utec { left: 0.75rem; }
-    .logo-imec { right: 0.9rem; height: 70px; }
+    .logo-imec { right: 0.9rem; height: 90px; }
 }
 
 .controls {
