@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useMemo, useCallback, useRef } from 'react';
 import confetti from 'canvas-confetti';
+import { motion, AnimatePresence } from 'motion/react';
+
 import { Moon, Sun, Calculator, Search, RotateCcw, Share2, FileText, Printer, Link, Check, MessageSquare, Send, LogIn, LogOut, CheckCircle2, Trash2, X, StickyNote, Edit2, Save, ChevronLeft, ChevronRight } from 'lucide-react';
 import { jsPDF } from 'jspdf';
 import autoTable from 'jspdf-autotable';
@@ -22,6 +24,10 @@ export default function App() {
   const [isDarkMode, setIsDarkMode] = useState(() => localStorage.getItem('theme') === 'dark');
   const [materiaEnfocada, setMateriaEnfocada] = useState<Materia | null>(null);
   const [showWelcome, setShowWelcome] = useState(() => localStorage.getItem('bienvenida_vista') !== 'true');
+    const [welcomeStep, setWelcomeStep] = useState(1);
+  const [mockMateriaEstado, setMockMateriaEstado] = useState<number>(0);
+  const [mockFocusId, setMockFocusId] = useState<string | null>(null);
+  
   const [showCalculator, setShowCalculator] = useState(false);
   const [showDisponibles, setShowDisponibles] = useState(false);
   const [showCommunityBoard, setShowCommunityBoard] = useState(false);
@@ -489,90 +495,395 @@ export default function App() {
 
   return (
     <div className="app-container">
-      {/* Welcome Modal */}
-      {showWelcome && (
-        <div className="modal-fondo">
-          <div className="modal-contenido">
-            <h2 className="text-2xl font-bold mb-4 text-[var(--primary)]">SISTEMA_INICIALIZADO 🛠️</h2>
-            <p className="mb-4 text-sm font-mono opacity-80">Cargando base de datos curricular Plan 2023...</p>
-            <ul className="space-y-3 mb-6 text-sm">
-              <li><strong>[!] PROTOCOLO_ENFOQUE:</strong> Hover para detectar dependencias (pre-requisitos y post-requisitos).</li>
-              <li><strong>[!] MÓDULO_CÁLCULO:</strong> Herramienta de predicción de exoneración integrada.</li>
-              <li><strong>[!] REGISTRO_PROGRESO:</strong> 1 click [CURSADA] // 2 clicks [APROBADA] // 3 clicks [RESET].</li>
-              <li><strong>[!] REPOSITORIO_TIPS:</strong> Dejale un mensaje a la comunidad IMEC.</li>
-            </ul>
-            <div className="p-4 bg-blue-900/20 border-l-4 border-blue-400 rounded text-[0.7rem] mb-6 font-mono">
-              <p className="font-bold mb-1 uppercase tracking-widest text-[#00BFFF]">ADVERTENCIA_DE_SEGURIDAD:</p>
-              <p className="mb-2">DOCUMENTACIÓN <strong>NO OFICIAL</strong>. REFERENCIA ACADÉMICA ÚNICAMENTE. VERIFICAR SIEMPRE POR MEDIOS OFICIALES.</p>
-              <p className="opacity-70">Desarrollado por una estudiante para estudiantes.</p>
-              <p className="opacity-70">Contacto: <a href="mailto:sofia.modernell@estudiantes.utec.edu.uy" className="underline">sofia.modernell@estudiantes.utec.edu.uy</a></p>
-            </div>
-            <button 
-              className="btn-theme w-full py-3"
-              onClick={() => { setShowWelcome(false); localStorage.setItem('bienvenida_vista', 'true'); }}
+      <AnimatePresence>
+        {showWelcome && (
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="modal-fondo select-none"
+          >
+            <motion.div 
+              initial={{ scale: 0.9, y: 20 }}
+              animate={{ scale: 1, y: 0 }}
+              className="modal-contenido max-w-2xl"
             >
-              EJECUTAR [ACCESO_PERMITIDO]
-            </button>
-          </div>
-        </div>
-      )}
-
-      {/* Calculator Modal */}
-      {showCalculator && <CalculatorModal onClose={() => setShowCalculator(false)} />}
-
-      {/* Disponibles Modal */}
-      {showDisponibles && (
-        <div className="modal-fondo" onClick={() => setShowDisponibles(false)}>
-          <div className="modal-contenido" onClick={e => e.stopPropagation()}>
-            <h2>
-              <Search size={22} />
-              DIAGNÓSTICO_DE_DISPONIBILIDAD
-            </h2>
-            <p className="mb-6 text-sm opacity-60 font-mono">// MATERIAS_DESBLOQUEADAS_PARA_CURSADO_INMEDIATO</p>
-            {materiasDisponibles.length === 0 ? (
-              <div className="p-8 border border-dashed border-white/20 text-center opacity-40">
-                NO SE DETECTARON NUEVAS MATERIAS DISPONIBLES.
+              {/* Header with Step Tracker */}
+              <div className="flex justify-between items-center mb-6 border-b border-white/20 pb-4 font-mono">
+                <span className="text-xs text-[var(--secondary)] font-bold tracking-widest">// ASISTENTE_INDUCCIÓN: PASO_0{welcomeStep}_DE_05</span>
+                <button 
+                  className="text-[0.65rem] opacity-60 hover:opacity-100 hover:text-red-400 bg-white/5 border border-white/10 px-2 py-1 rounded transition-colors"
+                  onClick={() => { setShowWelcome(false); localStorage.setItem('bienvenida_vista', 'true'); }}
+                >
+                  SALTAR_INTRO [X]
+                </button>
               </div>
-            ) : (
-              <ul className="space-y-3 max-h-60 overflow-y-auto pr-4">
-                {materiasDisponibles.map(m => (
-                  <li key={m.id} className="p-3 border border-white/10 bg-white/5 flex justify-between items-center group hover:border-[var(--secondary)] transition-colors">
-                    <div className="flex flex-col">
-                      <span className="text-[var(--secondary)] font-bold text-xs">[{m.id}]</span>
-                      <span className="text-sm font-bold uppercase">{m.n}</span>
-                    </div>
-                    <span className="text-[0.6rem] opacity-40 font-mono">{m.c}_CRED</span>
-                  </li>
-                ))}
-              </ul>
-            )}
-            <button className="btn-theme w-full mt-8" onClick={() => setShowDisponibles(false)}>CERRAR_DIAGNÓSTICO</button>
-          </div>
-        </div>
-      )}
 
-      {showCommunityBoard && (
-        <div className="modal-fondo" onClick={() => setShowCommunityBoard(false)}>
-          <div className="modal-contenido max-w-2xl h-[80vh]" onClick={e => e.stopPropagation()}>
-            <div className="flex justify-between items-center mb-4">
-              <h2 className="text-xl font-black">REPOSITORIO_DE_CONSEJOS</h2>
-              <button 
-                className="p-2 hover:bg-white/10 rounded transition-colors"
-                onClick={() => setShowCommunityBoard(false)}
-              >
-                <X size={24} />
-              </button>
-            </div>
-            <CommunityBoard carreraActual={carreraActual} />
-            <button 
-              className="btn-theme w-full mt-4 py-4" 
-              onClick={() => setShowCommunityBoard(false)}
+              {/* Step content */}
+              {welcomeStep === 1 && (
+                <div className="space-y-6">
+                  <h2 className="text-xl font-bold text-[var(--primary)] m-0 border-0 p-0 flex items-center gap-2">
+                    BIENVENIDO/A AL SISTEMA IMEC 🎓
+                  </h2>
+                  <p className="text-sm leading-relaxed mb-4">
+                    Este entorno virtual interactivo ha sido desarrollado para asistirte en la visualización de tu trayectoria en <strong>Ingeniería Mecatrónica</strong> (u otras carreras próximamente!) en la UTEC.
+                  </p>
+                  <p className="text-xs text-[var(--secondary)] font-mono uppercase tracking-wider">
+                    // ESPECIFICACIONES_DE_COMPATIBILIDAD:
+                  </p>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs bg-black/20 p-4 border border-white/5 rounded">
+                    <div>
+                      <strong className="text-yellow-400 font-bold">[!]</strong> Guardado Local Automático.
+                    </div>
+                    <div>
+                      <strong className="text-yellow-400 font-bold">[!]</strong> Modo Claro y Oscuro.
+                    </div>
+                    <div>
+                      <strong className="text-yellow-400 font-bold">[!]</strong> Generación de Reportes en PDF.
+                    </div>
+                    <div>
+                      <strong className="text-yellow-400 font-bold">[!]</strong> Sincronización en la Nube.
+                    </div>
+                  </div>
+                  <p className="text-xs leading-relaxed opacity-70">
+                    Acompañanos en esta breve guía de 4 pasos adicionales para dominar los protocolos, requerimientos y análisis predictivo integrados en la malla.
+                  </p>
+                </div>
+              )}
+
+              {welcomeStep === 2 && (
+                <div className="space-y-6">
+                  <h2 className="text-xl font-bold text-[var(--primary)] m-0 border-0 p-0">
+                    02_PROTOCOLO_CLICS (ESTADOS)
+                  </h2>
+                  <p className="text-sm leading-relaxed">
+                    Las asignaturas de la malla cambian su estado académico secuencialmente al hacerles clic. <strong>Hacé clic en la tarjeta piloto de abajo</strong> para experimentar la transición real del estado:
+                  </p>
+
+                  {/* Simulated Card Sandbox */}
+                  <div className="py-6 flex flex-col items-center justify-center bg-black/25 border border-white/5 rounded relative">
+                    <span className="text-[0.5rem] absolute top-2 left-3 opacity-30 font-mono tracking-widest font-bold">AULA_SIMULADOR_INTERACTIVO</span>
+                    
+                    <div 
+                      className={`materia cursor-pointer select-none transition-all ${
+                        mockMateriaEstado === 1 ? 'cursada scale-102 shadow-[0_0_12px_rgba(255,215,0,0.15)]' : ''
+                      } ${
+                        mockMateriaEstado === 2 ? 'aprobada scale-102 shadow-[0_0_12px_rgba(0,255,150,0.15)]' : ''
+                      }`}
+                      onClick={() => setMockMateriaEstado(prev => (prev + 1) % 3)}
+                      style={{ transform: 'scale(1.05)' }}
+                    >
+                      <div className="flex justify-between items-start">
+                        <span className="area-tag text-[0.55rem] font-bold">[PILOTO]</span>
+                        {mockMateriaEstado === 1 && (
+                          <span className="text-[0.45rem] font-bold uppercase text-yellow-500 animate-pulse tracking-tight">STATUS: IN_PROGRESS</span>
+                        )}
+                        {mockMateriaEstado === 2 && (
+                          <span className="text-[0.45rem] font-bold uppercase text-green-400 animate-pulse tracking-tight">STATUS: OK_PASSED</span>
+                        )}
+                      </div>
+                      <span className="materia-name block font-bold text-center my-4 tracking-wide text-sm">FÍSICA</span>
+                      <div className="materia-info">
+                        <span>5 CRÉDITOS</span>
+                        {mockMateriaEstado === 2 && (
+                          <span className="text-[0.45rem] text-green-400 font-bold tracking-tighter">[APROBADO]</span>
+                        )}
+                      </div>
+                    </div>
+
+                    {/* Console Log Simulator */}
+                    <div className="w-11/12 mt-6 bg-black/60 border border-white/10 rounded p-3 font-mono text-[0.65rem] text-green-400 space-y-1">
+                      <p className="text-white/40 border-b border-white/10 pb-1 uppercase tracking-widest">// REGISTRO_DEL_KERNEL_ACADÉMICO_OUT_V2.1</p>
+                      {mockMateriaEstado === 0 && (
+                        <>
+                          <p className="text-cyan-400">{`> ESTADO_ACTUAL: [0] PENDIENTE`}</p>
+                          <p>{`> La materia no ha sido cursada. Está habilitada esperando interacción.`}</p>
+                        </>
+                      )}
+                      {mockMateriaEstado === 1 && (
+                        <>
+                          <p className="text-yellow-400">{`> ESTADO_ACTUAL: [1] CURSADA`}</p>
+                          <p>{`> El estudiante asistió al curso pero aún no aprobó el examen final.`}</p>
+                        </>
+                      )}
+                      {mockMateriaEstado === 2 && (
+                        <>
+                          <p className="text-emerald-400">{`> ESTADO_ACTUAL: [2] APROBADA ✓`}</p>
+                          <p>{`> La materia está aprobada. ¡Sumás +5 créditos al contador total!`}</p>
+                        </>
+                      )}
+                      <p className="text-white/20 animate-pulse">{`> [!] Hacé clic en la tarjeta de arriba para cambiar de estado...`}</p>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {welcomeStep === 3 && (
+                <div className="space-y-6">
+                  <h2 className="text-xl font-bold text-[var(--primary)] m-0 border-0 p-0">
+                    03_PROTOCOLO_ENFOQUE (REQUERIMIENTOS)
+                  </h2>
+                  <p className="text-sm leading-relaxed">
+                    Las asignaturas pueden tener requisitos o co-requisitos. Al <strong>pasar el cursor (hover)</strong> por encima de una materia, el sistema colorea automáticamente los recorridos de avance para evitar confusiones de inscripción:
+                  </p>
+
+                  <div className="p-4 bg-black/20 border border-white/5 rounded space-y-4">
+                    <p className="text-[0.6rem] font-mono opacity-50 uppercase tracking-widest text-center">// SIMULACIÓN DE DETECCIÓN EN CADENA (HOVER/FOCALIZACIÓN)</p>
+                    
+                    <div className="flex flex-col sm:flex-row gap-4 justify-around items-center pt-2 pb-2">
+                      {/* Course A (Prerequisito) */}
+                      <div 
+                        className={`p-3 border rounded text-xs text-center font-mono w-40 transition-all ${
+                          mockFocusId === 'mat2' 
+                            ? 'border-orange-500/80 bg-orange-500/10 text-orange-400 scale-95 opacity-90 shadow-[0_0_10px_rgba(255,87,34,0.1)] font-bold' 
+                            : 'border-white/10 bg-white/5 opacity-70'
+                        }`}
+                      >
+                        <span className="text-[0.5rem] block opacity-40">// PRERREQUISITO</span>
+                        <strong className="block font-bold">MATEMÁTICA I</strong>
+                        <span className="text-[0.5rem] text-orange-400/80 font-bold block mt-1 tracking-widest">REQUISITO_OBLIGATORIO</span>
+                      </div>
+
+                      <div className="text-white/30 font-bold text-center select-none rotate-90 sm:rotate-0">➔</div>
+
+                      {/* Course B (Focused Course) */}
+                      <div 
+                        className={`p-3 border rounded text-xs text-center font-mono w-44 transition-all cursor-crosshair ${
+                          mockFocusId === 'mat2' 
+                            ? 'border-[var(--primary)] bg-white/10 scale-105 shadow-[0_0_15px_rgba(255,255,255,0.15)] font-bold' 
+                            : 'border-white/20 bg-white/5'
+                        }`}
+                        onMouseEnter={() => setMockFocusId('mat2')}
+                        onMouseLeave={() => setMockFocusId(null)}
+                      >
+                        <span className="text-[0.5rem] block text-[var(--secondary)] font-bold">// HOVER_FOCALIZADO</span>
+                        <strong className="block font-bold animate-pulse">MATEMÁTICA II</strong>
+                        <span className="text-[0.45rem] opacity-70 block mt-1 text-cyan-300">== COLOCÁ EL MOUSE ACÁ ==</span>
+                      </div>
+
+                      <div className="text-white/30 font-bold text-center select-none rotate-90 sm:rotate-0">➔</div>
+
+                      {/* Course C (Postrequisite) */}
+                      <div 
+                        className={`p-3 border rounded text-xs text-center font-mono w-40 transition-all ${
+                          mockFocusId === 'mat2' 
+                            ? 'border-[var(--secondary)]/80 bg-[var(--secondary)]/10 text-[var(--secondary)] scale-95 opacity-90 shadow-[0_0_10px_rgba(0,191,255,0.1)] font-bold' 
+                            : 'border-white/10 bg-white/5 opacity-70'
+                        }`}
+                      >
+                        <span className="text-[0.5rem] block opacity-40">// POSTREQUISITO</span>
+                        <strong className="block font-bold">MATEMÁTICA III</strong>
+                        <span className="text-[0.5rem] text-[var(--secondary)] font-bold block mt-1 tracking-widest">DESBLOQUEO_POSTERIOR</span>
+                      </div>
+                    </div>
+
+                    <div className="bg-black/40 p-3 rounded text-[0.65rem] font-mono leading-relaxed space-y-1">
+                      <div className="flex gap-2">
+                        <span className="text-orange-500 font-bold">[!] COLOR_NARANJA:</span>
+                        <span>Asignatura previa. Debe estar aprobada o cursada para poder rendir/cursar Matemática II.</span>
+                      </div>
+                      <div className="flex gap-2">
+                        <span className="text-[var(--secondary)] font-bold">[!] COLOR_CELESTE:</span>
+                        <span>Asignatura consecuente. Se requiere Matemática II aprobada para poder habilitarla.</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {welcomeStep === 4 && (
+                <div className="space-y-6">
+                  <h2 className="text-xl font-bold text-[var(--primary)] m-0 border-0 p-0 flex items-center gap-2">
+                    04_HERRAMIENTAS_INTEGRADAS ⚙️
+                  </h2>
+                  <p className="text-sm leading-relaxed">
+                    Además de la vista diagramática principal, contás con tres utilidades integradas de alto nivel accesibles en la barra superior:
+                  </p>
+
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                    <div className="p-4 bg-black/20 border border-white/10 rounded font-mono text-center space-y-2">
+                      <div className="flex justify-center text-[var(--secondary)]"><Calculator size={20} /></div>
+                      <span className="text-[0.65rem] font-bold block text-[var(--primary)]">SISTEMA CÁLCULO</span>
+                      <p className="text-[0.55rem] opacity-65 leading-normal">
+                        Calculadora de notas según SCP. Calculá exactamente qué notas de examen o laboratorios necesitás para exonerar tus cursos.
+                      </p>
+                    </div>
+
+                    <div className="p-4 bg-black/20 border border-white/10 rounded font-mono text-center space-y-2">
+                      <div className="flex justify-center text-green-400"><Search size={20} /></div>
+                      <span className="text-[0.65rem] font-bold block text-[var(--primary)]">DIAGNÓSTICO RÁPIDO</span>
+                      <p className="text-[0.55rem] opacity-65 leading-normal">
+                        Algoritmo que filtra tu avance curricular en tiempo real y te entrega una checklist con todas las materias habilitadas para cursar inmediatamente.
+                      </p>
+                    </div>
+
+                    <div className="p-4 bg-black/20 border border-white/10 rounded font-mono text-center space-y-2">
+                      <div className="flex justify-center text-yellow-500"><MessageSquare size={20} /></div>
+                      <span className="text-[0.65rem] font-bold block text-[var(--primary)]">COMUNIDAD TIPS</span>
+                      <p className="text-[0.55rem] opacity-65 leading-normal">
+                        Repositorio colaborativo de consejos. Estudiantes comparten sugerencias de cursado, profesores, libros o tips de exoneración.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {welcomeStep === 5 && (
+                <div className="space-y-6">
+                  <h2 className="text-xl font-bold text-[var(--primary)] m-0 border-0 p-0 text-red-400">
+                    SISTEMA_COMPLETADO_Y_LISTO_PARA_USAR 
+                  </h2>
+                  
+                  <div className="p-4 bg-amber-500/10 border-l-4 border-amber-500 rounded text-xs gap-3 space-y-2 font-mono text-amber-200">
+                    <p className="font-bold uppercase tracking-widest text-amber-400">ADVERTENCIA_MÉTRICA_DE_SEGURIDAD:</p>
+                    <p className="leading-normal">
+                      ESTE SISTEMA ES DE CARÁCTER NO OFICIAL Y ESTÁ DISEÑADO ÚNICAMENTE PARA REFERENCIA VISUAL Y DE PLANIFICACIÓN REFERENCIAL.
+                    </p>
+                    <p className="leading-normal">
+                      Cualquier divergencia siempre debe ser resuelta remitiéndose al Plan de Estudio o medios oficiales correspondiente.
+                    </p>
+                  </div>
+
+                  <p className="text-[0.7rem] text-white/50 leading-relaxed font-mono">
+                    Haciendo clic en el botón de abajo guardarás tu registro de bienvenida y entrarás de manera permanente a la malla curricular interactiva. Podés reabrir este asistente interactivo cuando desees desde el botón <strong>GUÍA_INTERACTIVA</strong> en la barra de controles.
+                  </p>
+
+                  <button 
+                    className="btn-theme w-full py-4 text-xs font-black text-center border-green-500/80 hover:bg-green-500/20 text-green-400 animate-pulse bg-green-500/5 transition-all"
+                    onClick={() => { setShowWelcome(false); localStorage.setItem('bienvenida_vista', 'true'); }}
+                  >
+                    EJECUTAR_SISTEMA [ACCESO_PERMITIDO] ➔
+                  </button>
+                </div>
+              )}
+
+              {/* Navigation Bar */}
+              <div className="flex justify-between items-center mt-8 border-t border-white/20 pt-4 font-mono">
+                <button 
+                  className={`px-4 py-2 text-xs border border-white/10 bg-white/5 hover:bg-white/10 transition-colors ${
+                    welcomeStep === 1 ? 'opacity-30 cursor-not-allowed' : ''
+                  }`}
+                  disabled={welcomeStep === 1}
+                  onClick={() => setWelcomeStep(prev => prev - 1)}
+                >
+                  ◀ ANTERIOR
+                </button>
+
+                {/* Steps tracker dots */}
+                <div className="flex gap-2">
+                  {[1, 2, 3, 4, 5].map((step) => (
+                    <button
+                      key={step}
+                      onClick={() => setWelcomeStep(step)}
+                      className={`w-3.5 h-3.5 rounded-full border transition-all ${
+                        welcomeStep === step
+                          ? 'bg-[var(--secondary)] border-[var(--secondary)] scale-110'
+                          : 'bg-white/10 hover:bg-white/30 border-white/20'
+                      }`}
+                      title={`Página ${step}`}
+                    />
+                  ))}
+                </div>
+
+                <button 
+                  className={`px-4 py-2 text-xs border hover:bg-white/10 transition-all ${
+                    welcomeStep === 5 
+                      ? 'border-green-500/40 text-green-400 hover:bg-green-500/10' 
+                      : 'border-white/10 bg-white/5 hover:text-[var(--secondary)] hover:border-[var(--secondary)]/50'
+                  }`}
+                  onClick={() => {
+                    if (welcomeStep === 5) {
+                      setShowWelcome(false); 
+                      localStorage.setItem('bienvenida_vista', 'true');
+                    } else {
+                      setWelcomeStep(prev => prev + 1);
+                    }
+                  }}
+                >
+                  {welcomeStep === 5 ? 'EJECUTAR ✓' : 'SIGUIENTE ▶'}
+                </button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      <AnimatePresence>
+        {showCalculator && (
+          <CalculatorModal onClose={() => setShowCalculator(false)} />
+        )}
+      </AnimatePresence>
+
+      <AnimatePresence>
+        {showDisponibles && (
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="modal-fondo" 
+            onClick={() => setShowDisponibles(false)}
+          >
+            <motion.div 
+              initial={{ scale: 0.9, y: 20 }}
+              animate={{ scale: 1, y: 0 }}
+              className="modal-contenido" 
+              onClick={e => e.stopPropagation()}
             >
-              CERRAR_REPOSITORIO
-            </button>
+              <h2>
+                <Search size={22} />
+                DIAGNÓSTICO_DE_DISPONIBILIDAD
+              </h2>
+              <p className="mb-6 text-sm opacity-60 font-mono">// MATERIAS_DESBLOQUEADAS_PARA_CURSADO_INMEDIATO</p>
+              <div className="max-h-[50vh] overflow-y-auto custom-scrollbar pr-4">
+                {materiasDisponibles.length === 0 ? (
+                  <div className="p-8 border border-dashed border-white/20 text-center opacity-40">
+                    NO SE DETECTARON NUEVAS MATERIAS DISPONIBLES.
+                  </div>
+                ) : (
+                  <ul className="space-y-3">
+                    {materiasDisponibles.map(m => (
+                      <li key={m.id} className="p-4 border border-white/10 bg-white/5 flex justify-between items-center group hover:border-[var(--secondary)] transition-colors">
+                        <div className="flex flex-col">
+                          <span className="text-[var(--secondary)] font-bold text-xs">[{m.id}]</span>
+                          <span className="text-sm font-bold uppercase">{m.n}</span>
+                        </div>
+                        <span className="text-[0.6rem] opacity-40 font-mono">{m.c}_CRED</span>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </div>
+              <button className="btn-theme w-full mt-8 py-3" onClick={() => setShowDisponibles(false)}>CERRAR_DIAGNÓSTICO</button>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      <AnimatePresence>
+        {showCommunityBoard && (
+          <div className="modal-fondo" onClick={() => setShowCommunityBoard(false)}>
+            <motion.div 
+              initial={{ x: '100%' }}
+              animate={{ x: 0 }}
+              exit={{ x: '100%' }}
+              transition={{ type: 'spring', damping: 25, stiffness: 200 }}
+              className="modal-contenido max-w-2xl h-[90vh] absolute right-0 m-4 rounded-lg" 
+              onClick={e => e.stopPropagation()}
+            >
+              <div className="flex justify-between items-center mb-6">
+                <h2 className="text-xl font-black m-0 border-0 p-0">REPOSITORIO_DE_CONSEJOS</h2>
+                <button 
+                  className="p-2 hover:bg-white/10 rounded transition-colors"
+                  onClick={() => setShowCommunityBoard(false)}
+                >
+                  <X size={24} />
+                </button>
+              </div>
+              <CommunityBoard carreraActual={carreraActual} />
+            </motion.div>
           </div>
-        </div>
-      )}
+        )}
+      </AnimatePresence>
 
       <main>
         <div className="main-content-scroll custom-scrollbar">
@@ -605,6 +916,10 @@ export default function App() {
                 REPOSITORIO_COMUNIDAD
               </button>
 
+              <button className="flex items-center gap-2 btn-theme border-[var(--secondary)]/30 bg-[var(--secondary)]/5 hover:bg-[var(--secondary)]/15" onClick={() => { setWelcomeStep(1); setShowWelcome(true); }} title="Abrir asistente de inducción interactivo">
+                <span className="text-[var(--secondary)] font-bold">GUÍA_INTERACTIVA</span>
+              </button>
+
               <button className="flex items-center gap-2 btn-theme" onClick={handleReset}>
                 <RotateCcw size={14} />
                 RESET_SISTEMA
@@ -630,27 +945,38 @@ export default function App() {
                   COMPARTIR / EXPORTAR
                 </button>
                 
-                {showShareMenu && (
-                  <div className="share-menu-dropdown">
-                    <button className="share-menu-item" onClick={handleGenerateLink}>
-                      {copied ? <Check size={14} className="text-green-400" /> : <Link size={14} />}
-                      <span>{copied ? 'ENLACE_COPIADO' : 'COPIAR_ENLACE_PROGRESO'}</span>
-                    </button>
-                    <button className="share-menu-item" onClick={() => { setShowShareMenu(false); window.print(); }}>
-                      <Printer size={14} />
-                      <span>IMPRIMIR / GUARDAR_PDF</span>
-                    </button>
-                    <button className="share-menu-item" onClick={handleExportPDF}>
-                      <FileText size={14} />
-                      <span>DESCARGAR_PDF_DIRECTO</span>
-                    </button>
-                  </div>
-                )}
+                <AnimatePresence>
+                  {showShareMenu && (
+                    <motion.div 
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: 10 }}
+                      className="share-menu-dropdown"
+                    >
+                      <button className="share-menu-item" onClick={handleGenerateLink}>
+                        {copied ? <Check size={14} className="text-green-400" /> : <Link size={14} />}
+                        <span>{copied ? 'ENLACE_COPIADO' : 'COPIAR_ENLACE_PROGRESO'}</span>
+                      </button>
+                      <button className="share-menu-item" onClick={() => { setShowShareMenu(false); window.print(); }}>
+                        <Printer size={14} />
+                        <span>IMPRIMIR_VISTA</span>
+                      </button>
+                      <button className="share-menu-item" onClick={handleExportPDF}>
+                        <FileText size={14} />
+                        <span>DESCARGAR_PDF_ACADÉMICO</span>
+                      </button>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
               </div>
 
               <div className="flex items-center gap-2">
                 <span className="text-[0.6rem] font-bold opacity-50 uppercase tracking-widest">PROYECTO:</span>
-                <select value={carreraActual} onChange={(e) => setCarreraActual(e.target.value)}>
+                <select 
+                  className="bg-black/40 border border-white/10 rounded px-2 py-1 text-[0.7rem] font-mono outline-none focus:border-[var(--primary)]"
+                  value={carreraActual} 
+                  onChange={(e) => setCarreraActual(e.target.value)}
+                >
                   {Object.keys(nombresCarreras).map(key => (
                     <option key={key} value={key}>{nombresCarreras[key].titulo}</option>
                   ))}
@@ -659,9 +985,19 @@ export default function App() {
             </div>
           </div>
 
-          <div ref={mallaRef} className={`malla-wrapper ${materiaEnfocada ? 'dimming-active' : ''}`}>
+          <motion.div 
+            ref={mallaRef} 
+            layout
+            className={`malla-wrapper ${materiaEnfocada ? 'dimming-active' : ''}`}
+          >
             {plan.map((semestre, index) => (
-              <div key={semestre.sem} className="semestre">
+              <motion.div 
+                key={`${carreraActual}-${semestre.sem}`} 
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: index * 0.05 }}
+                className="semestre"
+              >
                 <div className="semestre-header">
                   <div className="flex justify-between items-start w-full mb-2">
                     <div className="flex items-center gap-3">
@@ -700,45 +1036,53 @@ export default function App() {
                   </div>
 
                   {notasSemestres[semestre.sem] && semestreEditandoNota !== semestre.sem && (
-                    <div 
-                      className="mb-3 p-2 bg-yellow-500/5 border-l-2 border-yellow-500/50 text-[0.65rem] italic text-yellow-200/60 rounded-r cursor-pointer hover:bg-yellow-500/10 transition-colors"
+                    <motion.div 
+                      layout
+                      className="mb-3 p-3 bg-yellow-500/5 border-l-2 border-yellow-500/50 text-[0.65rem] italic text-yellow-200/80 rounded-r cursor-pointer hover:bg-yellow-500/10 transition-colors"
                       onClick={() => {
                         setSemestreEditandoNota(semestre.sem);
                         setTempNota(notasSemestres[semestre.sem] || "");
                       }}
                     >
-                      <p className="line-clamp-3">{notasSemestres[semestre.sem]}</p>
-                    </div>
+                      <p className="line-clamp-4 leading-relaxed">{notasSemestres[semestre.sem]}</p>
+                    </motion.div>
                   )}
 
-                  {semestreEditandoNota === semestre.sem && (
-                    <div className="mb-3 space-y-2">
-                      <textarea
-                        className="w-full bg-black/40 border border-white/10 rounded p-2 text-[0.7rem] font-mono focus:outline-none focus:border-[var(--primary)] min-h-[80px]"
-                        value={tempNota}
-                        autoFocus
-                        onChange={(e) => setTempNota(e.target.value)}
-                        placeholder="Escribe una nota para este semestre..."
-                      />
-                      <div className="flex gap-2 justify-end">
-                        <button 
-                          className="flex items-center gap-1 text-[0.6rem] px-2 py-1 bg-green-500/10 hover:bg-green-500/20 text-green-400 rounded transition-colors border border-green-500/20"
-                          onClick={() => {
-                            setNotasSemestres(prev => ({ ...prev, [semestre.sem]: tempNota }));
-                            setSemestreEditandoNota(null);
-                          }}
-                        >
-                          <Save size={10} /> GUARDAR
-                        </button>
-                        <button 
-                          className="flex items-center gap-1 text-[0.6rem] px-2 py-1 bg-white/5 hover:bg-white/10 rounded transition-colors border border-white/10"
-                          onClick={() => setSemestreEditandoNota(null)}
-                        >
-                          <X size={10} /> CANCELAR
-                        </button>
-                      </div>
-                    </div>
-                  )}
+                  <AnimatePresence>
+                    {semestreEditandoNota === semestre.sem && (
+                      <motion.div 
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: 'auto', opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        className="mb-3 space-y-2 overflow-hidden"
+                      >
+                        <textarea
+                          className="w-full bg-black/40 border border-white/10 rounded p-2 text-[0.7rem] font-mono focus:outline-none focus:border-[var(--primary)] min-h-[100px] text-white"
+                          value={tempNota}
+                          autoFocus
+                          onChange={(e) => setTempNota(e.target.value)}
+                          placeholder="ENTRADA_DE_DATOS_NOTAS..."
+                        />
+                        <div className="flex gap-2 justify-end">
+                          <button 
+                            className="flex items-center gap-1 text-[0.6rem] px-3 py-1.5 bg-green-500/10 hover:bg-green-500/20 text-green-400 rounded transition-colors border border-green-500/20"
+                            onClick={() => {
+                              setNotasSemestres(prev => ({ ...prev, [semestre.sem]: tempNota }));
+                              setSemestreEditandoNota(null);
+                            }}
+                          >
+                            <Save size={12} /> GUARDAR
+                          </button>
+                          <button 
+                            className="flex items-center gap-1 text-[0.6rem] px-3 py-1.5 bg-white/5 hover:bg-white/10 rounded transition-colors border border-white/10"
+                            onClick={() => setSemestreEditandoNota(null)}
+                          >
+                            <X size={12} /> CANCELAR
+                          </button>
+                        </div>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
 
                   <div className="semestre-summary">
                     <div className="summary-item">
@@ -757,21 +1101,21 @@ export default function App() {
                   className={`btn-semestre ${semestre.materias.every((m: Materia) => estadoMaterias.get(m.id) === 2) ? 'completado' : ''}`}
                   onClick={() => handleAprobarSemestre(semestre)}
                 >
-                  {semestre.materias.every((m: Materia) => estadoMaterias.get(m.id) === 2) ? "Desmarcar Semestre" : "Aprobar Semestre ✓"}
+                  {semestre.materias.every((m: Materia) => estadoMaterias.get(m.id) === 2) ? "DESMARCAR_SEMESTRE" : "APROBAR_SEMESTRE ✓"}
                 </button>
                 
                 <div className="space-y-4">
                   {semestre.materias.map((m: Materia) => {
                     const status = estadoMaterias.get(m.id) || 0;
                     const isBlocked = (() => {
-                      const failEx = m.reqExamen?.some((id: string) => estadoMaterias.get(id) !== 2);
-                      const failCur = m.reqCurso?.some((id: string) => (estadoMaterias.get(id) || 0) < 1);
+                      const failEx = m.reqExamen?.some((id: string) => !isRequisitoCumplido(id, 'examen'));
+                      const failCur = m.reqCurso?.some((id: string) => !isRequisitoCumplido(id, 'curso'));
                       return failEx || failCur;
                     })();
 
                     return (
                       <MateriaCard 
-                        key={m.id}
+                        key={`${semestre.sem}-${m.id}`}
                         materia={m}
                         estado={status}
                         isBlocked={isBlocked}
@@ -786,13 +1130,13 @@ export default function App() {
                     );
                   })}
                 </div>
-              </div>
+              </motion.div>
             ))}
-          </div>
+          </motion.div>
 
           <footer className="site-footer">
             <p className="mb-2"><strong>[!] DISCLAIMER:</strong> PROYECTO NO OFICIAL. DOCUMENTACIÓN TÉCNICA PARA REFERENCIA ESTUDIANTIL.</p>
-            <p>IDENTIFICACIÓN ESTUDIANTE ENCARGADA: <a href="mailto:sofia.modernell@estudiantes.utec.edu.uy" className="text-white hover:underline">sofia.modernell@estudiantes.utec.edu.uy</a></p>
+            <p>IDENTIFICACIÓN ESTUDIANTE: <a href="mailto:sofia.modernell@estudiantes.utec.edu.uy" className="text-white hover:underline">sofia.modernell@estudiantes.utec.edu.uy</a></p>
           </footer>
         </div>
       </main>
