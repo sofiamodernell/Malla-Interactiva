@@ -916,7 +916,7 @@ export default function App() {
                 REPOSITORIO_COMUNIDAD
               </button>
 
-              <button className="flex items-center gap-2 btn-theme" onClick={() => setShowWelcome(true)>
+              <button className="flex items-center gap-2 btn-theme" onClick={() => setShowWelcome(true)}>
                 <messageCircleQuestionMark size={14} />
                 GUÍA_INTERACTIVA
               </button>
