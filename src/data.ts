@@ -141,7 +141,7 @@ export const basesDeDatos: Record<string, Semestre[]> = {
     ]},
     { sem: 3, materias: [
       { id: "RADI_IBIO", n: "Óptica y Radiaciones", c: 10, a: "", reqCurso: ["AAGA_IBIO", "MEC_IBIO"] },
-      { id: "EANA_IBIO", n: "Electrónica Analógica", c: 10, a: "Electrónica", reqCurso: ["NCEA_IBIO", "EMAG_IBIO", "TIT_IBIO"] },
+      { id: "EANA_IBIO", n: "Electrónica Analógica", c: 10, a: "Electrónica", reqCurso: ["NCEA_IBIO", "EMAG_IBIO", "TIT1_IBIO", "TIT2_IBIO"] },
       { id: "ETEC_IBIO", n: "Electrotecnia", c: 9, a: "Electrónica", reqCurso: ["EMAG_IBIO"] },
       { id: "IHOS_IBIO", n: "Instalaciones Hospitalarias", c: 9, a: "General", reqCurso: [ "QGI_IBIO","EMAG_IBIO", "AFH_IBIO"] },
       { id: "PRG_IBIO", n: "Programación de Computadoras", c: 8, a: "Informática", reqCurso: ["AAGA_IBIO"] },
