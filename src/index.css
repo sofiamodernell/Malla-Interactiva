@@ -83,6 +83,17 @@
     background: #fffbeb;
 }
 
+
+[data-theme="light"] .materia.pendiente-anual {
+    border-color: #f59e0b;
+    color: #d97706;
+    background: #fffbeb;
+}
+
+[data-theme="light"] .materia.pendiente-anual::before {
+    content: 'STATUS: PENDING_PART';
+}
+
 [data-theme="light"] .area-tag {
     color: #0055ff;
 }
@@ -400,6 +411,7 @@ select option {
     border-color: var(--success);
     color: var(--success);
 }
+
 .materia.aprobada::before {
     content: 'STATUS: OK_PASSED';
     position: absolute;
@@ -408,7 +420,18 @@ select option {
     font-size: 0.5rem;
     font-weight: 800;
 }
-
+.materia.pendiente-anual {
+    border-color: #fbbf24;
+    color: #fbbf24;
+}
+.materia.pendiente-anual::before {
+    content: 'STATUS: PENDING_PART';
+    position: absolute;
+    top: 5px;
+    right: 10px;
+    font-size: 0.5rem;
+    font-weight: 800;
+}
 .materia.cursada {
     border-color: var(--cursada);
     color: var(--cursada);
