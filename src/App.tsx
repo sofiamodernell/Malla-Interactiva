@@ -211,6 +211,26 @@ export default function App() {
 
   const porcentaje = maxCreditos > 0 ? (totalCreditos / maxCreditos) * 100 : 0;
 
+  const isRequisitoCumplido = useCallback((targetId: string, type: 'curso' | 'examen') => {
+    // Check if it's a direct subject ID
+    const directState = estadoMaterias.get(targetId);
+    if (directState !== undefined) {
+      return type === 'examen' ? directState === 2 : directState >= 1;
+    }
+
+    // Check if it's an anualId
+    const subjectsInGroup = todasLasMaterias.filter(m => m.anualId === targetId);
+    if (subjectsInGroup.length > 0) {
+      if (type === 'examen') {
+        return subjectsInGroup.every(m => estadoMaterias.get(m.id) === 2);
+      } else {
+        return subjectsInGroup.every(m => (estadoMaterias.get(m.id) || 0) >= 1);
+      }
+    }
+
+    return false;
+  }, [estadoMaterias, todasLasMaterias]);
+  
   const checkPrerrequisitos = (m: Materia) => {
     const faltan: string[] = [];
     if (m.reqExamen) {
@@ -306,8 +326,8 @@ export default function App() {
       // Logic to check if any subject in the semester is blocked by prerequisites
       const materiaIdsEnSemestre = new Set(sem.materias.map(m => m.id));
       const blockedMaterias = sem.materias.filter(m => {
-        const failEx = m.reqExamen?.some(id => !materiaIdsEnSemestre.has(id) && estadoMaterias.get(id) !== 2);
-        const failCur = m.reqCurso?.some(id => !materiaIdsEnSemestre.has(id) && (estadoMaterias.get(id) || 0) < 1);
+        const failEx = m.reqExamen?.some(id => !materiaIdsEnSemestre.has(id) && !isRequisitoCumplido(id, 'examen'));
+        const failCur = m.reqCurso?.some(id => !materiaIdsEnSemestre.has(id) && !isRequisitoCumplido(id, 'curso'));
         return failEx || failCur;
       });
 
@@ -461,11 +481,11 @@ export default function App() {
   const materiasDisponibles = useMemo(() => {
     return todasLasMaterias.filter(mat => {
       if ((estadoMaterias.get(mat.id) || 0) > 0) return false;
-      const cumpleExamen = !mat.reqExamen || mat.reqExamen.every(id => estadoMaterias.get(id) === 2);
-      const cumpleCurso = !mat.reqCurso || mat.reqCurso.every(id => (estadoMaterias.get(id) || 0) >= 1);
+      const cumpleExamen = !mat.reqExamen || mat.reqExamen.every(id => isRequisitoCumplido(id, 'examen'));
+      const cumpleCurso = !mat.reqCurso || mat.reqCurso.every(id => isRequisitoCumplido(id, 'curso'));
       return cumpleExamen && cumpleCurso;
     });
-  }, [todasLasMaterias, estadoMaterias]);
+  }, [todasLasMaterias, estadoMaterias, isRequisitoCumplido]);
 
   return (
     <div className="app-container">
