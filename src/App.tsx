@@ -916,11 +916,11 @@ export default function App() {
                 REPOSITORIO_COMUNIDAD
               </button>
 
-              <button className="flex items-center gap-2 btn-theme" onClick={() => setShowWelcome(true)}>
-                <messageCircleQuestionMark size={14} />
+             <button className="flex items-center gap-2 btn-theme" onClick={() => { setWelcomeStep(1); setShowWelcome(true); }} >
+                <MessageCircleQuestionMark size={14} />
                 GUÍA_INTERACTIVA
               </button>
-
+            
               <button className="flex items-center gap-2 btn-theme" onClick={handleReset}>
                 <RotateCcw size={14} />
                 RESET_SISTEMA
