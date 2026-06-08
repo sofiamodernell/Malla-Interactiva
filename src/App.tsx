@@ -1166,7 +1166,7 @@ function Header({ onTitleClick, liveUsers, totalVisits, carreraKey }: { onTitleC
       )}
       
       <div className="header-content">
-        <p className="mb-4">ENGINEERING DIAGRAM // SPEC</p>
+        <p className="mb-4">ENGINEERING DIAGRAM // SOFIA.MODERNELL</p>
         <h1 
           className="text-white cursor-default select-none" 
           onClick={onTitleClick}
