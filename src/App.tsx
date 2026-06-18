@@ -2,14 +2,14 @@ import React, { useState, useEffect, useMemo, useCallback, useRef } from 'react'
 import confetti from 'canvas-confetti';
 import { motion, AnimatePresence } from 'motion/react';
 
-import { Moon, Sun, Calculator, Search, RotateCcw, Share2, FileText, Printer, Link, Check, MessageSquare,MessageCircleQuestionMark ,  Send, LogIn, LogOut, CheckCircle2, Trash2, X, StickyNote, Save, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Moon, Sun, Calculator, Search, RotateCcw, Share2, FileText, Link, Check, MessageSquare,MessageCircleQuestionMark ,  Send, LogIn, LogOut, CheckCircle2, Trash2, X, StickyNote, Save, ChevronLeft, ChevronRight } from 'lucide-react';
 import { jsPDF } from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import { collection, addDoc, query, orderBy, onSnapshot, serverTimestamp, updateDoc, doc, deleteDoc, where, increment, getDoc, setDoc } from 'firebase/firestore';
 import { signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signOut, User } from 'firebase/auth';
 import { db, handleFirestoreError, OperationType, auth } from './firebase';
 import { basesDeDatos, configuracionSCP, nombresCarreras } from './data';
-import { Materia, Semestre, MateriaEstado, StudentTip } from './types';
+import { Materia, Semestre, MateriaEstado } from './types';
 
 // Extend jsPDF with autoTable type
 interface jsPDFWithAutoTable extends jsPDF {
@@ -30,7 +30,6 @@ export default function App() {
   
   const [showCalculator, setShowCalculator] = useState(false);
   const [showDisponibles, setShowDisponibles] = useState(false);
-  const [showCommunityBoard, setShowCommunityBoard] = useState(false);
   const [showShareMenu, setShowShareMenu] = useState(false);
   const [copied, setCopied] = useState(false);
   const [user, setUser] = useState<User | null>(null);
@@ -859,32 +858,6 @@ export default function App() {
         )}
       </AnimatePresence>
 
-      <AnimatePresence>
-        {showCommunityBoard && (
-          <div className="modal-fondo" onClick={() => setShowCommunityBoard(false)}>
-            <motion.div 
-              initial={{ x: '100%' }}
-              animate={{ x: 0 }}
-              exit={{ x: '100%' }}
-              transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-              className="modal-contenido max-w-2xl h-[90vh] absolute right-0 m-4 rounded-lg" 
-              onClick={e => e.stopPropagation()}
-            >
-              <div className="flex justify-between items-center mb-6">
-                <h2 className="text-xl font-black m-0 border-0 p-0">REPOSITORIO_DE_CONSEJOS</h2>
-                <button 
-                  className="p-2 hover:bg-white/10 rounded transition-colors"
-                  onClick={() => setShowCommunityBoard(false)}
-                >
-                  <X size={24} />
-                </button>
-              </div>
-              <CommunityBoard carreraActual={carreraActual} />
-            </motion.div>
-          </div>
-        )}
-      </AnimatePresence>
-
       <main>
         <div className="main-content-scroll custom-scrollbar">
           <div className="sticky-horizontal">
@@ -909,11 +882,6 @@ export default function App() {
               <button className="flex items-center gap-2 btn-theme" onClick={() => setShowCalculator(true)}>
                 <Calculator size={14} />
                 MÓDULO_CALCULADORA
-              </button>
-
-              <button className="flex items-center gap-2 btn-theme" onClick={() => setShowCommunityBoard(true)}>
-                <MessageSquare size={14} />
-                REPOSITORIO_COMUNIDAD
               </button>
 
              <button className="flex items-center gap-2 btn-theme" onClick={() => { setWelcomeStep(1); setShowWelcome(true); }} >
@@ -957,10 +925,6 @@ export default function App() {
                       <button className="share-menu-item" onClick={handleGenerateLink}>
                         {copied ? <Check size={14} className="text-green-400" /> : <Link size={14} />}
                         <span>{copied ? 'ENLACE_COPIADO' : 'COPIAR_ENLACE_PROGRESO'}</span>
-                      </button>
-                      <button className="share-menu-item" onClick={() => { setShowShareMenu(false); window.print(); }}>
-                        <Printer size={14} />
-                        <span>IMPRIMIR_VISTA</span>
                       </button>
                       <button className="share-menu-item" onClick={handleExportPDF}>
                         <FileText size={14} />
@@ -1255,179 +1219,6 @@ function MateriaCard({
     </div>
   );
 }
-
-function CommunityBoard({ carreraActual }: { carreraActual: string }) {
-  const [tips, setTips] = useState<StudentTip[]>([]);
-  const [newTip, setNewTip] = useState("");
-  const [authorName, setAuthorName] = useState("");
-  const [isSending, setIsSending] = useState(false);
-  const [user, setUser] = useState<User | null>(null);
-
-  const isAdmin = user?.email === 'sofaaa163@gmail.com';
-
-  useEffect(() => {
-    return onAuthStateChanged(auth, (u) => setUser(u));
-  }, []);
-
-  useEffect(() => {
-    let q;
-    if (isAdmin) {
-      q = query(
-        collection(db, "tips"),
-        orderBy("createdAt", "desc")
-      );
-    } else {
-      q = query(
-        collection(db, "tips"),
-        where("approved", "==", true),
-        orderBy("createdAt", "desc")
-      );
-    }
-
-    const unsubscribe = onSnapshot(q, (snapshot) => {
-      const tipsData = snapshot.docs.map(doc => ({
-        id: doc.id,
-        ...doc.data()
-      })) as StudentTip[];
-      setTips(tipsData);
-    }, (error) => {
-      handleFirestoreError(error, OperationType.GET, "tips");
-    });
-
-    return () => unsubscribe();
-  }, [isAdmin]);
-
-  const handleAddTip = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!newTip.trim() || !authorName.trim() || isSending) return;
-
-    // Validate format name.lastname
-    const nameRegex = /^[a-z]+\.[a-z]+$/;
-    if (!nameRegex.test(authorName.toLowerCase())) {
-      alert("El nombre debe tener el formato: nombre.apellido (en minúsculas)");
-      return;
-    }
-
-    setIsSending(true);
-    try {
-      await addDoc(collection(db, "tips"), {
-        content: newTip,
-        author: authorName.toLowerCase(),
-        approved: false,
-        createdAt: serverTimestamp()
-      });
-      setNewTip("");
-      alert("Consejo enviado. Pendiente de aprobación por el autorizador.");
-    } catch (error) {
-      handleFirestoreError(error, OperationType.WRITE, "tips");
-      alert("Error al enviar consejo. Intentá de nuevo.");
-    } finally {
-      setIsSending(false);
-    }
-  };
-
-  const handleApprove = async (id: string) => {
-    try {
-      await updateDoc(doc(db, "tips", id), { approved: true });
-    } catch (error) {
-      console.error("Error approving tip:", error);
-    }
-  };
-
-  const handleDelete = async (id: string) => {
-    if (!confirm("¿Borrar este consejo?")) return;
-    try {
-      await deleteDoc(doc(db, "tips", id));
-    } catch (error) {
-      console.error("Error deleting tip:", error);
-    }
-  };
-
-  return (
-    <section className="bg-black/20 p-6 border border-white/5 rounded-lg flex flex-col h-full overflow-hidden">
-      <h4 className="text-[0.6rem] font-bold text-[var(--primary)] mb-4 tracking-widest uppercase flex items-center gap-2">
-        <MessageSquare size={12} />
-        COMUNIDAD_MECATRÓNICA_TIPS
-      </h4>
-      
-      <form onSubmit={handleAddTip} className="flex flex-col gap-2 mb-6">
-        <input 
-          type="text" 
-          placeholder="nombre.apellido"
-          className="bg-white/5 border border-white/10 p-2 text-[0.65rem] font-mono outline-none focus:border-[var(--primary)] transition-all"
-          value={authorName}
-          onChange={e => setAuthorName(e.target.value)}
-        />
-        <div className="flex gap-2">
-          <input 
-            type="text" 
-            placeholder="Escribí un consejo para otros..."
-            className="flex-1 bg-white/5 border border-white/10 p-3 text-xs font-mono outline-none focus:border-[var(--primary)] transition-all"
-            value={newTip}
-            onChange={e => setNewTip(e.target.value)}
-            maxLength={200}
-          />
-          <button 
-            type="submit" 
-            className="px-4 bg-[var(--primary)] text-black hover:opacity-90 disabled:opacity-50 transition-all flex items-center justify-center shrink-0"
-            disabled={!newTip.trim() || !authorName.trim() || isSending}
-          >
-            <Send size={16} />
-          </button>
-        </div>
-        <p className="text-[0.5rem] opacity-30 mt-1 uppercase tracking-widest">Su mensaje requerirá aprobación antes de ser visible.</p>
-      </form>
-
-      <div className="space-y-3 overflow-y-auto custom-scrollbar flex-1 pr-2">
-        {tips.length === 0 ? (
-          <p className="text-[0.6rem] opacity-30 italic text-center py-4 uppercase tracking-widest">
-            {isAdmin ? "No hay consejos para moderar." : "Aún no hay consejos aprobados."}
-          </p>
-        ) : (
-          tips.map(tip => (
-            <div key={tip.id} className={`p-3 border-l-2 ${tip.approved ? 'border-[var(--primary)]/20' : 'border-yellow-500/40 bg-yellow-500/5'} bg-white/2 pb-1 relative group`}>
-              {!tip.approved && isAdmin && (
-                <div className="absolute top-2 right-2 flex gap-1">
-                  <button 
-                    onClick={() => handleApprove(tip.id)}
-                    className="p-1 bg-green-500/20 text-green-500 rounded hover:bg-green-500/40 transition-colors"
-                    title="Aprobar"
-                  >
-                    <CheckCircle2 size={12} />
-                  </button>
-                  <button 
-                    onClick={() => handleDelete(tip.id)}
-                    className="p-1 bg-red-500/20 text-red-500 rounded hover:bg-red-500/40 transition-colors"
-                    title="Eliminar"
-                  >
-                    <Trash2 size={12} />
-                  </button>
-                </div>
-              )}
-              {tip.approved && isAdmin && (
-                <button 
-                  onClick={() => handleDelete(tip.id)}
-                  className="absolute top-2 right-2 p-1 opacity-0 group-hover:opacity-100 bg-red-500/20 text-red-500 rounded hover:bg-red-500/40 transition-colors"
-                  title="Eliminar"
-                >
-                  <Trash2 size={12} />
-                </button>
-              )}
-              <p className="text-xs font-sans mb-1 pr-8">{tip.content}</p>
-              <div className="flex justify-between items-center opacity-30 text-[0.5rem] font-mono">
-                <span className={!tip.approved ? 'text-yellow-500 opacity-100 font-bold' : ''}>
-                  {tip.author} {!tip.approved && '[PENDIENTE]'}
-                </span>
-                <span>{tip.createdAt?.toDate ? tip.createdAt.toDate().toLocaleDateString() : 'Pendiente...'}</span>
-              </div>
-            </div>
-          ))
-        )}
-      </div>
-    </section>
-  );
-}
-
 function CalculatorModal({ onClose }: { onClose: () => void }) {
   const [scp, setScp] = useState("1");
   const config = configuracionSCP[scp];
