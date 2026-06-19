@@ -525,10 +525,10 @@ export default function App() {
                     BIENVENIDO/A AL SISTEMA IMEC 🎓
                   </h2>
                   <p className="text-sm leading-relaxed mb-4">
-                    Este entorno virtual interactivo ha sido desarrollado para asistirte en la visualización de tu trayectoria en <strong>Ingeniería Mecatrónica</strong> (u otras carreras próximamente!) en la UTEC.
+                    Este entorno virtual interactivo ha sido desarrollado para asistirte en la visualización de tu trayectoria en <strong>Ingeniería Mecatrónica</strong> (otras carreras próximamente!) en la UTEC.
                   </p>
                   <p className="text-xs text-[var(--secondary)] font-mono uppercase tracking-wider">
-                    // ESPECIFICACIONES_DE_COMPATIBILIDAD:
+                    // ESPECIFICACIONES:
                   </p>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs bg-black/20 p-4 border border-white/5 rounded">
                     <div>
@@ -545,7 +545,7 @@ export default function App() {
                     </div>
                   </div>
                   <p className="text-xs leading-relaxed opacity-70">
-                    Acompañanos en esta breve guía de 4 pasos adicionales para dominar los protocolos, requerimientos y análisis predictivo integrados en la malla.
+                    Acompañanos en esta breve guía de 4 pasos para dominar los protocolos, requerimientos y análisis predictivo integrados en la malla.
                   </p>
                 </div>
               )}
@@ -561,7 +561,7 @@ export default function App() {
 
                   {/* Simulated Card Sandbox */}
                   <div className="py-6 flex flex-col items-center justify-center bg-black/25 border border-white/5 rounded relative">
-                    <span className="text-[0.5rem] absolute top-2 left-3 opacity-30 font-mono tracking-widest font-bold">AULA_SIMULADOR_INTERACTIVO</span>
+                    <span className="text-[0.5rem] absolute top-2 left-3 opacity-30 font-mono tracking-widest font-bold">SIMULADOR_INTERACTIVO</span>
                     
                     <div 
                       className={`materia cursor-pointer select-none transition-all ${
@@ -575,15 +575,15 @@ export default function App() {
                       <div className="flex justify-between items-start">
                         <span className="area-tag text-[0.55rem] font-bold">[PILOTO]</span>
                         {mockMateriaEstado === 1 && (
-                          <span className="text-[0.45rem] font-bold uppercase text-yellow-500 animate-pulse tracking-tight">STATUS: IN_PROGRESS</span>
+                          <span className="text-[0.45rem] font-bold uppercase text-[var(--cursada)] animate-pulse tracking-tight">STATUS: IN_PROGRESS</span>
                         )}
                         {mockMateriaEstado === 2 && (
                           <span className="text-[0.45rem] font-bold uppercase text-green-400 animate-pulse tracking-tight">STATUS: OK_PASSED</span>
                         )}
                       </div>
-                      <span className="materia-name block font-bold text-center my-4 tracking-wide text-sm">FÍSICA</span>
+                      <span className="materia-name block font-bold text-center my-4 tracking-wide text-sm">FÍSICA I</span>
                       <div className="materia-info">
-                        <span>5 CRÉDITOS</span>
+                        <span>6 CRÉDITOS</span>
                         {mockMateriaEstado === 2 && (
                           <span className="text-[0.45rem] text-green-400 font-bold tracking-tighter">[APROBADO]</span>
                         )}
@@ -592,7 +592,7 @@ export default function App() {
 
                     {/* Console Log Simulator */}
                     <div className="w-11/12 mt-6 bg-black/60 border border-white/10 rounded p-3 font-mono text-[0.65rem] text-green-400 space-y-1">
-                      <p className="text-white/40 border-b border-white/10 pb-1 uppercase tracking-widest">// REGISTRO_DEL_KERNEL_ACADÉMICO_OUT_V2.1</p>
+                      <p className="text-white/40 border-b border-white/10 pb-1 uppercase tracking-widest">// REGISTRO_ACADÉMICO_OUT_V2.1</p>
                       {mockMateriaEstado === 0 && (
                         <>
                           <p className="text-cyan-400">{`> ESTADO_ACTUAL: [0] PENDIENTE`}</p>
@@ -716,13 +716,6 @@ export default function App() {
                       </p>
                     </div>
 
-                    <div className="p-4 bg-black/20 border border-white/10 rounded font-mono text-center space-y-2">
-                      <div className="flex justify-center text-yellow-500"><MessageSquare size={20} /></div>
-                      <span className="text-[0.65rem] font-bold block text-[var(--primary)]">COMUNIDAD TIPS</span>
-                      <p className="text-[0.55rem] opacity-65 leading-normal">
-                        Repositorio colaborativo de consejos. Estudiantes comparten sugerencias de cursado, profesores, libros o tips de exoneración.
-                      </p>
-                    </div>
                   </div>
                 </div>
               )}
@@ -733,13 +726,17 @@ export default function App() {
                     SISTEMA_COMPLETADO_Y_LISTO_PARA_USAR 
                   </h2>
                   
-                  <div className="p-4 bg-amber-500/10 border-l-4 border-amber-500 rounded text-xs gap-3 space-y-2 font-mono text-amber-200">
-                    <p className="font-bold uppercase tracking-widest text-amber-400">ADVERTENCIA_MÉTRICA_DE_SEGURIDAD:</p>
+                <div className={`p-4 border-l-4 rounded text-xs gap-3 space-y-2 font-mono ${
+                    isDarkMode 
+                      ? "bg-amber-500/10 border-amber-500 text-amber-200" 
+                      : "bg-amber-500/15 border-amber-600 text-amber-950 font-medium"
+                  }`}>
+                    <p className={`font-bold uppercase tracking-widest ${isDarkMode ? "text-amber-400" : "text-amber-800"}`}>ADVERTENCIA_MÉTRICA_DE_SEGURIDAD:</p>
                     <p className="leading-normal">
-                      ESTE SISTEMA ES DE CARÁCTER NO OFICIAL Y ESTÁ DISEÑADO ÚNICAMENTE PARA REFERENCIA VISUAL Y DE PLANIFICACIÓN REFERENCIAL.
+                      ESTE SISTEMA ES DE CARÁCTER NO OFICIAL Y ESTÁ DISEÑADO ÚNICAMENTE PARA REFERENCIA VISUAL Y DE PLANIFICACIÓN PERSONAL.
                     </p>
                     <p className="leading-normal">
-                      Cualquier divergencia siempre debe ser resuelta remitiéndose al Plan de Estudio o medios oficiales correspondiente.
+                      Cualquier divergencia siempre debe ser resuelta remitiéndose al Plan de Estudio o medios oficiales correspondientes.
                     </p>
                   </div>
 
@@ -1003,7 +1000,11 @@ export default function App() {
                   {notasSemestres[semestre.sem] && semestreEditandoNota !== semestre.sem && (
                     <motion.div 
                       layout
-                      className="mb-3 p-3 bg-yellow-500/5 border-l-2 border-yellow-500/50 text-[0.65rem] italic text-yellow-200/80 rounded-r cursor-pointer hover:bg-yellow-500/10 transition-colors"
+                      className={`mb-3 p-3 border-l-2 text-[0.65rem] italic rounded-r cursor-pointer transition-colors ${
+                        isDarkMode 
+                          ? "bg-yellow-500/5 border-yellow-500/50 text-yellow-200/80 hover:bg-yellow-500/10" 
+                          : "bg-amber-500/10 border-amber-500 text-amber-900 hover:bg-amber-500/20"
+                      }`}                   
                       onClick={() => {
                         setSemestreEditandoNota(semestre.sem);
                         setTempNota(notasSemestres[semestre.sem] || "");
@@ -1022,7 +1023,12 @@ export default function App() {
                         className="mb-3 space-y-2 overflow-hidden"
                       >
                         <textarea
-                          className="w-full bg-black/40 border border-white/10 rounded p-2 text-[0.7rem] font-mono focus:outline-none focus:border-[var(--primary)] min-h-[100px] text-white"
+                      className={`mb-3 p-3 border-l-2 text-[0.65rem] italic rounded-r cursor-pointer transition-colors ${
+                        isDarkMode 
+                              ? "bg-yellow-500/5 border-yellow-500/50 text-yellow-200/80 hover:bg-yellow-500/10" 
+                              : "bg-amber-500/10 border-amber-500 text-amber-900 hover:bg-amber-500/20"
+                          }`}
+                          
                           value={tempNota}
                           autoFocus
                           onChange={(e) => setTempNota(e.target.value)}
@@ -1111,14 +1117,14 @@ export default function App() {
               <p className="text-xs md:text-sm leading-relaxed opacity-60">
                 Los datos relativos a asignaturas (créditos, prerrequisitos, co-rrequisitos y códigos de materias) han sido recopilados con fines meramente visuales, ilustrativos y de simulación académica personal. Dado que la malla real y los esquemas normativos universitarios están sujetos a constantes actualizaciones, cambios curriculares y adaptaciones de calendario por parte de UTEC, queda estrictamente bajo exclusiva responsabilidad del estudiante contrastar y verificar el estado real de su escolaridad mediante el contacto directo con la Coordinación de IMEC o Secretaria de la carrera.
               </p>
-              <p className="text-xs md:text-sm leading-relaxed text-yellow-400 opacity-90">
+              <p className={`text-xs md:text-sm leading-relaxed opacity-90 ${isDarkMode ? "text-yellow-400" : "text-amber-700"}`}>
                 [!] Al interactuar con el sistema de simulación o generar reportes no oficiales en formato PDF, el usuario asume plenamente y deslinda de toda responsabilidad legal, civil o administrativa al desarrollador de la plataforma ante cualquier discrepancia curricular o error de inscripción en asignaturas reales.
               </p>
               <div className="pt-4 border-t border-white/5 text-xs flex flex-col sm:flex-row justify-between items-left sm: items-center gap-4 opacity-50">
                 <span>MALLA INTERACTIVA // V8.1 // CONSTRUIDO PARA UTEC</span>
                 <span>
-                  IDENTIFICACIÓN ESTUDIANTE:{' '}
-                  <a href="mailto:sofia.modernell@estudiantes.utec.edu.uy" className="text-white hover:underline">
+                  IDENTIFICACIÓN ESTUDIANTE RESPONSABLE:{' '}
+                  <a href="mailto:sofia.modernell@estudiantes.utec.edu.uy" className="hover:underline font-bold text-[var(--text)]">
                     sofia.modernell@estudiantes.utec.edu.uy
                   </a>
                 </span>
@@ -1236,7 +1242,7 @@ function MateriaCard({
       <div className="materia-info">
         <span>{materia.c} Créditos</span>
         {estado === 2 && !isCompletada && (
-        <span className="text-[0.5rem] text-yellow-500 font-bold ml-2 animate-pulse">PARTIAL_PASS</span>
+        <span className="text-[0.5rem] text-[var(--cursada)] font-bold ml-2 animate-pulse">PARTIAL_PASS</span>
         )}
       </div>
     </div>
