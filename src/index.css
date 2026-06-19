@@ -247,8 +247,7 @@ header::before {
     height: 120px;
 }
 
-[data-theme="light"] .logo-utec,
-[data-theme="light"] .logo-imec {
+[data-theme="light"] .logo-utec {
     filter: invert(1) contrast(1.2) brightness(0.9);
 }
 
