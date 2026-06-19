@@ -863,6 +863,7 @@ export default function App() {
               liveUsers={liveUsers} 
               totalVisits={totalVisits} 
               carreraKey={carreraActual}
+              isDarkMode={isDarkMode}
             />
             
             <div className="controls">
@@ -1147,7 +1148,8 @@ export default function App() {
   );
 }
 
-function Header({ onTitleClick, liveUsers, totalVisits, carreraKey }: { onTitleClick: () => void, liveUsers: number, totalVisits: number | null, carreraKey: string }) {
+function Header({ onTitleClick, liveUsers, totalVisits, carreraKey, isDarkMode }: { onTitleClick: () => void, liveUsers: number, totalVisits: number | null, carreraKey: string, isDarkMode: boolean }) {
+
   const baseUrl = import.meta.env.BASE_URL || '/';
   const infoCarrera = nombresCarreras[carreraKey];
   
@@ -1172,11 +1174,18 @@ function Header({ onTitleClick, liveUsers, totalVisits, carreraKey }: { onTitleC
             <span className="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse"></span>
             <span className="text-green-400 font-bold">{liveUsers} EN_VIVO</span>
           </div>
+
           {totalVisits !== null && (
-            <div className="flex items-center gap-1.5 bg-white/5 px-2 py-1 rounded-sm border border-white/10">
-              <span className="text-white/70">{totalVisits} VISITAS_TOTALES</span>
+            <div className={`flex items-center gap-1.5 px-2 py-1 rounded-sm border ${
+              isDarkMode 
+                ? "bg-white/5 border-white/10 text-white" 
+                : "bg-black/5 border-black/10 text-black font-semibold"
+            }`}>
+              <span>{totalVisits} VISITAS_TOTALES</span>
             </div>
           )}
+
+          
         </div>
       </div>
     </header>
