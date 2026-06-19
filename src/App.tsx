@@ -696,7 +696,7 @@ export default function App() {
                     04_HERRAMIENTAS_INTEGRADAS ⚙️
                   </h2>
                   <p className="text-sm leading-relaxed">
-                    Además de la vista diagramática principal, contás con tres utilidades integradas de alto nivel accesibles en la barra superior:
+                    Además de la vista diagramática principal, contás con utilidades integradas de alto nivel accesibles en la barra superior:
                   </p>
 
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
@@ -715,7 +715,15 @@ export default function App() {
                         Algoritmo que filtra tu avance curricular en tiempo real y te entrega una checklist con todas las materias habilitadas para cursar inmediatamente.
                       </p>
                     </div>
-
+                    
+                    <div className="p-4 bg-black/20 border border-white/10 rounded font-mono text-center space-y-2">
+                      <div className="flex justify-center text-pink-400"><Save size={20} /></div>
+                      <span className="text-[0.65rem] font-bold block text-[var(--primary)]">EXPORTAR EN PDF</span>
+                      <p className="text-[0.55rem] opacity-65 leading-normal">
+                        Podés exportar tu progreso actual en forma de tablas (formato PDF), el cual podes imprimir y tener como referencia a mano!
+                      </p>
+                    </div>
+                    
                   </div>
                 </div>
               )}
