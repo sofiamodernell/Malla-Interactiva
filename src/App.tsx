@@ -353,58 +353,165 @@ export default function App() {
     setEstadoMaterias(newMap);
   };
 
-  const handleExportPDF = () => {
+  const handleExportPDF = async () => {
     setShowShareMenu(false);
     const nombre = prompt("Ingresá tu nombre para el reporte (opcional):") || "Estudiante";
     
     const doc = new jsPDF() as jsPDFWithAutoTable;
+
+    const baseUrl = import.meta.env.BASE_URL || '/';
+    const carreraInfo = nombresCarreras[carreraActual];
+
+    // Grayscale image base64 loader helper
+    const getGrayscaleBase64 = (url: string): Promise<string> => {
+      return new Promise((resolve, reject) => {
+        const img = new Image();
+        img.crossOrigin = 'anonymous';
+        img.onload = () => {
+          try {
+            const canvas = document.createElement('canvas');
+            canvas.width = img.width;
+            canvas.height = img.height;
+            const ctx = canvas.getContext('2d');
+            if (!ctx) {
+              reject(new Error('Canvas context not available'));
+              return;
+            }
+            ctx.drawImage(img, 0, 0);
+            const imgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+            const data = imgData.data;
+            for (let i = 0; i < data.length; i += 4) {
+              const brightness = 0.299 * data[i] + 0.587 * data[i + 1] + 0.114 * data[i + 2];
+              data[i] = brightness;     // R
+              data[i + 1] = brightness; // G
+              data[i + 2] = brightness; // B
+            }
+            ctx.putImageData(imgData, 0, 0);
+            resolve(canvas.toDataURL('image/jpeg', 0.85));
+          } catch (err) {
+            reject(err);
+          }
+        };
+        img.onerror = () => reject(new Error('Image load failed'));
+        img.src = url;
+      });
+    };  
+    let utecLogoBase64: string | null = null;
+    let imecLogoBase64: string | null = null;
+
+    try {
+      const origin = window.location.origin;
+      const utecUrl = `${origin}${baseUrl}utec_logo.jpg`;
+      utecLogoBase64 = await getGrayscaleBase64(utecUrl).catch(() => null);
+
+      if (carreraInfo && carreraInfo.logo) {
+        const imecUrl = `${origin}${baseUrl}${carreraInfo.logo}`;
+        imecLogoBase64 = await getGrayscaleBase64(imecUrl).catch(() => null);
+      }
+    } catch (e) {
+      console.error("Error loading grayscale logos:", e);
+    }
+
+    // Header layout
+    const titleY = (utecLogoBase64 || imecLogoBase64) ? 32 : 25;
+
+    // Draw logos if available (Grayscale)
+    if (utecLogoBase64) {
+      doc.addImage(utecLogoBase64, 'JPEG', 14, 15, 28, 10);
+    }
+    if (imecLogoBase64) {
+      doc.addImage(imecLogoBase64, 'JPEG', 168, 15, 28, 10);
+    }
+
+    // Main Header Title
+    doc.setFontSize(14);
+    doc.setFont("helvetica", "bold");
+    doc.setTextColor(30, 30, 30);
+    doc.text("REPORTE DE AVANCE ACADÉMICO NO OFICIAL", 14, titleY);
+      
+    doc.setFontSize(8);
+    doc.setFont("helvetica", "bold");
+    doc.setTextColor(80, 80, 80);
+    doc.text(`Carrera: ${carreraInfo ? carreraInfo.titulo.toUpperCase() : carreraActual.toUpperCase()} • ${carreraInfo ? carreraInfo.subtitulo : ""}`, 14, titleY + 10);
+    doc.text(`Estudiante: ${nombre} • Fecha de emisión: ${new Date().toLocaleDateString()}`, 14, titleY + 14);
+
+    // Subtle divider line
+    doc.setDrawColor(200, 200, 200);
+    doc.setLineWidth(0.3);
+    doc.line(14, titleY + 17, 196, titleY + 17);
+
     
-    // Header
-    doc.setFontSize(18);
-    doc.setTextColor(40);
-    doc.text("REPORTE DE AVANCE ACADÉMICO NO OFICIAL", 14, 22);
-    
-    doc.setFontSize(10);
-    doc.setFont("helvetica", "normal");
-    doc.text(`Carrera: ${carreraActual.toUpperCase()}`, 14, 30);
-    doc.text(`Estudiante: ${nombre}`, 14, 35);
-    doc.text(`Fecha de emisión: ${new Date().toLocaleDateString()}`, 14, 40);
     
     // Stats Summary Table
-    doc.setFontSize(12);
+    const statsTableY = titleY + 24;
+    doc.setFontSize(10);
     doc.setFont("helvetica", "bold");
-    doc.text("RESUMEN GENERAL", 14, 50);
+    doc.setTextColor(40, 40, 40);
+    doc.text("I. RESUMEN GENERAL", 14, statsTableY);
 
     const totalCreditosMalla = todasLasMaterias.reduce((acc, m) => acc + m.c, 0);
     const progresoPorcentaje = totalCreditosMalla > 0 ? (totalCreditos / totalCreditosMalla) * 100 : 0;
 
     autoTable(doc, {
-      startY: 55,
-      head: [['Métrica', 'Valor']],
+      startY: statsTableY + 4,
+      head: [['Métrica', 'Valor/Créditos']],
       body: [
         ['Créditos Aprobados', totalCreditos.toString()],
         ['Créditos Totales Carrera', totalCreditosMalla.toString()],
         ['Porcentaje de Avance', `${progresoPorcentaje.toFixed(1)}%`],
-        ['Estado Actual', totalCreditos >= totalCreditosMalla ? 'CARRERA COMPLETADA' : 'EN CURSO']
+        ['Estado Actual', totalCreditos >= totalCreditosMalla ? 'CARRERA COMPLETA' : 'EN CURSO']
       ],
+    
       theme: 'grid',
-      headStyles: { fillColor: [60, 60, 60], textColor: [255, 255, 255] },
-      styles: { fontSize: 10, cellPadding: 3 }
+
+      headStyles: { 
+        fillColor: [240, 240, 240], 
+        textColor: [0, 0, 0], 
+        fontSize: 8.5, 
+        fontStyle: 'bold',
+        lineWidth: 0.1,
+        lineColor: [200, 200, 200]
+      },
+      styles: { 
+        fontSize: 8, 
+        cellPadding: 2.2, 
+        font: 'helvetica',
+        textColor: [40, 40, 40],
+        lineColor: [220, 220, 220],
+        lineWidth: 0.1
+      },
+      columnStyles: {
+        1: { fontStyle: 'bold' }
+      }
+      
     });
 
     let currentY = (doc as any).lastAutoTable.finalY + 15;
+   
+    // Header title for detail
+    if (currentY > 240) {
+      doc.addPage();
+      currentY = 25;
+    }
+    doc.setFontSize(10);
+    doc.setFont("helvetica", "bold");
+    doc.setTextColor(40, 40, 40);
+    doc.text("II. DETALLE POR SEMESTRE", 14, currentY);
+    currentY += 5;
 
     // Semester Details
     plan.forEach((semestre) => {
       // Check for page overflow
-      if (currentY > 240) {
+      if (currentY > 230) {
         doc.addPage();
-        currentY = 20;
+        currentY = 25;
       }
 
-      doc.setFontSize(11);
+      doc.setFontSize(8.5);
       doc.setFont("helvetica", "bold");
+      doc.setTextColor(80, 80, 80); 
       doc.text(`SEMESTRE ${semestre.sem}`, 14, currentY);
+    
       
       const tableData = semestre.materias.map(m => {
         const estado = estadoMaterias.get(m.id) || 0;
@@ -412,43 +519,126 @@ export default function App() {
         return [m.id, m.n, m.c.toString(), estadoTxt];
       });
 
+
       autoTable(doc, {
-        startY: currentY + 4,
+        startY: currentY + 3,
         head: [['CÓDIGO', 'MATERIA', 'CRÉDITOS', 'ESTADO']],
         body: tableData,
         theme: 'striped',
-        headStyles: { fillColor: [100, 100, 100], textColor: [255, 255, 255] },
-        styles: { fontSize: 8, cellPadding: 2 },
+        headStyles: { 
+          fillColor: [240, 240, 240], 
+          textColor: [0, 0, 0], 
+          fontSize: 8, 
+          fontStyle: 'bold',
+          lineWidth: 0.1,
+          lineColor: [200, 200, 200]
+        },
+        styles: { 
+          fontSize: 8, 
+          cellPadding: 2, 
+          font: 'helvetica',
+          textColor: [40, 40, 40],
+          lineColor: [235, 235, 235],
+          lineWidth: 0.1
+        },
         columnStyles: {
           2: { halign: 'center' },
-          3: { fontStyle: 'bold' }
+          3: { fontStyle: 'bold', halign: 'center' }
+        },
+        didParseCell: (data) => {
+          if (data.section === 'body' && data.column.index === 3) {
+            const cellValue = data.cell.text[0];
+            if (cellValue === 'APROBADA') {
+              data.cell.styles.textColor = [0, 0, 0];
+              data.cell.styles.fontStyle = 'bold';
+            } else if (cellValue === 'CURSADA') {
+              data.cell.styles.textColor = [80, 80, 80];
+              data.cell.styles.fontStyle = 'italic';
+            } else {
+              data.cell.styles.textColor = [150, 150, 150];
+            }
+          }
         },
         didDrawPage: (data) => {
           currentY = data.cursor?.y || currentY;
         }
       });
 
-      currentY = (doc as any).lastAutoTable.finalY + 12;
+      currentY = (doc as any).lastAutoTable.finalY + 8;
     });
 
-    // Final signature placeholder
-    if (currentY > 260) { doc.addPage(); currentY = 20; }
-    doc.setFontSize(8);
-    doc.setTextColor(150);
-    doc.text("----------------------------------------------------------------", 14, currentY + 10);
-    doc.text("Firma del Estudiante", 14, currentY + 15);
+    // Final signature and disclaimer placeholder
+    if (currentY > 220) { 
+      doc.addPage(); 
+      currentY = 25; 
+    }
+    
+    doc.setDrawColor(220, 220, 220);
+    doc.setLineWidth(0.5);
+    doc.line(14, currentY + 2, 196, currentY + 2);
 
-    // Page numbers
+    doc.setFontSize(8);
+    doc.setTextColor(80, 80, 80);
+    doc.setFont("helvetica", "bold");
+    doc.text("DESCARGO DE RESPONSABILIDAD Y COMPROMISO ACADÉMICO:", 14, currentY + 8);
+    
+    doc.setFont("helvetica", "normal");
+    doc.setTextColor(110, 110, 110);
+    doc.text("Esta simulación de escolaridad ha sido generada por el estudiante de forma autónoma utilizando la", 14, currentY + 13);
+    doc.text("Plataforma Malla Interactiva UTEC (NO OFICIAL). Su finalidad es estrictamente organizativa y de planificación,", 14, currentY + 17);
+    doc.text("careciendo de toda validez legal o acreditación oficial ante Secretaría y la Universidad Tecnológica.", 14, currentY + 21);
+
+    doc.text("----------------------------------------------------------------", 14, currentY + 38);
+    doc.text("Firma del Estudiante", 14, currentY + 42);
+
+    // Apply elegant B&W frame headers and footers page-by-page
     const totalPages = doc.internal.pages.length - 1;
     for (let i = 1; i <= totalPages; i++) {
-        doc.setPage(i);
-        doc.setFontSize(8);
-        doc.text(`MALLA CURRICULAR INTERACTIVA IMEC - Reporte Académico NO OFICIAL! - Pag. ${i} de ${totalPages}`, doc.internal.pageSize.width / 2, doc.internal.pageSize.height - 10, { align: 'center' });
+      doc.setPage(i);
+      
+      const pageHeight = doc.internal.pageSize.height;
+      const pageWidth = doc.internal.pageSize.width;
+
+      // Draw top header rule for page 2 and following
+      if (i > 1) {
+        doc.setFontSize(7);
+        
+        doc.setFont("helvetica", "normal");
+        doc.setTextColor(120, 120, 120);
+        doc.text("UTEC • REPORTE ACADÉMICO DE AVANCE (SIMULACIÓN ACADÉMICA)", 14, 10);
+        
+        doc.setDrawColor(220, 220, 220);
+        doc.setLineWidth(0.3);
+        doc.line(14, 12, pageWidth - 14, 12);
+      }
+      
+    // Footer page number + horizontal line
+      doc.setDrawColor(220, 220, 220);
+      doc.setLineWidth(0.3);
+      doc.line(14, pageHeight - 15, pageWidth - 14, pageHeight - 15);
+      
+      doc.setFontSize(7);
+      doc.setFont("helvetica", "normal");
+      doc.setTextColor(120, 120, 120);
+      doc.text(
+        `REPORTE DE AVANCE GENERADO POR ESTUDIANTE MEDIANTE LA PLATAFORMA MALLA INTERACTIVA IMEC (NO OFICIAL)`, 
+        14, 
+        pageHeight - 10
+      );
+      
+      doc.text(
+        `Página ${i} de ${totalPages}`, 
+        pageWidth - 14, 
+        pageHeight - 10, 
+        { align: 'right' }
+      );
     }
 
-    doc.save(`avance_utec_${carreraActual}_${nombre.replace(/\s+/g, '_')}.pdf`);
+    doc.save(`Reporte_Avance_UTEC_${carreraActual}_${nombre.replace(/\s+/g, '_')}.pdf`);
   };
 
+
+    
   const handleGenerateLink = () => {
     const dataStr = `${carreraActual}|${JSON.stringify(Array.from(estadoMaterias.entries()))}`;
     const encoded = btoa(dataStr);
