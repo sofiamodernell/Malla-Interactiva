@@ -21,6 +21,9 @@
     --cursada: #FFD700;
     --f-mono: 'JetBrains Mono', monospace;
     --br: 0px;
+    --share-bg: #00112a;
+    --share-hover-bg: #ffffff;
+    --share-hover-text: #001533;
 }
 
 [data-theme="light"] {
@@ -33,6 +36,9 @@
     --card-bg: #ffffff;
     --success: #10b981;
     --cursada: #f59e0b;
+     --share-bg: #ffffff;
+    --share-hover-bg: #002d80;
+    --share-hover-text: #ffffff;
 }
 
 [data-theme="light"] header,
@@ -239,6 +245,11 @@ header::before {
 .logo-utec {
     left: 2rem;
     height: 120px;
+}
+
+[data-theme="light"] .logo-utec,
+[data-theme="light"] .logo-imec {
+    filter: invert(1) contrast(1.2) brightness(0.9);
 }
 
 .logo-imec {
@@ -743,7 +754,7 @@ select option {
     top: 100%;
     left: 0;
     margin-top: 0.5rem;
-    background: #000;
+    background: var(--share-bg, #00112a);
     border: 1px solid var(--primary);
     width: 240px;
     z-index: 1000;
@@ -762,10 +773,11 @@ select option {
     font-size: 0.6rem;
     font-weight: bold;
     font-family: var(--f-mono);
-    color: var(--primary);
+    color: var(--text);
     border-bottom: 1px solid var(--line-major);
     transition: all 0.2s;
     cursor: pointer;
+    background: transparent;
 }
 
 .share-menu-item:last-child {
@@ -773,8 +785,8 @@ select option {
 }
 
 .share-menu-item:hover {
-    background: var(--primary);
-    color: #000;
+    background: var(--share-hover-bg, var(--primary));
+    color: var(--share-hover-text, #000);
 }
 
 @media (max-width: 768px) {
