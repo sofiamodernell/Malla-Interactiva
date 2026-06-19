@@ -358,71 +358,10 @@ export default function App() {
     const nombre = prompt("Ingresá tu nombre para el reporte (opcional):") || "Estudiante";
     
     const doc = new jsPDF() as jsPDFWithAutoTable;
-
-    const baseUrl = import.meta.env.BASE_URL || '/';
     const carreraInfo = nombresCarreras[carreraActual];
 
-    // Grayscale image base64 loader helper
-    const getGrayscaleBase64 = (url: string): Promise<string> => {
-      return new Promise((resolve, reject) => {
-        const img = new Image();
-        img.crossOrigin = 'anonymous';
-        img.onload = () => {
-          try {
-            const canvas = document.createElement('canvas');
-            canvas.width = img.width;
-            canvas.height = img.height;
-            const ctx = canvas.getContext('2d');
-            if (!ctx) {
-              reject(new Error('Canvas context not available'));
-              return;
-            }
-            ctx.drawImage(img, 0, 0);
-            const imgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-            const data = imgData.data;
-            for (let i = 0; i < data.length; i += 4) {
-              const brightness = 0.299 * data[i] + 0.587 * data[i + 1] + 0.114 * data[i + 2];
-              data[i] = brightness;     // R
-              data[i + 1] = brightness; // G
-              data[i + 2] = brightness; // B
-            }
-            ctx.putImageData(imgData, 0, 0);
-            resolve(canvas.toDataURL('image/jpeg', 0.85));
-          } catch (err) {
-            reject(err);
-          }
-        };
-        img.onerror = () => reject(new Error('Image load failed'));
-        img.src = url;
-      });
-    };  
-    let utecLogoBase64: string | null = null;
-    let imecLogoBase64: string | null = null;
-
-    try {
-      const origin = window.location.origin;
-      const utecUrl = `${origin}${baseUrl}utec_logo.jpg`;
-      utecLogoBase64 = await getGrayscaleBase64(utecUrl).catch(() => null);
-
-      if (carreraInfo && carreraInfo.logo) {
-        const imecUrl = `${origin}${baseUrl}${carreraInfo.logo}`;
-        imecLogoBase64 = await getGrayscaleBase64(imecUrl).catch(() => null);
-      }
-    } catch (e) {
-      console.error("Error loading grayscale logos:", e);
-    }
-
-    // Header layout
-    const titleY = (utecLogoBase64 || imecLogoBase64) ? 32 : 25;
-
-    // Draw logos if available (Grayscale)
-    if (utecLogoBase64) {
-      doc.addImage(utecLogoBase64, 'JPEG', 14, 15, 28, 10);
-    }
-    if (imecLogoBase64) {
-      doc.addImage(imecLogoBase64, 'JPEG', 168, 15, 28, 10);
-    }
-
+    // Header layout start at Y = 20 (simple, clean typographic header)
+    const titleY = 22;
     // Main Header Title
     doc.setFontSize(14);
     doc.setFont("helvetica", "bold");
