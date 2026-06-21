@@ -1029,20 +1029,6 @@ export default function App() {
                 RESET_SISTEMA
               </button>
 
-              {user && (
-                <button className="flex items-center gap-2 btn-theme border-green-500/50" onClick={handleLogout} title={user.email || ""}>
-                  <LogOut size={14} />
-                  SALIR [{user.displayName?.split(' ')[0].toUpperCase()}]
-                </button>
-              )}
-
-              {!user && showLoginButton && (
-                <button className="flex items-center gap-2 btn-theme animate-pulse border-[var(--primary)]" onClick={handleLogin}>
-                  <LogIn size={14} />
-                  ACCESO_ADMINISTRADOR
-                </button>
-              )}
-
               <div className="relative">
                 <button className="flex items-center gap-2 btn-theme" onClick={() => setShowShareMenu(!showShareMenu)}>
                   <Share2 size={14} />
@@ -1250,13 +1236,13 @@ export default function App() {
                 // DESCARGO DE RESPONABILIDAD Y TÉRMINOS DE USO (DISCLAIMER)
               </h4>
               <p className="text-xs md:text-sm leading-relaxed opacity-60">
-                Esta plataforma web interactiva es un proyecto de software libre de carácter <strong>completamente independiente, informal y no oficial</strong>. No se encuentra asociada de ninguna forma a la institución, Coordinación de Carrera, Seccretaría, ni cuenta con el aval oficial de la Universidad Tecnológica del Uruguay (UTEC).
+                Esta plataforma web interactiva es un proyecto de software libre de carácter <strong>completamente independiente, informal y no oficial</strong>. No se cuenta con el aval oficial de la Universidad Tecnológica del Uruguay (UTEC).
               </p>
               <p className="text-xs md:text-sm leading-relaxed opacity-60">
-                Los datos relativos a asignaturas (créditos, prerrequisitos, co-rrequisitos y códigos de materias) han sido recopilados con fines meramente visuales, ilustrativos y de simulación académica personal. Dado que la malla real y los esquemas normativos universitarios están sujetos a constantes actualizaciones, cambios curriculares y adaptaciones de calendario por parte de UTEC, queda estrictamente bajo exclusiva responsabilidad del estudiante contrastar y verificar el estado real de su escolaridad mediante el contacto directo con la Coordinación de IMEC o Secretaria de la carrera.
+                Los datos relativos a asignaturas (créditos, prerrequisitos, co-rrequisitos y códigos de materias) han sido recopilados con fines meramente visuales, ilustrativos y de simulación académica personal. Dado que la malla real y los esquemas normativos universitarios están sujetos a actualizaciones, cambios curriculares y adaptaciones de calendario por parte de UTEC, queda estrictamente bajo exclusiva responsabilidad del estudiante contrastar y verificar el estado real de su escolaridad mediante el Portal Academico, o en su defecto el contacto directo con Secretaria de la carrera.
               </p>
               <p className={`text-xs md:text-sm leading-relaxed opacity-90 ${isDarkMode ? "text-yellow-400" : "text-amber-700"}`}>
-                [!] Al interactuar con el sistema de simulación o generar reportes no oficiales en formato PDF, el usuario asume plenamente y deslinda de toda responsabilidad legal, civil o administrativa al desarrollador de la plataforma ante cualquier discrepancia curricular o error de inscripción en asignaturas reales.
+                [!] Al interactuar con este sistema de simulación o generar reportes no oficiales en formato PDF, el usuario asume plenamente y deslinda de toda responsabilidad legal, civil o administrativa al desarrollador de la plataforma ante cualquier discrepancia curricular o error de inscripción en asignaturas reales.
               </p>
               <div className="pt-4 border-t border-white/5 text-xs flex flex-col sm:flex-row justify-between items-left sm: items-center gap-4 opacity-50">
                 <span>MALLA INTERACTIVA // V8.1 // CONSTRUIDO PARA UTEC</span>
