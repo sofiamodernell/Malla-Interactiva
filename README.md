@@ -20,7 +20,6 @@ Permite visualizar la malla curricular completa, marcar el estado de cada materi
 - [Despliegue](#despliegue)
 - [Cómo agregar o editar una carrera](#cómo-agregar-o-editar-una-carrera)
 - [Seguridad](#seguridad)
-- [Roadmap / Posibles mejoras](#roadmap--posibles-mejoras)
 - [Agradecimientos](#agradecimientos)
 - [Autora](#autora)
 - [Licencia](#licencia)
@@ -258,16 +257,6 @@ Toda la definición curricular vive encapsulada de manera aislada en el archivo 
 *   **Acceso restringido de datos:** Las directrices en `firestore.rules` bloquean por definición los intentos de lectura y de escritura no declarados de forma predeterminada para cualquier origen que no coincida con colecciones públicas controladas, impidiendo alteraciones externas accidentales o intencionadas de los contadores e indicadores de red.
 *   **Gestión por roles autorizados:** El despliegue de funcionalidades administrativas está restringido al nivel de validación de credenciales del emisor según su correo electrónico autorizado u ordenamiento en colecciones de administradores (`admins`).
 *   **Políticas de privacidad en datos estudiantiles:** Ningún avance curricular o plan de notas de usuario es transmitido del navegador a servidores externos. Toda persistencia e historiales habitan estrictamente en el entorno aislado del dispositivo del estudiante (`localStorage`), salvo cuando el usuario decide de manera voluntaria presionar el botón de generación de enlace portable para transcribir su estatus como un enlace Base64 para guardarlo o compartirlo con terceros.
-
----
-
-## Roadmap / Posibles mejoras
-
-- [ ] Sincronización multi-dispositivo opcional mediante cuentas en Firestore para estudiantes autenticados.
-- [ ] Incorporación del sistema de tips y comentarios de estudio colaborativo por materia.
-- [ ] Suite de pruebas de regresión automáticas unitarias para validación lógica de correlatividades curriculares complicadas.
-- [ ] Implementación de traducciones y variantes idiomáticas para soporte en campus de UTEC binacionales.
-- [ ] Plantilla CSS para impresión simplificada ecológica adaptada a hojas físicas A4 opcional.
 
 ---
 
