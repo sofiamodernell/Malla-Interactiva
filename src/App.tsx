@@ -1,8 +1,7 @@
 import React, { useState, useEffect, useMemo, useCallback, useRef } from 'react';
 import confetti from 'canvas-confetti';
 import { motion, AnimatePresence } from 'motion/react';
-
-import { Moon, Sun, Calculator, Search, RotateCcw, Share2, FileText, Link, Check, MessageSquare,MessageCircleQuestionMark ,  Send, LogIn, LogOut, CheckCircle2, Trash2, X, StickyNote, Save, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Moon, Sun, Calculator, Search, RotateCcw, Share2, FileText, Link, Check, MessageSquare, MessageCircleQuestionMark, Send, LogIn, LogOut, CheckCircle2, Trash2, X, StickyNote, Save, ChevronLeft, ChevronRight, Github } from 'lucide-react';
 import { jsPDF } from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import { collection, addDoc, query, orderBy, onSnapshot, serverTimestamp, updateDoc, doc, deleteDoc, where, increment, getDoc, setDoc } from 'firebase/firestore';
@@ -1029,6 +1028,16 @@ export default function App() {
                 RESET_SISTEMA
               </button>
 
+              <a 
+                href="https://github.com/sofiamodernell/Malla-Interactiva" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="flex items-center gap-2 btn-theme hover:bg-white/10"
+              >
+                <Github size={14} />
+                REPOSITORIO_GITHUB
+              </a>
+              
               <div className="relative">
                 <button className="flex items-center gap-2 btn-theme" onClick={() => setShowShareMenu(!showShareMenu)}>
                   <Share2 size={14} />
