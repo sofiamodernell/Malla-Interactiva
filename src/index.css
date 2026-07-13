@@ -243,16 +243,17 @@ header::before {
 
 .logo-utec {
     left: 2rem;
-    height: 120px;
+    height: 150px;
 }
 
-[data-theme="light"] .logo-utec {
+[data-theme="light"] 
+.logo-utec {
     filter: invert(1) contrast(1.2) brightness(0.9);
 }
 
 .logo-imec {
     right: 2rem;
-    height: 150px;
+    height: 140px;
 }
 
 @media (max-width: 768px) {
