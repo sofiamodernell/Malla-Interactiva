@@ -1293,7 +1293,6 @@ function Header({ onTitleClick, liveUsers, totalVisits, carreraKey, isDarkMode }
       )}
       
       <div className="header-content">
-        <p className="mb-4">ENGINEERING DIAGRAM // SOFIA.MODERNELL</p>
         <h1 
           className="text-white cursor-default select-none" 
           onClick={onTitleClick}
