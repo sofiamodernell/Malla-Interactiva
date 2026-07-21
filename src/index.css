@@ -396,10 +396,10 @@ select option {
 .materia {
     background: var(--card-bg);
     border: 1px solid var(--line-major);
-    padding: 0.65rem 0.75rem;
+    padding: 0.55rem 0.65rem;
     margin-bottom: 0.65rem;
     width: 215px;
-    min-height: 85px;
+    height: 95px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -407,6 +407,7 @@ select option {
     cursor: pointer;
     position: relative;
     box-sizing: border-box;
+    overflow: hidden;
 }
 
 /* Blueprint "Corner" Accents */
@@ -482,11 +483,17 @@ select option {
 
 .materia-name {
     font-weight: 700;
-    font-size: 0.78rem;
+    font-size: 0.72rem;
     text-transform: uppercase;
-    letter-spacing: 0.03em;
-    margin: 0.35rem 0;
-    line-height: 1.25;
+    letter-spacing: 0.02em;
+    margin: 0.2rem 0;
+    line-height: 1.2;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    word-break: break-word;
 }
 
 .materia-info {
@@ -710,25 +717,30 @@ select option {
 .site-footer {
     background: rgba(0,0,0,0.3);
     border-top: 1px solid var(--primary);
-    padding: 2.5rem 1.5rem 5rem 1.5rem;
+    padding: 2rem 1.25rem 4.5rem 1.25rem;
     font-family: var(--f-mono);
     font-size: 0.65rem;
     color: var(--secondary);
     width: 100%;
     min-width: 100%;
+    align-self: stretch;
     box-sizing: border-box;
+    margin: 0;
+    flex-shrink: 0;
 }
 
 .site-footer-content {
     position: sticky;
-    left: 1.5rem;
-    max-width: 56rem;
+    left: 1.25rem;
+    max-width: min(52rem, calc(100vw - 2.5rem));
+    box-sizing: border-box;
 }
 .sticky-horizontal {
     position: sticky;
     left: 0;
-    width: fit-content;
+    width: auto;
     min-width: 100%;
+    align-self: stretch;
     z-index: 150;
     /* top: 0 removed to allow vertical scrolling away */
 }
@@ -833,13 +845,14 @@ select option {
     }
     .materia { 
         width: 195px; 
-        padding: 0.55rem 0.65rem;
-        min-height: 80px;
+        height: 90px;
+        padding: 0.5rem 0.6rem;
         margin-bottom: 0.5rem;
     }
     .materia-name {
-        font-size: 0.72rem;
-        margin: 0.25rem 0;
+        font-size: 0.68rem;
+        margin: 0.15rem 0;
+        line-height: 1.2;
     }
     
     .stats-bar {
@@ -872,6 +885,18 @@ select option {
         left: auto;
         right: 0;
         width: 220px;
+    }
+
+    .site-footer {
+        padding: 1.5rem 0.65rem 4rem 0.65rem;
+        width: 100%;
+        min-width: 100%;
+    }
+
+    .site-footer-content {
+        left: 0.65rem;
+        max-width: calc(100vw - 1.3rem);
+        padding-right: 0.25rem;
     }
 }
 
