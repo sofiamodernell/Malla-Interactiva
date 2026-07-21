@@ -650,7 +650,7 @@ export default function App() {
               {welcomeStep === 1 && (
                 <div className="space-y-6">
                   <h2 className="text-xl font-bold text-[var(--primary)] m-0 border-0 p-0 flex items-center gap-2">
-                    BIENVENIDO/A AL SISTEMA IMEC 🎓
+                    BIENVENIDO/A A LA MALLA INTERACTIVA DE UTEC
                   </h2>
                   <p className="text-sm leading-relaxed mb-4">
                     Este entorno virtual interactivo ha sido desarrollado para asistirte en la visualización de tu trayectoria en <strong>Ingeniería Mecatrónica</strong> (otras carreras próximamente!) en la UTEC.
@@ -681,7 +681,7 @@ export default function App() {
               {welcomeStep === 2 && (
                 <div className="space-y-6">
                   <h2 className="text-xl font-bold text-[var(--primary)] m-0 border-0 p-0">
-                    02_PROTOCOLO_CLICS (ESTADOS)
+                    02_PROTOCOLO_CLICS
                   </h2>
                   <p className="text-sm leading-relaxed">
                     Las asignaturas de la malla cambian su estado académico secuencialmente al hacerles clic. <strong>Hacé clic en la tarjeta piloto de abajo</strong> para experimentar la transición real del estado:
@@ -748,7 +748,7 @@ export default function App() {
               {welcomeStep === 3 && (
                 <div className="space-y-6">
                   <h2 className="text-xl font-bold text-[var(--primary)] m-0 border-0 p-0">
-                    03_PROTOCOLO_ENFOQUE (REQUERIMIENTOS)
+                    03_PROTOCOLO_ENFOQUE
                   </h2>
                   <p className="text-sm leading-relaxed">
                     Las asignaturas pueden tener requisitos o co-requisitos. Al <strong>pasar el cursor (hover)</strong> por encima de una materia, el sistema colorea automáticamente los recorridos de avance para evitar confusiones de inscripción:
@@ -821,7 +821,7 @@ export default function App() {
               {welcomeStep === 4 && (
                 <div className="space-y-6">
                   <h2 className="text-xl font-bold text-[var(--primary)] m-0 border-0 p-0 flex items-center gap-2">
-                    04_HERRAMIENTAS_INTEGRADAS ⚙️
+                    04_HERRAMIENTAS_INTEGRADAS
                   </h2>
                   <p className="text-sm leading-relaxed">
                     Además de la vista diagramática principal, contás con utilidades integradas de alto nivel accesibles en la barra superior:
@@ -848,7 +848,7 @@ export default function App() {
                       <div className="flex justify-center text-pink-400"><Save size={20} /></div>
                       <span className="text-[0.65rem] font-bold block text-[var(--primary)]">EXPORTAR EN PDF</span>
                       <p className="text-[0.55rem] opacity-65 leading-normal">
-                        Podés exportar tu progreso actual en forma de tablas (formato PDF), el cual podes imprimir y tener como referencia a mano!
+                        Podés exportar tu progreso actual en formato PDF, el cual podes imprimir y tener como referencia a mano!
                       </p>
                     </div>
                     
@@ -859,7 +859,7 @@ export default function App() {
               {welcomeStep === 5 && (
                 <div className="space-y-6">
                   <h2 className="text-xl font-bold text-[var(--primary)] m-0 border-0 p-0 text-red-400">
-                    SISTEMA_COMPLETADO_Y_LISTO_PARA_USAR 
+                    SISTEMA_LISTO_PARA_USAR 
                   </h2>
                   
                 <div className={`p-4 border-l-4 rounded text-xs gap-3 space-y-2 font-mono ${
