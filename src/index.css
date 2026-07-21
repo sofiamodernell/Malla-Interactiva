@@ -721,7 +721,7 @@ select option {
     font-family: var(--f-mono);
     font-size: 0.65rem;
     color: var(--secondary);
-    width: 3000px;
+    width: 2530px;
     min-width: 100%;
     align-self: stretch;
     box-sizing: border-box;
