@@ -721,7 +721,7 @@ select option {
     font-family: var(--f-mono);
     font-size: 0.65rem;
     color: var(--secondary);
-    width: 100%;
+    width: 3000px;
     min-width: 100%;
     align-self: stretch;
     box-sizing: border-box;
@@ -815,6 +815,7 @@ select option {
     color: var(--share-hover-text, #000);
 }
 
+
 @media (max-width: 768px) {
     .controls {
         padding: 0.5rem;
@@ -889,7 +890,7 @@ select option {
 
     .site-footer {
         padding: 1.5rem 0.65rem 4rem 0.65rem;
-        width: 3000px;
+        width: 100%;
         min-width: 100%;
     }
 
@@ -899,4 +900,3 @@ select option {
         padding-right: 0.25rem;
     }
 }
-
