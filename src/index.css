@@ -789,7 +789,7 @@ select option {
 
 @media (max-width: 1024px) {
     .main-content-scroll {
-}
+}}
 
 @media (max-width: 768px) {
     .controls {
