@@ -505,7 +505,6 @@ export default function App() {
       currentY = (doc as any).lastAutoTable.finalY + 8;
     });
 
-    // Final signature and disclaimer placeholder
     if (currentY > 220) { 
       doc.addPage(); 
       currentY = 25; 
@@ -645,7 +644,7 @@ export default function App() {
                   SALTAR_INTRO [X]
                 </button>
               </div>
-
+              
               {/* Step content */}
               {welcomeStep === 1 && (
                 <div className="space-y-6">
@@ -658,19 +657,11 @@ export default function App() {
                   <p className="text-xs text-[var(--secondary)] font-mono uppercase tracking-wider">
                     // ESPECIFICACIONES:
                   </p>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs bg-black/20 p-4 border border-white/5 rounded">
-                    <div>
-                      <strong className="text-yellow-400 font-bold">[!]</strong> Guardado Local Automático.
-                    </div>
-                    <div>
-                      <strong className="text-yellow-400 font-bold">[!]</strong> Modo Claro y Oscuro.
-                    </div>
-                    <div>
-                      <strong className="text-yellow-400 font-bold">[!]</strong> Generación de Reportes en PDF.
-                    </div>
-                    <div>
-                      <strong className="text-yellow-400 font-bold">[!]</strong> Sincronización en la Nube.
-                    </div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs bg-black/20 p-4 border border-white/5 rounded"> 
+                    <div> <strong className="text-yellow-400 font-bold">[!]</strong> Calculadora de Notas según SCP.</div>
+                    <div> <strong className="text-yellow-400 font-bold">[!]</strong> Modo Claro y Oscuro.</div>
+                    <div> <strong className="text-yellow-400 font-bold">[!]</strong> Generación de Reportes en PDF. </div>
+                    <div> <strong className="text-yellow-400 font-bold">[!]</strong> Sincronización en la Nube. </div>
                   </div>
                   <p className="text-xs leading-relaxed opacity-70">
                     Acompañanos en esta breve guía de 4 pasos para dominar los protocolos, requerimientos y análisis predictivo integrados en la malla.
@@ -684,7 +675,7 @@ export default function App() {
                     02_PROTOCOLO_CLICS
                   </h2>
                   <p className="text-sm leading-relaxed">
-                    Las asignaturas de la malla cambian su estado académico secuencialmente al hacerles clic. <strong>Hacé clic en la tarjeta piloto de abajo</strong> para experimentar la transición real del estado:
+                    Las asignaturas de la malla cambian su estado secuencialmente al hacerles clic. <strong>Hacé clic en la tarjeta piloto de abajo</strong> para experimentar la transición:
                   </p>
 
                   {/* Simulated Card Sandbox */}
@@ -709,9 +700,9 @@ export default function App() {
                           <span className="text-[0.45rem] font-bold uppercase text-green-400 animate-pulse tracking-tight">STATUS: OK_PASSED</span>
                         )}
                       </div>
-                      <span className="materia-name block font-bold text-center my-4 tracking-wide text-sm">FÍSICA I</span>
+                      <span className="materia-name block font-bold text-center my-4 tracking-wide text-sm">FÍSICA</span>
                       <div className="materia-info">
-                        <span>6 CRÉDITOS</span>
+                        <span>5 CRÉDITOS</span>
                         {mockMateriaEstado === 2 && (
                           <span className="text-[0.45rem] text-green-400 font-bold tracking-tighter">[APROBADO]</span>
                         )}
@@ -720,7 +711,7 @@ export default function App() {
 
                     {/* Console Log Simulator */}
                     <div className="w-11/12 mt-6 bg-black/60 border border-white/10 rounded p-3 font-mono text-[0.65rem] text-green-400 space-y-1">
-                      <p className="text-white/40 border-b border-white/10 pb-1 uppercase tracking-widest">// REGISTRO_ACADÉMICO_OUT_V2.1</p>
+                      <p className="text-white/40 border-b border-white/10 pb-1 uppercase tracking-widest">// REGISTRO</p>
                       {mockMateriaEstado === 0 && (
                         <>
                           <p className="text-cyan-400">{`> ESTADO_ACTUAL: [0] PENDIENTE`}</p>
@@ -730,7 +721,7 @@ export default function App() {
                       {mockMateriaEstado === 1 && (
                         <>
                           <p className="text-yellow-400">{`> ESTADO_ACTUAL: [1] CURSADA`}</p>
-                          <p>{`> El estudiante asistió al curso pero aún no aprobó el examen final.`}</p>
+                          <p>{`> El estudiante asistió al curso pero aún no aprobó el examen.`}</p>
                         </>
                       )}
                       {mockMateriaEstado === 2 && (
@@ -754,13 +745,13 @@ export default function App() {
                     Las asignaturas pueden tener requisitos o co-requisitos. Al <strong>pasar el cursor (hover)</strong> por encima de una materia, el sistema colorea automáticamente los recorridos de avance para evitar confusiones de inscripción:
                   </p>
 
-                  <div className="p-4 bg-black/20 border border-white/5 rounded space-y-4">
-                    <p className="text-[0.6rem] font-mono opacity-50 uppercase tracking-widest text-center">// SIMULACIÓN DE DETECCIÓN EN CADENA (HOVER/FOCALIZACIÓN)</p>
+                  <div className="p-3 sm:p-4 bg-black/20 border border-white/5 rounded space-y-3 sm:space-y-4">
+                    <p className="text-[0.55rem] sm:text-[0.6rem] font-mono opacity-50 uppercase tracking-widest text-center">// SIMULACIÓN DE DETECCIÓN</p>
                     
-                    <div className="flex flex-col sm:flex-row gap-4 justify-around items-center pt-2 pb-2">
+                    <div className="flex flex-col sm:flex-row gap-2 sm:gap-4 justify-around items-center pt-1 pb-1">
                       {/* Course A (Prerequisito) */}
                       <div 
-                        className={`p-3 border rounded text-xs text-center font-mono w-40 transition-all ${
+                        className={`p-2.5 sm:p-3 border rounded text-xs text-center font-mono w-full sm:w-40 transition-all ${
                           mockFocusId === 'mat2' 
                             ? 'border-orange-500/80 bg-orange-500/10 text-orange-400 scale-95 opacity-90 shadow-[0_0_10px_rgba(255,87,34,0.1)] font-bold' 
                             : 'border-white/10 bg-white/5 opacity-70'
@@ -771,28 +762,35 @@ export default function App() {
                         <span className="text-[0.5rem] text-orange-400/80 font-bold block mt-1 tracking-widest">REQUISITO_OBLIGATORIO</span>
                       </div>
 
-                      <div className="text-white/30 font-bold text-center select-none rotate-90 sm:rotate-0">➔</div>
+                      <div className="text-white/40 font-bold text-center select-none py-1 sm:py-0">
+                        <span className="hidden sm:inline">➔</span>
+                        <span className="sm:hidden inline text-sm">↓</span>
+                      </div>
 
                       {/* Course B (Focused Course) */}
                       <div 
-                        className={`p-3 border rounded text-xs text-center font-mono w-44 transition-all cursor-crosshair ${
+                        className={`p-2.5 sm:p-3 border rounded text-xs text-center font-mono w-full sm:w-44 transition-all cursor-pointer ${
                           mockFocusId === 'mat2' 
-                            ? 'border-[var(--primary)] bg-white/10 scale-105 shadow-[0_0_15px_rgba(255,255,255,0.15)] font-bold' 
+                            ? 'border-[var(--primary)] bg-white/10 scale-102 sm:scale-105 shadow-[0_0_15px_rgba(255,255,255,0.15)] font-bold' 
                             : 'border-white/20 bg-white/5'
                         }`}
                         onMouseEnter={() => setMockFocusId('mat2')}
                         onMouseLeave={() => setMockFocusId(null)}
+                        onClick={() => setMockFocusId(prev => prev === 'mat2' ? null : 'mat2')}
                       >
                         <span className="text-[0.5rem] block text-[var(--secondary)] font-bold">// HOVER_FOCALIZADO</span>
                         <strong className="block font-bold animate-pulse">MATEMÁTICA II</strong>
-                        <span className="text-[0.45rem] opacity-70 block mt-1 text-cyan-300">== COLOCÁ EL MOUSE ACÁ ==</span>
+                        <span className="text-[0.45rem] opacity-70 block mt-1 text-cyan-300">== PASÁ MOUSE ACÁ ==</span>
                       </div>
 
-                      <div className="text-white/30 font-bold text-center select-none rotate-90 sm:rotate-0">➔</div>
+                      <div className="text-white/40 font-bold text-center select-none py-1 sm:py-0">
+                        <span className="hidden sm:inline">➔</span>
+                        <span className="sm:hidden inline text-sm">↓</span>
+                      </div>
 
                       {/* Course C (Postrequisite) */}
                       <div 
-                        className={`p-3 border rounded text-xs text-center font-mono w-40 transition-all ${
+                        className={`p-2.5 sm:p-3 border rounded text-xs text-center font-mono w-full sm:w-40 transition-all ${
                           mockFocusId === 'mat2' 
                             ? 'border-[var(--secondary)]/80 bg-[var(--secondary)]/10 text-[var(--secondary)] scale-95 opacity-90 shadow-[0_0_10px_rgba(0,191,255,0.1)] font-bold' 
                             : 'border-white/10 bg-white/5 opacity-70'
@@ -804,19 +802,20 @@ export default function App() {
                       </div>
                     </div>
 
-                    <div className="bg-black/40 p-3 rounded text-[0.65rem] font-mono leading-relaxed space-y-1">
+                    <div className="bg-black/40 p-2.5 sm:p-3 rounded text-[0.6rem] sm:text-[0.65rem] font-mono leading-relaxed space-y-1">
                       <div className="flex gap-2">
-                        <span className="text-orange-500 font-bold">[!] COLOR_NARANJA:</span>
+                        <span className="text-orange-500 font-bold flex-shrink-0">[!] NARANJA:</span>
                         <span>Asignatura previa. Debe estar aprobada o cursada para poder rendir/cursar Matemática II.</span>
                       </div>
                       <div className="flex gap-2">
-                        <span className="text-[var(--secondary)] font-bold">[!] COLOR_CELESTE:</span>
+                        <span className="text-[var(--secondary)] font-bold flex-shrink-0">[!] CELESTE:</span>
                         <span>Asignatura consecuente. Se requiere Matemática II aprobada para poder habilitarla.</span>
                       </div>
                     </div>
                   </div>
                 </div>
               )}
+              
 
               {welcomeStep === 4 && (
                 <div className="space-y-6">
@@ -824,7 +823,7 @@ export default function App() {
                     04_HERRAMIENTAS_INTEGRADAS
                   </h2>
                   <p className="text-sm leading-relaxed">
-                    Además de la vista diagramática principal, contás con utilidades integradas de alto nivel accesibles en la barra superior:
+                    Además de la vista diagramática principal, contás con utilidades integradas accesibles en la barra superior:
                   </p>
 
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
@@ -848,7 +847,7 @@ export default function App() {
                       <div className="flex justify-center text-pink-400"><Save size={20} /></div>
                       <span className="text-[0.65rem] font-bold block text-[var(--primary)]">EXPORTAR EN PDF</span>
                       <p className="text-[0.55rem] opacity-65 leading-normal">
-                        Podés exportar tu progreso actual en formato PDF, el cual podes imprimir y tener como referencia a mano!
+                        Podés exportar tu progreso actual en formato PDF, el cual podes imprimir y tener a mano!
                       </p>
                     </div>
                     
@@ -1238,35 +1237,34 @@ export default function App() {
             ))}
           </motion.div>
 
+
           <footer className="site-footer">
-            
-           <div className="max-w-4xl space-y-4 :text-left font-mono">
-              <h4 className="text-mx font-bold uppercase tracking-widest text-[var(--secondary)]">
-                // DESCARGO DE RESPONABILIDAD Y TÉRMINOS DE USO (DISCLAIMER)
+            <div className="site-footer-content space-y-2.5 text-left font-mono">
+              <h4 className="text-[0.65rem] sm:text-xs font-bold uppercase tracking-widest text-[var(--secondary)]">
+                // DESCARGO DE RESPONSABILIDAD
               </h4>
-              <p className="text-xs md:text-sm leading-relaxed opacity-60">
-                Esta plataforma web interactiva es un proyecto de software libre de carácter <strong>completamente independiente, informal y no oficial</strong>. No se cuenta con el aval oficial de la Universidad Tecnológica del Uruguay (UTEC).
+              <p className="text-[0.62rem] sm:text-[0.68rem] leading-relaxed opacity-70">
+                Esta plataforma es un proyecto de software libre <strong>independiente, informal y no oficial</strong>. No posee vinculación ni aval oficial de la Universidad Tecnológica del Uruguay (UTEC), Coordinación de Carrera ni Secretaría.
               </p>
-              <p className="text-xs md:text-sm leading-relaxed opacity-60">
-                Los datos relativos a asignaturas (créditos, prerrequisitos, co-rrequisitos y códigos de materias) han sido recopilados con fines meramente visuales, ilustrativos y de simulación académica personal. Dado que la malla real y los esquemas normativos universitarios están sujetos a actualizaciones, cambios curriculares y adaptaciones de calendario por parte de UTEC, queda estrictamente bajo exclusiva responsabilidad del estudiante contrastar y verificar el estado real de su escolaridad mediante el Portal Academico, o en su defecto el contacto directo con Secretaria de la carrera.
+              <p className="text-[0.62rem] sm:text-[0.68rem] leading-relaxed opacity-70">
+                Los datos de asignaturas, créditos y prerrequisitos fueron recolectados de los planes de estudio correspondientes. El estudiante debe verificar siempre su estado de escolaridad en el <strong>Portal Academico oficial</strong> de UTEC.
               </p>
-              <p className={`text-xs md:text-sm leading-relaxed opacity-90 ${isDarkMode ? "text-yellow-400" : "text-amber-700"}`}>
-                [!] Al interactuar con este sistema de simulación o generar reportes no oficiales en formato PDF, el usuario asume plenamente y deslinda de toda responsabilidad legal, civil o administrativa al desarrollador de la plataforma ante cualquier discrepancia curricular o error de inscripción en asignaturas reales.
+              <p className={`text-[0.62rem] sm:text-[0.68rem] leading-relaxed font-semibold ${isDarkMode ? "text-yellow-400 opacity-90" : "text-amber-800 opacity-90"}`}>
+                [!] El usuario asume la responsabilidad del uso de esta herramienta y de los reportes no oficiales generados.
               </p>
-              <div className="pt-4 border-t border-white/5 text-xs flex flex-col sm:flex-row justify-between items-left sm: items-center gap-4 opacity-50">
-                <span>MALLA INTERACTIVA // V8.1 // CONSTRUIDO PARA UTEC</span>
+              <div className="pt-2 border-t border-white/5 text-[0.58rem] sm:text-[0.65rem] flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 opacity-50">
                 <span>
-                  IDENTIFICACIÓN ESTUDIANTE RESPONSABLE:{' '}
+                  CONTACTO:{' '}
                   <a href="mailto:sofia.modernell@estudiantes.utec.edu.uy" className="hover:underline font-bold text-[var(--text)]">
                     sofia.modernell@estudiantes.utec.edu.uy
                   </a>
                 </span>
               </div>
             </div>
-            
           </footer>
         </div>
       </main>
+      
 
       <div className="stats-bar">
         <div className="progress-container">
