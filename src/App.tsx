@@ -1295,7 +1295,7 @@ function Header({ onTitleClick, liveUsers, totalVisits, carreraKey, isDarkMode }
           className="text-white cursor-default select-none" 
           onClick={onTitleClick}
         >
-          Malla Curricular
+          Malla Interactiva
         </h1>
         <p className="text-white/60">{infoCarrera.subtitulo}</p>
         <div className="flex items-center gap-4 mt-2 text-[0.7rem] font-mono opacity-80 uppercase tracking-widest justify-center">
