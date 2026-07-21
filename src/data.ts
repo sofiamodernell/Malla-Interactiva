@@ -9,8 +9,14 @@ export const nombresCarreras: Record<string, { titulo: string; subtitulo: string
   "ibio_2021": { 
     titulo: "IBIO_PLAN_2021", 
     subtitulo: "INGENIERÍA_BIOMÉDICA // UTEC",
-    logo: "ibio_logo.jpg" // Placeholder o logo de IBIO si existe
+    logo: "ibio_logo.jpg" 
   }
+//  "ilog_XXXX": { 
+//    titulo: "ILOG_PLAN_XXXX", 
+//    subtitulo: "INGENIERÍA_LÓGISTICA // UTEC",
+//    logo: "ilog_logo.jpg" 
+//  }
+  
 };
 
 export const basesDeDatos: Record<string, Semestre[]> = {
