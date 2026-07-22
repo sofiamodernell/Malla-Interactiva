@@ -9,6 +9,7 @@ import { signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signOut, User 
 import { db, handleFirestoreError, OperationType, auth } from './firebase';
 import { basesDeDatos, configuracionSCP, nombresCarreras } from './data';
 import { Materia, Semestre, MateriaEstado } from './types';
+import { parseSemesterReq, resolveRequirementSubjects, formatReqLabel } from './utils';
 
 // Extend jsPDF with autoTable type
 interface jsPDFWithAutoTable extends jsPDF {
@@ -287,36 +288,38 @@ export default function App() {
   const porcentaje = maxCreditos > 0 ? (totalCreditos / maxCreditos) * 100 : 0;
 
   const isRequisitoCumplido = useCallback((targetId: string, type: 'curso' | 'examen') => {
+    
     // Check if it's a direct subject ID
     const directState = estadoMaterias.get(targetId);
     if (directState !== undefined) {
       return type === 'examen' ? directState === 2 : directState >= 1;
     }
 
-    // Check if it's an anualId
-    const subjectsInGroup = todasLasMaterias.filter(m => m.anualId === targetId);
-    if (subjectsInGroup.length > 0) {
-      if (type === 'examen') {
-        return subjectsInGroup.every(m => estadoMaterias.get(m.id) === 2);
-      } else {
-        return subjectsInGroup.every(m => (estadoMaterias.get(m.id) || 0) >= 1);
-      }
-    }
+    const res = resolveRequirementSubjects(targetId, plan, todasLasMaterias);
+    if (res.subjects.length === 0) return false;
 
-    return false;
-  }, [estadoMaterias, todasLasMaterias]);
+    if (type === 'examen') {
+      return res.subjects.every(m => estadoMaterias.get(m.id) === 2);
+    } else {
+      return res.subjects.every(m => (estadoMaterias.get(m.id) || 0) >= 1);
+    }
+  }, [estadoMaterias, plan, todasLasMaterias]);
+  
   
   const checkPrerrequisitos = (m: Materia) => {
     const faltan: string[] = [];
     if (m.reqExamen) {
       m.reqExamen.forEach(id => {
-        if (estadoMaterias.get(id) !== 2) faltan.push(`${id} (Aprobada)`);
+        if (!isRequisitoCumplido(id, 'examen')) {
+          faltan.push(formatReqLabel(id, 'examen', todasLasMaterias));
+        }
       });
     }
     if (m.reqCurso) {
       m.reqCurso.forEach(id => {
-        const s = estadoMaterias.get(id) || 0;
-        if (s < 1) faltan.push(`${id} (Cursada)`);
+        if (!isRequisitoCumplido(id, 'curso')) {
+          faltan.push(formatReqLabel(id, 'curso', todasLasMaterias));
+        }
       });
     }
     return faltan;
@@ -401,8 +404,22 @@ export default function App() {
       // Logic to check if any subject in the semester is blocked by prerequisites
       const materiaIdsEnSemestre = new Set(sem.materias.map(m => m.id));
       const blockedMaterias = sem.materias.filter(m => {
-        const failEx = m.reqExamen?.some(id => !materiaIdsEnSemestre.has(id) && !isRequisitoCumplido(id, 'examen'));
-        const failCur = m.reqCurso?.some(id => !materiaIdsEnSemestre.has(id) && !isRequisitoCumplido(id, 'curso'));
+
+      const failEx = m.reqExamen?.some(id => {
+      const res = resolveRequirementSubjects(id, plan, todasLasMaterias);
+      if (res.subjects.length > 0 && res.subjects.every(x => materiaIdsEnSemestre.has(x.id))) {
+         return false;
+          }
+          return !isRequisitoCumplido(id, 'examen');
+        });
+        const failCur = m.reqCurso?.some(id => {
+          const res = resolveRequirementSubjects(id, plan, todasLasMaterias);
+          if (res.subjects.length > 0 && res.subjects.every(x => materiaIdsEnSemestre.has(x.id))) {
+            return false;
+          }
+          return !isRequisitoCumplido(id, 'curso');
+        });
+        
         return failEx || failCur;
       });
 
@@ -448,8 +465,6 @@ export default function App() {
     doc.setDrawColor(200, 200, 200);
     doc.setLineWidth(0.3);
     doc.line(14, titleY + 17, 196, titleY + 17);
-
-    
     
     // Stats Summary Table
     const statsTableY = titleY + 24;
@@ -599,7 +614,7 @@ export default function App() {
     doc.text("----------------------------------------------------------------", 14, currentY + 38);
     doc.text("Firma del Estudiante", 14, currentY + 42);
 
-    // Apply elegant B&W frame headers and footers page-by-page
+    // Apply  B&W frame headers and footers page-by-page
     const totalPages = doc.internal.pages.length - 1;
     for (let i = 1; i <= totalPages; i++) {
       doc.setPage(i);
@@ -670,16 +685,34 @@ export default function App() {
   // Highlighting Logic
   const highlightedReqs = useMemo(() => {
     if (!materiaEnfocada) return new Set<string>();
-    return new Set([...(materiaEnfocada.reqCurso || []), ...(materiaEnfocada.reqExamen || [])]);
-  }, [materiaEnfocada]);
+    const reqIds = new Set<string>();
+    const allReqs = [...(materiaEnfocada.reqCurso || []), ...(materiaEnfocada.reqExamen || [])];
+
+    allReqs.forEach(reqId => {
+      const resolved = resolveRequirementSubjects(reqId, plan, todasLasMaterias);
+      resolved.subjects.forEach(m => reqIds.add(m.id));
+    });
+
+    return reqIds;
+  }, [materiaEnfocada, plan, todasLasMaterias]);
+
 
   const highlightedPosts = useMemo(() => {
     if (!materiaEnfocada) return new Set<string>();
-    return new Set(todasLasMaterias.filter(m => 
-      (m.reqCurso && m.reqCurso.includes(materiaEnfocada.id)) || 
-      (m.reqExamen && m.reqExamen.includes(materiaEnfocada.id))
-    ).map(m => m.id));
-  }, [materiaEnfocada, todasLasMaterias]);
+    const semOfEnfocada = plan.find(s => s.materias.some(m => m.id === materiaEnfocada.id))?.sem;
+
+    return new Set(todasLasMaterias.filter(p => {
+      const allReqs = [...(p.reqCurso || []), ...(p.reqExamen || [])];
+      return allReqs.some(reqId => {
+        const semReq = parseSemesterReq(reqId);
+        if (semReq && semOfEnfocada) {
+          return semOfEnfocada >= semReq.semStart && semOfEnfocada <= semReq.semEnd;
+        }
+        return reqId === materiaEnfocada.id || (materiaEnfocada.anualId && reqId === materiaEnfocada.anualId);
+      });
+    }).map(m => m.id));
+  }, [materiaEnfocada, plan, todasLasMaterias]);
+
 
   const materiasDisponibles = useMemo(() => {
     return todasLasMaterias.filter(mat => {
