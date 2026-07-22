@@ -11,6 +11,13 @@ export const nombresCarreras: Record<string, { titulo: string; subtitulo: string
     subtitulo: "INGENIERÍA_BIOMÉDICA // UTEC",
     logo: "ibio_logo.jpg" 
   }
+  
+  "lti_2024": { 
+    titulo: "LTI_PLAN_2024", 
+    subtitulo: "LICENCIATURA_TECNOLOGÍAS_DE_LA_INFORMACIÓN // UTEC",
+    logo: "lti_logo.png" 
+  }
+  
 //  "ilog_XXXX": { 
 //    titulo: "ILOG_PLAN_XXXX", 
 //    subtitulo: "INGENIERÍA_LÓGISTICA // UTEC",
@@ -218,7 +225,99 @@ export const basesDeDatos: Record<string, Semestre[]> = {
       { id: "ING10_IBIO", n: "Inglés 10", c: 4, a: "Idiomas", reqExamen: ["ING9_IBIO"] },
       { id: "PE10_IBIO", n: "Programas Especiales 10", c: 2, a: "Otros", reqExamen: ["PE9_IBIO"] }
     ]}
-    ]
+    ],
+
+  "lti_2024": [
+    { sem: 1, materias: [
+      { id: "INT_TI", n: "Introducción y Perspectivas de las TI", c: 2, a: "Troncal Académica" },
+      { id: "FIPR", n: "Fundamentos e Introducción a la Programación", c: 10, a: "Troncal Académica" },
+      { id: "AREQ", n: "Análisis de Requerimientos", c: 6, a: "Troncal Académica" },
+      { id: "BDCD", n: "Base de Datos: Conceptos y Diseño", c: 6, a: "Troncal Académica" },
+      { id: "MTFU", n: "Metodologías de Testing Funcional", c: 5, a: "Troncal Académica" },
+      { id: "PROY1_LTI", n: "Proyecto S1", c: 6, a: "Integración" },
+      { id: "UINN1", n: "UTEC Innova 1", c: 2, a: "Otro" },
+      { id: "ING1_LTI", n: "Inglés 1", c: 4, a: "Idiomas" },
+      { id: "VME1", n: "Vinculación con el Medio 1", c: 4, a: "Troncal Profesional" }
+    ]},
+    { sem: 2, materias: [
+      { id: "ALPD", n: "Algoritmos y Patrones de Diseño", c: 10, a: "Troncal Académica" },
+      { id: "PSQL", n: "Programación SQL", c: 8, a: "Troncal Académica" },
+      { id: "ITFU", n: "Implementación del Testing Funcional", c: 5, a: "Troncal Académica" },
+      { id: "FACC", n: "Fundamentos de Arquitectura, Ciberseguridad y Cloud", c: 7, a: "Troncal Académica" },
+      { id: "PROY2_LTI", n: "Proyecto S2", c: 7, a: "Integración", reqCurso: ["PROY1_LTI"] },
+      { id: "UINN2", n: "UTEC Innova 2", c: 2, a: "Otro", reqExamen: ["UINN1"] },
+      { id: "ING2_LTI", n: "Inglés 2", c: 4, a: "Idiomas", reqExamen: ["ING1_LTI"] },
+      { id: "VME2", n: "Vinculación con el Medio 2", c: 2, a: "Troncal Profesional" }
+    ]},
+    { sem: 3, materias: [
+      { id: "RII", n: "Redes, Infraestructura e Interconexión", c: 12, a: "Troncal Académica", reqExamen: ["SEM1"] },
+      { id: "GIS", n: "Gestión de Ingeniería de Software", c: 5, a: "Troncal Académica", reqExamen: ["SEM1"] },
+      { id: "PBE", n: "Programación Backend", c: 7, a: "Troncal Académica", reqExamen: ["SEM1"] },
+      { id: "MDEV", n: "Metodologías de Desarrollo", c: 3, a: "Troncal Académica", reqExamen: ["SEM1"] },
+      { id: "DUX", n: "Diseño y Experiencia de Usuario", c: 3, a: "Troncal Académica", reqExamen: ["SEM1"] },
+      { id: "PROY3_LTI", n: "Proyecto S3", c: 5, a: "Integración", reqExamen: ["SEM1", "PROY2_LTI"] },
+      { id: "UINN3", n: "UTEC Innova 3", c: 2, a: "Otro", reqExamen: ["UINN2"]  },
+      { id: "ING3_LTI", n: "Inglés 3", c: 4, a: "Idiomas", reqExamen: ["ING2_LTI"] },
+      { id: "VME3", n: "Vinculación con el Medio 3", c: 2, a: "Troncal Profesional" },
+      { id: "OPT1_LTI", n: "Optativa 1", c: 2, a: "Optativa" }
+    ]},
+    { sem: 4, materias: [
+      { id: "SORV", n: "Sistemas Operativos de Red y Virtualización", c: 9, a: "Troncal Académica", reqExamen: ["SEM1-2"] },
+      { id: "SAR", n: "Seguridad y Auditoría de Redes", c: 6, a: "Troncal Académica", reqExamen: ["SEM1-2"] },
+      { id: "PFE", n: "Programación Frontend", c: 7, a: "Troncal Académica", reqExamen: ["SEM1-2"] },
+      { id: "DWH", n: "Datawarehousing", c: 4, a: "Troncal Académica", reqExamen: ["SEM1-2"] },
+      { id: "PROY4_LTI", n: "Proyecto Final Tecnicatura", c: 9, a: "Integración", reqExamen: ["SEM1-2", "PROY3_LTI"] },
+      { id: "UINN4", n: "UTEC Innova 4", c: 2, a: "Otro", reqExamen: ["UINN3"] },
+      { id: "ING4_LTI", n: "Inglés 4", c: 4, a: "Idiomas", reqExamen: ["ING3_LTI"] },
+      { id: "VME4", n: "Vinculación con el Medio 4", c: 2, a: "Troncal Profesional" },
+      { id: "OPT2_LTI", n: "Optativa 2", c: 2, a: "Optativa" }
+    ]},
+    { sem: 5, materias: [
+      { id: "PDM", n: "Programación en Dispositivos Móviles", c: 6, a: "Troncal Académica", reqExamen: ["SEM1-3"] },
+      { id: "BDNR", n: "Bases de Datos No Relacionales", c: 6, a: "Troncal Académica", reqExamen: ["SEM1-3"] },
+      { id: "GCAL_LTI", n: "Gestión de la Calidad", c: 4, a: "Troncal Académica", reqExamen: ["SEM1-3"] },
+      { id: "DSCI", n: "Data Science", c: 7, a: "Troncal Académica", reqExamen: ["SEM1-3"] },
+      { id: "DINA", n: "Derecho Informático y Normativa Asociada", c: 2, a: "Troncal Académica", reqExamen: ["SEM1-3"] },
+      { id: "GPRO", n: "Gestión de Proyectos", c: 5, a: "Troncal Académica", reqExamen: ["SEM1-3"] },
+      { id: "ATES", n: "Automatización del Testing", c: 5, a: "Troncal Académica", reqExamen: ["SEM1-3"] },
+      { id: "UINN5", n: "UTEC Innova 5", c: 2, a: "Otro", reqExamen: ["UINN4"]  },
+      { id: "ING5_LTI", n: "Inglés 5", c: 4, a: "Idiomas", reqExamen: ["ING4_LTI"] },
+      { id: "VME5", n: "Vinculación con el Medio 5", c: 2, a: "Troncal Profesional" },
+      { id: "OPT3_LTI", n: "Optativa 3", c: 2, a: "Optativa" }
+    ]},
+    { sem: 6, materias: [
+      { id: "IAPL", n: "Inteligencia Artificial Aplicada", c: 7, a: "Troncal Académica", reqExamen: ["SEM1-4"] },
+      { id: "PFUN", n: "Programación Funcional", c: 5, a: "Troncal Académica", reqExamen: ["SEM1-4"] },
+      { id: "AMCC", n: "Arquitectura y Modelos de Cloud Computing", c: 11, a: "Troncal Académica", reqExamen: ["SEM1-4"] },
+      { id: "TPER", n: "Testing de Performance", c: 4, a: "Troncal Académica", reqExamen: ["SEM1-4"] },
+      { id: "CSCL", n: "Ciberseguridad en Ambientes Cloud", c: 6, a: "Troncal Académica", reqExamen: ["SEM1-4"] },
+      { id: "ETS", n: "Ética, Tecnología y Sociedad", c: 2, a: "Troncal Académica", reqExamen: ["SEM1-4"] },
+      { id: "UINN6", n: "UTEC Innova 6", c: 2, a: "Otro" , reqExamen: ["UINN5"] },
+      { id: "ING6_LTI", n: "Inglés 6", c: 4, a: "Idiomas", reqExamen: ["ING5_LTI"] },
+      { id: "VME6", n: "Vinculación con el Medio 6", c: 2, a: "Troncal Profesional" },
+      { id: "OPT4_LTI", n: "Optativa 4", c: 2, a: "Optativa" }
+    ]},
+    { sem: 7, materias: [
+      { id: "FRSA", n: "Fundamentos de Robótica y Sistemas Autónomos", c: 6, a: "Troncal Académica", reqExamen: ["SEM1-5"] },
+      { id: "GCIB", n: "Gestión de la Ciberseguridad", c: 12, a: "Troncal Académica", reqExamen: ["SEM1-5"] },
+      { id: "TCIB", n: "Taller de Ciberseguridad", c: 5, a: "Troncal Académica", reqExamen: ["SEM1-5"] },
+      { id: "IDEV", n: "Introducción a DevOps", c: 7, a: "Troncal Académica", reqExamen: ["SEM1-5"] },
+      { id: "ANTE_LTI", n: "Anteproyecto Licenciatura", c: 5, a: "Integración", reqExamen: ["SEM1-5", "ETS"] },
+      { id: "UINN7", n: "UTEC Innova 7", c: 2, a: "Otro", reqExamen: ["UINN6"] },
+      { id: "ING7_LTI", n: "Inglés 7", c: 4, a: "Idiomas", reqExamen: ["ING6_LTI"] },
+      { id: "VME7", n: "Vinculación con el Medio 7", c: 2, a: "Troncal Profesional" },
+      { id: "OPT5_LTI", n: "Optativa 5", c: 2, a: "Optativa" }
+    ]},
+    { sem: 8, materias: [
+      { id: "TDEV", n: "Taller DevOps", c: 8, a: "Troncal Académica", reqExamen: ["SEM1-7"] },
+      { id: "PPRY", n: "Preparación Proyecto Final", c: 2, a: "Troncal Académica", reqExamen: ["SEM1-7"] },
+      { id: "PFLI", n: "Proyecto Final Licenciatura", c: 25, a: "Integración", reqExamen: ["SEM1-7"] },
+      { id: "UINN8", n: "UTEC Innova 8", c: 2, a: "Otro", reqExamen: ["UINN7"] },
+      { id: "ING8_LTI", n: "Inglés 8", c: 4, a: "Idiomas", reqExamen: ["ING7_LTI"] },
+      { id: "VME8", n: "Vinculación con el Medio 8", c: 2, a: "Troncal Profesional" },
+      { id: "OPT6_LTI", n: "Optativa 6", c: 2, a: "Optativa" }
+    ]}
+  ]
 };
 
 export const configuracionSCP: Record<string, SCPConfig> = {
