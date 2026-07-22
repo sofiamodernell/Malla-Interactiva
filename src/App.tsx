@@ -311,14 +311,14 @@ export default function App() {
     if (m.reqExamen) {
       m.reqExamen.forEach(id => {
         if (!isRequisitoCumplido(id, 'examen')) {
-          faltan.push(formatReqLabel(id, 'examen', todasLasMaterias));
+          faltan.push(formatReqLabel(id, 'examen', todasLasMaterias, plan, estadoMaterias));
         }
       });
     }
     if (m.reqCurso) {
       m.reqCurso.forEach(id => {
         if (!isRequisitoCumplido(id, 'curso')) {
-          faltan.push(formatReqLabel(id, 'curso', todasLasMaterias));
+          faltan.push(formatReqLabel(id, 'curso', todasLasMaterias, plan, estadoMaterias));
         }
       });
     }
