@@ -46,13 +46,84 @@ export default function App() {
   const mallaRef = useRef<HTMLDivElement>(null);
 
   const scrollToSemester = (index: number) => {
-    if (mallaRef.current) {
+    if (!mallaRef.current) return;
       const semNodes = mallaRef.current.querySelectorAll('.semestre');
-      if (semNodes[index]) {
-        semNodes[index].scrollIntoView({ behavior: 'smooth', inline: 'start', block: 'nearest' });
+    if (semNodes.length === 0) return;
+
+    const clampedIndex = Math.max(0, Math.min(index, semNodes.length - 1));
+    const targetNode = semNodes[clampedIndex] as HTMLElement;
+    if (!targetNode) return;
+
+    const scrollContainer = mallaRef.current.closest('.main-content-scroll') || mallaRef.current.parentElement;
+    if (!scrollContainer) return;
+
+    const wrapperStyle = window.getComputedStyle(mallaRef.current);
+    const paddingLeft = parseFloat(wrapperStyle.paddingLeft) || 0;
+
+    const targetLeft = targetNode.offsetLeft - paddingLeft;
+
+    scrollContainer.scrollTo({
+      left: Math.max(0, targetLeft),
+      top: scrollContainer.scrollTop,
+      behavior: 'smooth'
+    });
+  };
+  
+ const getCurrentSemesterIndex = (): number => {
+    if (!mallaRef.current) return 0;
+    const semNodes = Array.from(mallaRef.current.querySelectorAll('.semestre')) as HTMLElement[];
+    if (semNodes.length === 0) return 0;
+
+    const scrollContainer = mallaRef.current.closest('.main-content-scroll') || mallaRef.current.parentElement;
+    if (!scrollContainer) return 0;
+
+    const currentScrollLeft = scrollContainer.scrollLeft;
+    const wrapperStyle = window.getComputedStyle(mallaRef.current);
+    const paddingLeft = parseFloat(wrapperStyle.paddingLeft) || 0;
+
+    let closestIndex = 0;
+    let minDiff = Infinity;
+
+    semNodes.forEach((node, i) => {
+      const nodeLeft = node.offsetLeft - paddingLeft;
+      const diff = Math.abs(nodeLeft - currentScrollLeft);
+      if (diff < minDiff) {
+        minDiff = diff;
+        closestIndex = i;
       }
+    });
+   return closestIndex;
+  };
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (showWelcome || showCalculator || showDisponibles || showShareMenu || semestreEditandoNota !== null) {
+        return;
+      }
+
+      const active = document.activeElement;
+      if (active && (
+        active.tagName === 'INPUT' ||
+        active.tagName === 'TEXTAREA' ||
+        active.tagName === 'SELECT' ||
+        (active as HTMLElement).isContentEditable
+      )) {
+        return;
+      }
+
+      if (e.key === 'ArrowLeft') {
+        e.preventDefault();
+        const currIndex = getCurrentSemesterIndex();
+        scrollToSemester(currIndex - 1);
+      } else if (e.key === 'ArrowRight') {
+        e.preventDefault();
+        const currIndex = getCurrentSemesterIndex();
+        scrollToSemester(currIndex + 1);
     }
   };
+ window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [showWelcome, showCalculator, showDisponibles, showShareMenu, semestreEditandoNota]);
 
     // Load notes when career changes
   useEffect(() => {
@@ -1095,10 +1166,15 @@ export default function App() {
                 <div className="semestre-header">
                   <div className="flex justify-between items-start w-full mb-2">
                     <div className="flex items-center gap-3">
+                      
                       <div className="flex bg-white/5 rounded p-0.5 border border-white/5">
                         <button 
                           className={`p-0.5 rounded transition-colors ${index > 0 ? 'text-white/60 hover:text-[var(--primary)] hover:bg-white/10' : 'text-white/10 cursor-not-allowed'}`}
-                          onClick={() => index > 0 && scrollToSemester(index - 1)}
+                          onClick={(e) => {
+                            e.preventDefault();
+                            e.currentTarget.blur();
+                            if (index > 0) scrollToSemester(index - 1);
+                          }}                          
                           disabled={index === 0}
                           title="Semestre anterior"
                         >
@@ -1106,7 +1182,11 @@ export default function App() {
                         </button>
                         <button 
                           className={`p-0.5 rounded transition-colors ${index < plan.length - 1 ? 'text-white/60 hover:text-[var(--primary)] hover:bg-white/10' : 'text-white/10 cursor-not-allowed'}`}
-                          onClick={() => index < plan.length - 1 && scrollToSemester(index + 1)}
+                          onClick={(e) => {
+                            e.preventDefault();
+                            e.currentTarget.blur();
+                            if (index < plan.length - 1) scrollToSemester(index + 1);
+                          }}
                           disabled={index === plan.length - 1}
                           title="Siguiente semestre"
                         >
