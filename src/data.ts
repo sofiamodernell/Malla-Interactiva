@@ -330,6 +330,6 @@ export const configuracionSCP: Record<string, SCPConfig> = {
   "8": { campos: ["Ev1", "Ev2"], pesos: [0.40, 0.60] },
   "9": { campos: ["Teórico-Práctico", "EC"], pesos: [0.70, 0.30] },
   "10": { campos: ["Participación", "Trabajo"], pesos: [0.70, 0.30] },
-  "11": { campos: ["Lab", "EC", "Proy", "Ev1", "Ev2", "Ev3", "Ev4"], pesos: [0.3, 0.1, 0.2, 0.1, 0.1, 0.1, 0.1] },
-  "12": { campos: ["Lab", "EC", "Proy"], pesos: [0.30, 0.30, 0.40] }
+  "11": { campos: ["Lab", "EC", "Proyecto", "Ev1", "Ev2", "Ev3", "Ev4"], pesos: [0.3, 0.1, 0.2, 0.1, 0.1, 0.1, 0.1] },
+  "12": { campos: ["Lab", "EC", "Proyecto"], pesos: [0.30, 0.30, 0.40] }
 };
