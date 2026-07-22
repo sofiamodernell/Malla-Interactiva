@@ -1,4 +1,4 @@
-import { Materia, Semestre } from './types';
+import { Materia, Semestre, MateriaEstado } from './types';
 
 export interface SemesterReq {
   semStart: number;
@@ -58,27 +58,61 @@ export function resolveRequirementSubjects(
 }
 
 /**
- * Genera una etiqueta legible para un requerimiento de curso o examen no cumplido.
+ * Genera una etiqueta legible para un requerimiento de curso o examen no cumplido,
+ * especificando las materias faltantes cuando el requerimiento involucra un semestre o grupo.
  */
 export function formatReqLabel(
   reqId: string,
   type: 'curso' | 'examen',
-  todasLasMaterias: Materia[]
+  todasLasMaterias: Materia[],
+  plan?: Semestre[],
+  estadoMaterias?: Map<string, MateriaEstado>
 ): string {
   const semReq = parseSemesterReq(reqId);
   const verb = type === 'examen' ? 'Aprobado' : 'Cursado';
+  const verbMateria = type === 'examen' ? 'Aprobada' : 'Cursada';
 
   if (semReq) {
-    if (semReq.semStart === semReq.semEnd) {
-      return `Semestre ${semReq.semStart} completo (${verb})`;
+    let missingInfo = '';
+    if (plan && estadoMaterias) {
+      const resolved = resolveRequirementSubjects(reqId, plan, todasLasMaterias);
+      const missingSubs = resolved.subjects.filter(m => {
+        if (type === 'examen') {
+          return estadoMaterias.get(m.id) !== 2;
+        } else {
+          return (estadoMaterias.get(m.id) || 0) < 1;
+        }
+      });
+
+      if (missingSubs.length > 0) {
+        const names = missingSubs.map(m => m.n).join(', ');
+        missingInfo = ` - Falta: ${names}`;
+      }
     }
-    return `Semestres ${semReq.semStart} a ${semReq.semEnd} completos (${verb})`;
+
+    if (semReq.semStart === semReq.semEnd) {
+      return `Semestre ${semReq.semStart} (${verb})${missingInfo}`;
+    }
+    return `Semestres ${semReq.semStart} a ${semReq.semEnd} (${verb})${missingInfo}`;
+  }
+
+  // Verificar si es un grupo anual
+  const anualSubjects = todasLasMaterias.filter(m => m.anualId === reqId);
+  if (anualSubjects.length > 0 && estadoMaterias) {
+    const missingAnual = anualSubjects.filter(m => {
+      if (type === 'examen') return estadoMaterias.get(m.id) !== 2;
+      return (estadoMaterias.get(m.id) || 0) < 1;
+    });
+    if (missingAnual.length > 0) {
+      const names = missingAnual.map(m => m.n).join(', ');
+      return `${reqId} (${verbMateria}) - Falta: ${names}`;
+    }
   }
 
   const found = todasLasMaterias.find(x => x.id === reqId || x.anualId === reqId);
-  const verbMateria = type === 'examen' ? 'Aprobada' : 'Cursada';
   if (found) {
     return `${found.n} [${reqId}] (${verbMateria})`;
   }
   return `${reqId} (${verbMateria})`;
 }
+
