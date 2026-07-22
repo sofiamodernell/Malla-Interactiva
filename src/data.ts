@@ -10,8 +10,7 @@ export const nombresCarreras: Record<string, { titulo: string; subtitulo: string
     titulo: "IBIO_PLAN_2021", 
     subtitulo: "INGENIERÍA_BIOMÉDICA // UTEC",
     logo: "ibio_logo.jpg" 
-  }
-  
+  },
   "lti_2024": { 
     titulo: "LTI_PLAN_2024", 
     subtitulo: "LICENCIATURA_TECNOLOGÍAS_DE_LA_INFORMACIÓN // UTEC",
