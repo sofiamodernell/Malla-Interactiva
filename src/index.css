@@ -236,7 +236,7 @@ header::before {
 
 .logo-container {
     position: absolute;
-    top: 1.5rem;
+    top: 1.75rem;
     display: flex;
     align-items: center;
     z-index: 20;
@@ -244,7 +244,7 @@ header::before {
 
 .logo-utec {
     left: 1.5rem;
-    height: 150px;
+    height: 130px;
 }
 
 [data-theme="light"] .logo-utec {
@@ -253,7 +253,7 @@ header::before {
 
 .logo-imec {
     right: 1.5rem;
-    height: 100px;
+    height: 110px;
 }
 
 @media (max-width: 768px) {
