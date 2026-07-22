@@ -14,7 +14,7 @@ export const nombresCarreras: Record<string, { titulo: string; subtitulo: string
 //  "ilog_XXXX": { 
 //    titulo: "ILOG_PLAN_XXXX", 
 //    subtitulo: "INGENIERÍA_LÓGISTICA // UTEC",
-//    logo: "ilog_logo.jpg" 
+//    logo: "ilog_logo.png" 
 //  }
   
 };
