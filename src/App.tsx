@@ -970,7 +970,7 @@ export default function App() {
                       ? "bg-amber-500/10 border-amber-500 text-amber-200" 
                       : "bg-amber-500/15 border-amber-600 text-amber-950 font-medium"
                   }`}>
-                    <p className={`font-bold uppercase tracking-widest ${isDarkMode ? "text-amber-400" : "text-amber-800"}`}>ADVERTENCIA_MÉTRICA_DE_SEGURIDAD:</p>
+                    <p className={`font-bold uppercase tracking-widest ${isDarkMode ? "text-amber-400" : "text-amber-800"}`}>ADVERTENCIA:</p>
                     <p className="leading-normal">
                       ESTE SISTEMA ES DE CARÁCTER NO OFICIAL Y ESTÁ DISEÑADO ÚNICAMENTE PARA REFERENCIA VISUAL Y DE PLANIFICACIÓN PERSONAL.
                     </p>
