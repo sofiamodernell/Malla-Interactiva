@@ -280,7 +280,7 @@ La presente es una herramienta de simulación de carácter no oficial, desarroll
 
 ## Licencia
 
-Este proyecto no cuenta actualmente con una licencia explícitamente declarada. Si deseas utilizar, modificar, publicar o heredar parte del código fuente en otros fines académicos, te invitamos a adjuntar un archivo simple de licencia abierta (por ejemplo, Licencia MIT) o establecer contacto para mayor acuerdo de uso de activos.
+Este proyecto no cuenta actualmente con una licencia explícitamente declarada. 
 
 ---
 
